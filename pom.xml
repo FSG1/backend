@@ -59,6 +59,13 @@
             <version>42.1.4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.ohadr/ohadr.commons -->
+        <dependency>
+            <groupId>com.ohadr</groupId>
+            <artifactId>ohadr.commons</artifactId>
+            <version>0.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
