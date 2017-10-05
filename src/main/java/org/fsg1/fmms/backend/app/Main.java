@@ -1,46 +1,49 @@
-package org.fsg1.fmms.backend.app;
+package resources;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.net.URI;
 
 /**
  * Main class.
+ *
  */
-public final class Main {
+public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    static final String BASE_URI = "http://localhost:8080/fmms/";
-
-    private Main() {
-    }
+    static final String BASE_URI = "http://0.0.0.0:8080/fmms/";
 
     /**
-     * Starts Grizzly HTTP server exposing JAX-RS endpoints defined in this application.
-     *
+     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
-        // create a resource config that scans for JAX-RS endpoints and providers
-        // in endpoints package
+        Configuration config = new Configuration();
+
+        // create a resource config that scans for JAX-RS resources and providers
+        // in resources package
         final ResourceConfig rc = new ResourceConfig();
-        rc.register(new AppBinder());
-        rc.packages("org.fsg1.fmms.backend.endpoints");
+
+        AppBinder di = new AppBinder();
+        di.bind(config).to(Configuration.class);
+
+        rc.register(di);
+        rc.packages("resources");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(config.getServerString()), rc);
     }
 
     /**
      * Main method.
-     *
-     * @param args Arguments.
-     * @throws IOException If the server could not start.
+     * @param args
+     * @throws IOException
      */
-    public static void main(final String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
