@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import database.Connection;
+import resources.Configuration;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class CurriculumService {
     public CurriculumService(Connection conn){
         this.conn = conn;
     }
+
     public ObjectNode getCurriculumSemesters(String curriculumId) throws SQLException, IOException {
         String query =
                 "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n" +
