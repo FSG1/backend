@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import database.Connection;
-import resources.Configuration;
 
 import javax.inject.Inject;
 import java.io.IOException;
