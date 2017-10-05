@@ -1,0 +1,17 @@
+FROM maven:latest
+LABEL maintainer="Tobias Derksen <tobias.derksen@student.fontys.nl>"
+
+ENV HOST=0.0.0.0
+ENV PORT=8080
+
+VOLUME /root/.m2
+
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+
+RUN mvn install -Dcheckstyle.skip
+
+EXPOSE 8080
+
+ENTRYPOINT [ "mvn" ]
+CMD [ "exec:java", "-Dcheckstyle.skip" ]
