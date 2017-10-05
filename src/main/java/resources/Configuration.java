@@ -22,7 +22,7 @@ public class Configuration {
 
         Builder builder = new Builder();
 
-        builder.setHost(env.getOrDefault("HOST", "localhost"));
+        builder.setHost(env.getOrDefault("HOST", "0.0.0.0"));
         builder.setHost(env.getOrDefault("PORT", "8080"));
         builder.setHost(env.getOrDefault("BASE", "/fmms"));
         builder.setHost(env.getOrDefault("DB_USER", "fmms"));
