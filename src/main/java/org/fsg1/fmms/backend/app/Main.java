@@ -32,8 +32,6 @@ public class Main {
         rc.register(di);
         rc.packages("resources");
 
-        System.out.println("Server listen on: " + config.getServerString());
-
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(config.getServerString()), rc);
