@@ -9,7 +9,7 @@ import java.util.Properties;
 public class Connection {
     private java.sql.Connection conn = null;
 
-    public Connection() {
+    Connection() {
         Properties props = new Properties();
         props.setProperty("user", "fmms");
         props.setProperty("password", "test123456");
