@@ -1,11 +1,7 @@
 package resources;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Properties;
+import java.util.Map;
 
 public class Configuration {
 
@@ -15,59 +11,25 @@ public class Configuration {
 
     private String db_user;
     private String db_passwd;
-    private String db_host;
-    private String db_name;
-    private String db_port;
+    private String db;
 
-    public Configuration() {
-        this.loadConfigFromFile("config/server.properties");
-        this.loadConfigFromFile("config/database.properties");
-        this.loadConfigFromEnv();
+
+    private Configuration() {
     }
 
-    private void setEachField(GetValueInterface obj) {
-        Class<? extends Configuration> self = this.getClass();
-        Field[] fields = self.getDeclaredFields();
+    public static Configuration fromEnv() {
+        Map<String, String> env = System.getenv();
 
-        Arrays.stream(fields)
-                .parallel()
-                .forEach((field) -> setField(field, obj.getValue(field.getName()))
-                );
-    }
+        Builder builder = new Builder();
 
-    private void setField(Field field, String value) {
-        try {
-            if (value != null && !value.isEmpty()) {
-                field.setAccessible(true);
-                field.set(this, value);
-            }
+        builder.setHost(env.getOrDefault("HOST", "localhost"));
+        builder.setHost(env.getOrDefault("PORT", "8080"));
+        builder.setHost(env.getOrDefault("BASE", "/fmms"));
+        builder.setHost(env.getOrDefault("DB_USER", "fmms"));
+        builder.setHost(env.getOrDefault("DB_PASSWD", ""));
+        builder.setHost(env.getOrDefault("DB", "localhost:5432/fmms"));
 
-        } catch (IllegalAccessException e) {
-            System.err.println("Cannot access field: " + field.getName());
-            // variable left unset
-        }
-    }
-
-    private void loadConfigFromEnv() {
-        setEachField((name) -> System.getenv(name.toUpperCase()));
-    }
-
-    private void loadConfigFromFile(String filename) {
-        Properties prop = new Properties();
-        ClassLoader loader = this.getClass().getClassLoader();
-
-        InputStream input = loader.getResourceAsStream(filename);
-        if (input == null) {
-            return;
-        }
-
-        try {
-            prop.load(input);
-            setEachField(prop::getProperty);
-        } catch (IOException e) {
-            // Properties not loaded
-            System.err.println("Cannot load property file: " + filename);
-        }
+        return builder.build();
     }
 
     public String getServerString() {
@@ -75,7 +37,7 @@ public class Configuration {
     }
 
     public String getDbString() {
-        return "jdbc:postgresql://" + db_host + "/" + db_name;
+        return "jdbc:postgresql://" + db;
     }
 
     public String getDbUser() {
@@ -86,8 +48,42 @@ public class Configuration {
         return db_passwd;
     }
 
-    @FunctionalInterface
-    private interface GetValueInterface {
-        String getValue(String fieldName);
+    public static class Builder {
+        private Configuration config = new Configuration();
+
+        public Builder setHost(String host) {
+            config.host = host;
+            return this;
+        }
+
+        public Builder setPort(String port) {
+            config.port = port;
+            return this;
+        }
+
+        public Builder setBase(String base) {
+            config.base = base;
+            return this;
+        }
+
+
+        public Builder setDb(String db) {
+            config.db = db;
+            return this;
+        }
+
+        public Builder setDbUser(String db_user) {
+            config.db_user = db_user;
+            return this;
+        }
+
+        public Builder setDbPassword(String db_passwd) {
+            config.db_passwd = db_passwd;
+            return this;
+        }
+
+        public Configuration build() {
+            return config;
+        }
     }
 }
