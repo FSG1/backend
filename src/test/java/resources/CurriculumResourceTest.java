@@ -35,6 +35,16 @@ public class CurriculumResourceTest extends JerseyTest {
     @Mock
     private CurriculumService service;
 
+    @BeforeClass
+    public static void initSpec() {
+        spec = new RequestSpecBuilder()
+                .setContentType(ContentType.JSON)
+                .setBaseUri("http://localhost:9998/")
+                .addFilter(new ResponseLoggingFilter())//log request and response for better debugging. You can also only log if a requests fails.
+                .addFilter(new RequestLoggingFilter())
+                .build();
+    }
+
     @Override
     public ResourceConfig configure() {
         MockitoAnnotations.initMocks(this);
@@ -46,16 +56,6 @@ public class CurriculumResourceTest extends JerseyTest {
                         bind(service).to(CurriculumService.class);
                     }
                 });
-    }
-
-    @BeforeClass
-    public static void initSpec() {
-        spec = new RequestSpecBuilder()
-                .setContentType(ContentType.JSON)
-                .setBaseUri("http://localhost:9998/")
-                .addFilter(new ResponseLoggingFilter())//log request and response for better debugging. You can also only log if a requests fails.
-                .addFilter(new RequestLoggingFilter())
-                .build();
     }
 
     @Test
@@ -165,7 +165,7 @@ public class CurriculumResourceTest extends JerseyTest {
         verify(service, times(1)).getCurriculumSemesters(anyString());
     }
 
-    @Test (expected = IOException.class)
+    @Test(expected = IOException.class)
     public void testExpectServerError() throws IOException, SQLException {
         when(service.getCurriculumSemesters(any()))
                 .thenReturn(null);

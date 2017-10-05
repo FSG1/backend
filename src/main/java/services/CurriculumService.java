@@ -15,7 +15,7 @@ public class CurriculumService {
     private final Connection conn;
 
     @Inject
-    public CurriculumService(Connection conn){
+    public CurriculumService(Connection conn) {
         this.conn = conn;
     }
 
@@ -39,7 +39,7 @@ public class CurriculumService {
         resultObject.set("semesters", resultArray);
 
         ArrayNode jsonArray = (ArrayNode) mapper.readTree(JSONString);
-        if(jsonArray.size() == 0) return resultObject;
+        if (jsonArray.size() == 0) return resultObject;
 
         ObjectNode currentModule = (ObjectNode) jsonArray.get(0);
         int semester = currentModule.get("semester").asInt();
@@ -54,10 +54,10 @@ public class CurriculumService {
 
         currentSemesterModules.add(currentModule);
 
-        for(int i = 1; i < jsonArray.size(); i++){
+        for (int i = 1; i < jsonArray.size(); i++) {
             currentModule = (ObjectNode) jsonArray.get(i);
 
-            if(currentModule.get("semester").asInt() != semester){
+            if (currentModule.get("semester").asInt() != semester) {
                 resultArray.add(currentSemester);
                 currentSemester = mapper.createObjectNode();
                 semester = currentModule.get("semester").asInt();

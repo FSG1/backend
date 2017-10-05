@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import database.Connection;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,16 +18,14 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class CurriculumServiceTest {
-    @Mock
-    private Connection conn;
-
-    @Mock
-    private ResultSet mockResult;
-
-    private CurriculumService service;
     final String query = "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n" +
             "FROM study.curriculum_overview co\n" +
             "WHERE study_programme = ?;";
+    @Mock
+    private Connection conn;
+    @Mock
+    private ResultSet mockResult;
+    private CurriculumService service;
 
     @Before
     public void initMocks() throws SQLException {
@@ -44,7 +41,7 @@ public class CurriculumServiceTest {
         );
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(),1);
+        assertEquals(semesters.size(), 1);
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -53,7 +50,7 @@ public class CurriculumServiceTest {
         when(mockResult.getString(anyString())).thenReturn("[{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":1,\"module_code\":\"BUA1\",\"module_name\":\"Business Administration 1\",\"credits\":4}]");
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(),1);
+        assertEquals(semesters.size(), 1);
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -72,7 +69,7 @@ public class CurriculumServiceTest {
         );
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(),8);
+        assertEquals(semesters.size(), 8);
         final JsonNode codes = semesters.path("module_code");
         verify(conn, times(1)).executeQuery(query, "SE");
     }
@@ -82,7 +79,7 @@ public class CurriculumServiceTest {
         when(mockResult.getString(anyString())).thenReturn("[]");
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(),0);
+        assertEquals(semesters.size(), 0);
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -91,7 +88,7 @@ public class CurriculumServiceTest {
         when(mockResult.getString(anyString())).thenReturn("[]");
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(),0);
+        assertEquals(semesters.size(), 0);
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 }

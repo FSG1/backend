@@ -17,7 +17,7 @@ public class CurriculumResource {
     private final CurriculumService service;
 
     @Inject
-    public CurriculumResource(CurriculumService service){
+    public CurriculumResource(CurriculumService service) {
         this.service = service;
     }
 

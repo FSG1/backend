@@ -11,8 +11,8 @@ public class Connection {
 
     public Connection() {
         Properties props = new Properties();
-        props.setProperty("user","fmms");
-        props.setProperty("password","test123456");
+        props.setProperty("user", "fmms");
+        props.setProperty("password", "test123456");
         try {
             String url = "jdbc:postgresql://localhost:5432/fmms";
             conn = DriverManager.getConnection(url, props);
