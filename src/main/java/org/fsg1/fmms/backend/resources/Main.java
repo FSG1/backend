@@ -20,7 +20,7 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
-        Configuration config = new Configuration();
+        Configuration config = Configuration.fromEnv();
 
         // create a resource config that scans for JAX-RS resources and providers
         // in resources package
@@ -31,8 +31,6 @@ public class Main {
 
         rc.register(di);
         rc.packages("resources");
-
-        System.out.println("Server listen on: " + config.getServerString());
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
