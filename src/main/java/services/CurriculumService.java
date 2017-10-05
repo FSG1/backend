@@ -1,6 +1,5 @@
 package services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,7 +9,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
 
 public class CurriculumService {
 
@@ -20,6 +18,7 @@ public class CurriculumService {
     public CurriculumService(Connection conn){
         this.conn = conn;
     }
+
     public ObjectNode getCurriculumSemesters(String curriculumId) throws SQLException, IOException {
         String query =
                 "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n" +
@@ -29,34 +28,56 @@ public class CurriculumService {
         resultSet.next();
         final String JSONString = resultSet.getString("semesters");
 
+        ObjectNode resultObject = buildJsonResult(JSONString);
+        return resultObject;
+    }
+
+    private ObjectNode buildJsonResult(String JSONString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode result = mapper.createObjectNode();
-        ArrayNode resultSemesterArray = mapper.createArrayNode();
-        result.set("semesters", resultSemesterArray);
+        ObjectNode resultObject = mapper.createObjectNode();
+        ArrayNode resultArray = mapper.createArrayNode();
+        resultObject.set("semesters", resultArray);
 
-        ArrayNode actualObj = (ArrayNode) mapper.readTree(JSONString);
+        ArrayNode jsonArray = (ArrayNode) mapper.readTree(JSONString);
+        if(jsonArray.size() == 0) return resultObject;
 
-        final Iterator<JsonNode> jsonIterator = actualObj.iterator();
-        while(jsonIterator.hasNext()){
-            ObjectNode module = (ObjectNode) jsonIterator.next();
-            final int semester = module.get("semester").asInt();
-            final ObjectNode currentSemester = mapper.createObjectNode();
-            currentSemester.put("semester", semester);
-            final ArrayNode modules = mapper.createArrayNode();
-            currentSemester.set("modules", modules);
+        ObjectNode currentModule = (ObjectNode) jsonArray.get(0);
+        int semester = currentModule.get("semester").asInt();
 
-            while(module.get("semester").asInt() == semester){
-                module.remove("semester");
-                module.remove("name");
-                module.remove("study_programme");
+        cleanModuleNode(currentModule);
 
-                modules.add(module);
+        ObjectNode currentSemester = mapper.createObjectNode();
+        currentSemester.put("semester", semester);
 
-                if(jsonIterator.hasNext()) module = (ObjectNode) jsonIterator.next();
+        ArrayNode currentSemesterModules = mapper.createArrayNode();
+        currentSemester.set("modules", currentSemesterModules);
+
+        currentSemesterModules.add(currentModule);
+
+        for(int i = 1; i < jsonArray.size(); i++){
+            currentModule = (ObjectNode) jsonArray.get(i);
+
+            if(currentModule.get("semester").asInt() != semester){
+                resultArray.add(currentSemester);
+                currentSemester = mapper.createObjectNode();
+                semester = currentModule.get("semester").asInt();
+                currentSemester.put("semester", semester);
+
+                currentSemesterModules = mapper.createArrayNode();
+                currentSemester.set("modules", currentSemesterModules);
+
             }
-            modules.add(module);
-            resultSemesterArray.add(currentSemester);
+
+            cleanModuleNode(currentModule);
+            currentSemesterModules.add(currentModule);
         }
-        return result;
+        resultArray.add(currentSemester);
+        return resultObject;
+    }
+
+    private void cleanModuleNode(ObjectNode currentModule) {
+        currentModule.remove("semester");
+        currentModule.remove("name");
+        currentModule.remove("study_programme");
     }
 }
