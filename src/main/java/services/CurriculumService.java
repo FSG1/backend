@@ -10,35 +10,50 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The service class for the curriculum endpoint.
+ */
 public class CurriculumService {
 
     private final Connection conn;
 
+    /**
+     * Constructor. Takes a connection object which it uses to query a database.
+     * @param connection The connection object.
+     */
     @Inject
-    public CurriculumService(Connection conn) {
-        this.conn = conn;
+    public CurriculumService(final Connection connection) {
+        conn = connection;
     }
 
-    public ObjectNode getCurriculumSemesters(String curriculumId) throws SQLException, IOException {
+    /**
+     * Gets all semesters and their modules in a given curriculum.
+     *
+     * @param curriculumId The identifier of the curriculum.
+     * @return A JSON ObjectNode of the resulting JSON object.
+     * @throws SQLException If something goes wrong.
+     * @throws IOException  If something goes wrong.
+     */
+    public ObjectNode getCurriculumSemesters(final String curriculumId) throws SQLException, IOException {
         String query =
-                "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n" +
-                        "FROM study.curriculum_overview co\n" +
-                        "WHERE study_programme = ?;";
+                "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n"
+                        + "FROM study.curriculum_overview co\n"
+                        + "WHERE study_programme = ?;";
         final ResultSet resultSet = conn.executeQuery(query, curriculumId);
         resultSet.next();
-        final String JSONString = resultSet.getString("semesters");
+        final String jsonString = resultSet.getString("semesters");
 
-        ObjectNode resultObject = buildJsonResult(JSONString);
+        ObjectNode resultObject = buildJsonResult(jsonString);
         return resultObject;
     }
 
-    private ObjectNode buildJsonResult(String JSONString) throws IOException {
+    private ObjectNode buildJsonResult(final String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode resultObject = mapper.createObjectNode();
         ArrayNode resultArray = mapper.createArrayNode();
         resultObject.set("semesters", resultArray);
 
-        ArrayNode jsonArray = (ArrayNode) mapper.readTree(JSONString);
+        ArrayNode jsonArray = (ArrayNode) mapper.readTree(jsonString);
         if (jsonArray.size() == 0) return resultObject;
 
         ObjectNode currentModule = (ObjectNode) jsonArray.get(0);
@@ -75,7 +90,7 @@ public class CurriculumService {
         return resultObject;
     }
 
-    private void cleanModuleNode(ObjectNode currentModule) {
+    private void cleanModuleNode(final ObjectNode currentModule) {
         currentModule.remove("semester");
         currentModule.remove("name");
         currentModule.remove("study_programme");

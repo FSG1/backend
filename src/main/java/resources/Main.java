@@ -10,9 +10,12 @@ import java.net.URI;
 /**
  * Main class.
  */
-public class Main {
+public final class Main {
     // Base URI the Grizzly HTTP server will listen on
     static final String BASE_URI = "http://localhost:8080/fmms/";
+
+    private Main() {
+    }
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -34,10 +37,10 @@ public class Main {
     /**
      * Main method.
      *
-     * @param args
-     * @throws IOException
+     * @param args Arguments.
+     * @throws IOException If the server could not start.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));

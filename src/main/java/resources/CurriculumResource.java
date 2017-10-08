@@ -11,14 +11,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * The class containing the curriculum endpoints.
+ */
 @Path("curriculum")
 public class CurriculumResource {
 
     private final CurriculumService service;
 
+    /**
+     * Constructor which receives the service as dependency.
+     * @param curriculumService CurriculumService object.
+     */
     @Inject
-    public CurriculumResource(CurriculumService service) {
-        this.service = service;
+    public CurriculumResource(final CurriculumService curriculumService) {
+        service = curriculumService;
     }
 
     /**
@@ -30,11 +37,11 @@ public class CurriculumResource {
     @GET
     @Path("/{curriculum_id}/semesters")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurriculumSemesters(@PathParam("curriculum_id") String curriculumId) {
+    public Response getCurriculumSemesters(@PathParam("curriculum_id") final String curriculumId) {
         try {
             final ObjectNode result = service.getCurriculumSemesters(curriculumId);
-            final String JsonString = result.toString();
-            return Response.status(200).entity(JsonString).build();
+            final String jsonString = result.toString();
+            return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();

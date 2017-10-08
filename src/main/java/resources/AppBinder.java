@@ -6,8 +6,15 @@ import services.CurriculumService;
 
 import javax.inject.Singleton;
 
-public class AppBinder extends AbstractBinder {
+/**
+ * The AppBinder. This resolves dependencies using Jersey's HK2 DI.
+ */
+public final class AppBinder extends AbstractBinder {
 
+    /**
+     * Configures dependencies. Dependencies can be shared in a Singleton, recreated for every request
+     * and more. Read HK2's DI documentation.
+     */
     @Override
     protected void configure() {
         //Connection conn = new Connection();
