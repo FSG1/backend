@@ -1,4 +1,4 @@
-package org.fsg1.backend.jaxrs;
+package org.fsg1.fmms.backend.jaxrs;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -22,7 +22,7 @@ public class Main extends ResourceConfig {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in jaxrs package
-        final ResourceConfig rc = new ResourceConfig().packages("org/fsg1/backend/jaxrs");
+        final ResourceConfig rc = new ResourceConfig().packages("org/fsg1/fmms/backend/jaxrs");
         //rc.register(AuthenticationFilter.class);
 
         // create and start a new instance of grizzly http server
