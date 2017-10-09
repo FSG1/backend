@@ -3,8 +3,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fsg1</groupId>
-    <artifactId>fmmsbackend</artifactId>
+    <groupId>org.fsg1.backend</groupId>
+    <artifactId>fmms-backend</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
     <name>fmmsbackend</name>
