@@ -27,7 +27,7 @@ public final class Main {
         // in resources package
         final ResourceConfig rc = new ResourceConfig();
         rc.register(new AppBinder());
-        rc.packages("resources");
+        rc.packages("org.fsg1.fmms.backend.resources");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
