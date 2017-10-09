@@ -43,7 +43,7 @@ public final class Configuration {
                 .setBase(env.getOrDefault("BASE", "/fmms"))
                 .setDbUser(env.getOrDefault("DB_USER", "fmms"))
                 .setDbPassword(env.getOrDefault("DB_PASSWD", ""))
-                .setDb(env.getOrDefault("DB", "localhost:5432/fmms"));
+                .setDb(env.getOrDefault("DB", "172.17.0.1:5432/fmms"));
 
         return builder.build();
     }
