@@ -3,7 +3,7 @@ package org.fsg1.fmms.backend.database;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
-import org.fsg1.fmms.backend.resources.Configuration;
+import org.fsg1.fmms.backend.app.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

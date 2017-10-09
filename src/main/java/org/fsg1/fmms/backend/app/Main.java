@@ -1,4 +1,4 @@
-package org.fsg1.fmms.backend.resources;
+package org.fsg1.fmms.backend.app;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -34,7 +34,7 @@ public final class Main {
         di.bind(config).to(Configuration.class);
 
         rc.register(di);
-        rc.packages("resources");
+        rc.packages("org.fsg1.fmms.backend.endpoints");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

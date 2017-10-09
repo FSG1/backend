@@ -1,6 +1,6 @@
 package org.fsg1.fmms.backend.database;
 
-import org.fsg1.fmms.backend.resources.Configuration;
+import org.fsg1.fmms.backend.app.Configuration;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
