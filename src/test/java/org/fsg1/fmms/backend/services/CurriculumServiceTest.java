@@ -20,9 +20,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class CurriculumServiceTest {
-    final String query = "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n" +
-            "FROM study.curriculum_overview co\n" +
-            "WHERE study_programme = ?;";
     @Mock
     private Connection conn;
     @Mock
@@ -59,7 +56,7 @@ public class CurriculumServiceTest {
         assertEquals(expectedJAVA.get("module_name").asText(), "Programming in Java 1");
         assertEquals(expectedJAVA.get("credits").asInt(), 5);
 
-        verify(conn, times(1)).executeQuery(query, "SE");
+        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
     }
 
     @Test
@@ -77,7 +74,7 @@ public class CurriculumServiceTest {
         assertEquals(expectedBUA.get("module_name").asText(), "Business Administration 1");
         assertEquals(expectedBUA.get("credits").asInt(), 4);
 
-        verify(conn, times(1)).executeQuery(query, "SE");
+        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
     }
 
     @Test
@@ -106,7 +103,7 @@ public class CurriculumServiceTest {
                 verifyModuleStructure(module);
             }
         }
-        verify(conn, times(1)).executeQuery(query, "SE");
+        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
     }
 
     @Test
@@ -115,7 +112,7 @@ public class CurriculumServiceTest {
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 0);
-        verify(conn, times(1)).executeQuery(query, "SE");
+        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
     }
 
     private void verifyModuleStructure(JsonNode module) {

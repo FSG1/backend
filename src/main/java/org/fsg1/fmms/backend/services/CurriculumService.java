@@ -17,6 +17,11 @@ public class CurriculumService {
 
     private final Connection conn;
 
+    final String queryCurriculumSemesters =
+            "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n"
+            + "FROM study.curriculum_overview co\n"
+            + "WHERE study_programme = ?;";
+
     /**
      * Constructor. Takes a connection object which it uses to query a database.
      * @param connection The connection object.
@@ -35,11 +40,7 @@ public class CurriculumService {
      * @throws IOException  If something goes wrong.
      */
     public ObjectNode getCurriculumSemesters(final String curriculumId) throws SQLException, IOException {
-        String query =
-                "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n"
-                        + "FROM study.curriculum_overview co\n"
-                        + "WHERE study_programme = ?;";
-        final ResultSet resultSet = conn.executeQuery(query, curriculumId);
+        final ResultSet resultSet = conn.executeQuery(queryCurriculumSemesters, curriculumId);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 
