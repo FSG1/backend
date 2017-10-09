@@ -17,7 +17,6 @@ public final class AppBinder extends AbstractBinder {
      */
     @Override
     protected void configure() {
-        //Connection conn = new Connection();
         bind(Connection.class).to(Connection.class).in(Singleton.class);
         bind(CurriculumService.class).to(CurriculumService.class).in(Singleton.class);
     }
