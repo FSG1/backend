@@ -23,11 +23,11 @@ public class Configuration {
         Builder builder = new Builder();
 
         builder.setHost(env.getOrDefault("HOST", "0.0.0.0"));
-        builder.setHost(env.getOrDefault("PORT", "8080"));
-        builder.setHost(env.getOrDefault("BASE", "/fmms"));
-        builder.setHost(env.getOrDefault("DB_USER", "fmms"));
-        builder.setHost(env.getOrDefault("DB_PASSWD", ""));
-        builder.setHost(env.getOrDefault("DB", "localhost:5432/fmms"));
+        builder.setPort(env.getOrDefault("PORT", "8080"));
+        builder.setBase(env.getOrDefault("BASE", "/fmms"));
+        builder.setDbUser(env.getOrDefault("DB_USER", "fmms"));
+        builder.setDbPassword(env.getOrDefault("DB_PASSWD", ""));
+        builder.setDb(env.getOrDefault("DB", "localhost:5432/fmms"));
 
         return builder.build();
     }
