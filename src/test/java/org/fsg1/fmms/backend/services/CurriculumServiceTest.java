@@ -1,6 +1,7 @@
 package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.fsg1.fmms.backend.database.Connection;
 import org.junit.Before;
@@ -11,8 +12,9 @@ import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -42,6 +44,21 @@ public class CurriculumServiceTest {
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 1);
+
+        final ArrayNode modules = (ArrayNode) semesters.findValue("modules");
+        assertEquals(modules.size(), 2);
+        final JsonNode expectedBUA = modules.get(0);
+        verifyModuleStructure(expectedBUA);
+        assertEquals(expectedBUA.get("module_code").asText(), "BUA1");
+        assertEquals(expectedBUA.get("module_name").asText(), "Business Administration 1");
+        assertEquals(expectedBUA.get("credits").asInt(), 4);
+
+        final JsonNode expectedJAVA = modules.get(1);
+        verifyModuleStructure(expectedJAVA);
+        assertEquals(expectedJAVA.get("module_code").asText(), "JAVA1");
+        assertEquals(expectedJAVA.get("module_name").asText(), "Programming in Java 1");
+        assertEquals(expectedJAVA.get("credits").asInt(), 5);
+
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -51,6 +68,15 @@ public class CurriculumServiceTest {
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 1);
+
+        final ArrayNode modules = (ArrayNode) semesters.findValue("modules");
+        assertEquals(modules.size(), 1);
+        final JsonNode expectedBUA = modules.get(0);
+        verifyModuleStructure(expectedBUA);
+        assertEquals(expectedBUA.get("module_code").asText(), "BUA1");
+        assertEquals(expectedBUA.get("module_name").asText(), "Business Administration 1");
+        assertEquals(expectedBUA.get("credits").asInt(), 4);
+
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -68,9 +94,18 @@ public class CurriculumServiceTest {
 
         );
         ObjectNode result = service.getCurriculumSemesters("SE");
-        final JsonNode semesters = result.findValue("semesters");
+        final ArrayNode semesters = (ArrayNode) result.findValue("semesters");
         assertEquals(semesters.size(), 8);
-        final JsonNode codes = semesters.path("module_code");
+        for (int i = 0; i < semesters.size(); i++) {
+            assertEquals(semesters.get(i).get("semester").asInt(), i + 1);
+        }
+
+        final List<JsonNode> modulesArray = semesters.findValues("modules");
+        for (JsonNode modules : modulesArray) {
+            for (JsonNode module : modules) {
+                verifyModuleStructure(module);
+            }
+        }
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
@@ -90,5 +125,15 @@ public class CurriculumServiceTest {
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 0);
         verify(conn, times(1)).executeQuery(query, "SE");
+    }
+
+
+    private void verifyModuleStructure(JsonNode module) {
+        assertNotNull(module.get("module_code"));
+        assertNotNull(module.get("module_name"));
+        assertNotNull(module.get("credits"));
+        assertNull(module.get("semester"));
+        assertNull(module.get("study_programme"));
+        assertNull(module.get("name"));
     }
 }
