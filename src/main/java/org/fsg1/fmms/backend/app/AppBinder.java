@@ -1,4 +1,4 @@
-package org.fsg1.fmms.backend.resources;
+package org.fsg1.fmms.backend.app;
 
 import org.fsg1.fmms.backend.database.Connection;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
