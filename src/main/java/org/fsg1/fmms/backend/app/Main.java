@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.app;
 
+import org.fsg1.fmms.backend.filters.CORSResponseFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -34,6 +35,7 @@ public final class Main {
         di.bind(config).to(Configuration.class);
 
         rc.register(di);
+        rc.register(CORSResponseFilter.class);
         rc.packages("org.fsg1.fmms.backend.endpoints");
 
         // create and start a new instance of grizzly http server
