@@ -57,7 +57,7 @@ public final class Connection {
         final int parameterCount = ps.getParameterMetaData().getParameterCount();
         int i = 1;
         for (Object arg : args) {
-            if(i > parameterCount) return;
+            if (i > parameterCount) return;
             if (arg instanceof Integer) {
                 ps.setInt(i++, (Integer) arg);
             } else {
