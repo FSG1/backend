@@ -1,7 +1,7 @@
-package resources;
+package org.fsg1.fmms.backend.resources;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import services.CurriculumService;
+import org.fsg1.fmms.backend.services.CurriculumService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

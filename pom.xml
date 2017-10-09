@@ -249,7 +249,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>resources.Main</mainClass>
+                            <mainClass>org.fsg1.fmms.backend.resources.Main</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>

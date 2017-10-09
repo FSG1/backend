@@ -1,8 +1,8 @@
-package resources;
+package org.fsg1.fmms.backend.resources;
 
-import database.Connection;
+import org.fsg1.fmms.backend.database.Connection;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
-import services.CurriculumService;
+import org.fsg1.fmms.backend.services.CurriculumService;
 
 import javax.inject.Singleton;
 

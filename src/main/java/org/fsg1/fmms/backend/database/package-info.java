@@ -1,4 +1,4 @@
 /**
  * This package contains all the classes related to connecting to a database.
  */
-package database;
+package org.fsg1.fmms.backend.database;

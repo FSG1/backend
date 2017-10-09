@@ -1,4 +1,4 @@
-package resources;
+package org.fsg1.fmms.backend.resources;
 
 import org.junit.Test;
 

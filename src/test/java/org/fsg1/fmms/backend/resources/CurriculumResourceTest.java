@@ -1,4 +1,4 @@
-package resources;
+package org.fsg1.fmms.backend.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,7 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import services.CurriculumService;
+import org.fsg1.fmms.backend.services.CurriculumService;
 
 import java.io.IOException;
 import java.sql.SQLException;

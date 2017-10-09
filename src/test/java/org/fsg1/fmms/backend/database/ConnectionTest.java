@@ -1,4 +1,4 @@
-package database;
+package org.fsg1.fmms.backend.database;
 
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.MockParameterMap;

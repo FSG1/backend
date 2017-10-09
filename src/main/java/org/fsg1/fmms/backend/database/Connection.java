@@ -1,4 +1,4 @@
-package database;
+package org.fsg1.fmms.backend.database;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

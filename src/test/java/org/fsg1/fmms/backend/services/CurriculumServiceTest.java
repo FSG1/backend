@@ -1,8 +1,8 @@
-package services;
+package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import database.Connection;
+import org.fsg1.fmms.backend.database.Connection;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
