@@ -118,16 +118,6 @@ public class CurriculumServiceTest {
         verify(conn, times(1)).executeQuery(query, "SE");
     }
 
-    @Test
-    public void testProcessNonexistantSemester() throws SQLException, IOException {
-        when(mockResult.getString(anyString())).thenReturn("[]");
-        ObjectNode result = service.getCurriculumSemesters("SE");
-        final JsonNode semesters = result.findValue("semesters");
-        assertEquals(semesters.size(), 0);
-        verify(conn, times(1)).executeQuery(query, "SE");
-    }
-
-
     private void verifyModuleStructure(JsonNode module) {
         assertNotNull(module.get("module_code"));
         assertNotNull(module.get("module_name"));
