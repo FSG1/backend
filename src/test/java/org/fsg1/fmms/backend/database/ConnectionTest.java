@@ -6,22 +6,26 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import org.fsg1.fmms.backend.app.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ConnectionTest extends BasicJDBCTestCaseAdapter {
 
-    Configuration configMock;
+    @Mock
+    private Configuration configMock;
 
     @Before
     public void setupJDBC(){
         getJDBCMockObjectFactory().registerMockDriver();
 
-        configMock = Mockito.mock(Configuration.class);
         Mockito.when(configMock.getDbString()).thenReturn("jdbc:postgresql://localhost:5432/fmms");
         Mockito.when(configMock.getDbUser()).thenReturn("fmms");
         Mockito.when(configMock.getDbPassword()).thenReturn("test123456");
