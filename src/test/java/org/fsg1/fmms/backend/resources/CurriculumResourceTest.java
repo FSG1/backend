@@ -165,10 +165,14 @@ public class CurriculumResourceTest extends JerseyTest {
         verify(service, times(1)).getCurriculumSemesters(anyString());
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void testExpectServerError() throws IOException, SQLException {
         when(service.getCurriculumSemesters(any()))
                 .thenReturn(null);
-        get("curriculum/1Fuio/semesters");
+        given()
+                .spec(spec)
+                .get("curriculum/1Fuio/semesters")
+                .then()
+                .statusCode(500);
     }
 }
