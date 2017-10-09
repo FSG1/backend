@@ -15,7 +15,7 @@ public final class Connection {
     /**
      * The constructor. It immediately connects to the database.
      */
-    Connection() {
+    public Connection() {
         Properties props = new Properties();
         props.setProperty("user", "fmms");
         props.setProperty("password", "test123456");
