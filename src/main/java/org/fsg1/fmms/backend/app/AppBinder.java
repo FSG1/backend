@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.app;
 
+import org.fsg1.fmms.backend.database.Connection;
 import org.fsg1.fmms.backend.services.CurriculumService;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -16,6 +17,7 @@ public final class AppBinder extends AbstractBinder {
      */
     @Override
     protected void configure() {
-        bind(CurriculumService.class).in(Singleton.class);
+        bind(CurriculumService.class).to(CurriculumService.class).in(Singleton.class);
+        bind(Connection.class).to(Connection.class).in(Singleton.class);
     }
 }

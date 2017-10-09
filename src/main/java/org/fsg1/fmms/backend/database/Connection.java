@@ -2,6 +2,7 @@ package org.fsg1.fmms.backend.database;
 
 import org.fsg1.fmms.backend.app.Configuration;
 
+import javax.inject.Inject;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ public final class Connection {
      * The constructor. It immediately connects to the database.
      * @param config Active server configuration
      */
+    @Inject
     public Connection(final Configuration config) {
         Properties props = new Properties();
         props.setProperty("user", config.getDbUser());
