@@ -3,11 +3,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fsg1</groupId>
-    <artifactId>fmmsbackend</artifactId>
+    <groupId>org.fsg1.fmms</groupId>
+    <artifactId>backend</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-    <name>fmmsbackend</name>
+    <name>backend</name>
 
     <properties>
         <jdk.version>1.8</jdk.version>
@@ -172,7 +172,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>resources.Main</mainClass>
+                    <mainClass>org.fsg1.fmms.backend.jaxrs.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
