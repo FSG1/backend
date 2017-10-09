@@ -22,7 +22,7 @@ public class CORSResponseFilterTest extends JerseyTest {
                 .get("http://localhost:9998/fmms/cors")
                 .then()
                 .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
                 .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     }
 }
