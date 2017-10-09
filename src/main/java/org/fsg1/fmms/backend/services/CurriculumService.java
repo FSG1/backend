@@ -48,12 +48,12 @@ public class CurriculumService {
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 
-        ObjectNode resultObject = buildJsonResult(jsonString);
-        return resultObject;
+        return buildJsonResult(jsonString);
     }
 
     private ObjectNode buildJsonResult(final String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+
         ObjectNode resultObject = mapper.createObjectNode();
         ArrayNode resultArray = mapper.createArrayNode();
         resultObject.set("semesters", resultArray);

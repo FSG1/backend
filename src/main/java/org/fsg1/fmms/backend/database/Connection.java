@@ -1,5 +1,8 @@
 package org.fsg1.fmms.backend.database;
 
+import org.fsg1.fmms.backend.app.Configuration;
+
+import javax.inject.Inject;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,13 +17,16 @@ public final class Connection {
 
     /**
      * The constructor. It immediately connects to the database.
+     * @param config Active server configuration
      */
-    public Connection() {
+    @Inject
+    public Connection(final Configuration config) {
         Properties props = new Properties();
-        props.setProperty("user", "fmms");
-        props.setProperty("password", "test123456");
+        props.setProperty("user", config.getDbUser());
+        props.setProperty("password", config.getDbPassword());
+
         try {
-            String url = "jdbc:postgresql://localhost:5432/fmms";
+            String url = config.getDbString();
             conn = DriverManager.getConnection(url, props);
         } catch (SQLException e) {
             e.printStackTrace();

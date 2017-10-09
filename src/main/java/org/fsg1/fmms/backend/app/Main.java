@@ -11,41 +11,61 @@ import java.net.URI;
  * Main class.
  */
 public final class Main {
-    // Base URI the Grizzly HTTP server will listen on
-    static final String BASE_URI = "http://localhost:8080/fmms/";
 
+    /**
+     * Private constructor.
+     * Class should never be instantiated.
+     */
     private Main() {
     }
 
     /**
-     * Starts Grizzly HTTP server exposing JAX-RS endpoints defined in this application.
-     *
+     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
-        // create a resource config that scans for JAX-RS endpoints and providers
-        // in endpoints package
+        Configuration config = Configuration.fromEnv();
+
+        // create a resource config that scans for JAX-RS resources and providers
+        // in resources package
         final ResourceConfig rc = new ResourceConfig();
-        rc.register(new AppBinder());
+
+        AppBinder di = new AppBinder();
+        di.bind(config).to(Configuration.class);
+
+        rc.register(di);
         rc.packages("org.fsg1.fmms.backend.endpoints");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(config.getServerString()), rc);
     }
 
     /**
      * Main method.
-     *
-     * @param args Arguments.
-     * @throws IOException If the server could not start.
+     * @param args Command line arguments
+     * @throws IOException if an error occurs while attempting to start the server.
      */
     public static void main(final String[] args) throws IOException {
+        System.out.println("Booting server ...");
+
         final HttpServer server = startServer();
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
-        System.in.read();
-        server.stop();
+
+        // register shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Stopping server ...");
+            server.shutdownNow();
+        }, "shutdownHook"));
+
+        // run
+        try {
+            System.out.println("Starting server ...");
+            server.start();
+            System.out.println("Press CTRL^C to exit..");
+            Thread.currentThread().join();
+        } catch (Exception e) {
+            System.err.println(e.toString());
+        }
     }
 }
 
