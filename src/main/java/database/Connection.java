@@ -54,8 +54,10 @@ public final class Connection {
      * this method is called on a closed <code>PreparedStatement</code>.
      */
     private void mapParams(final PreparedStatement ps, final Object... args) throws SQLException {
+        final int parameterCount = ps.getParameterMetaData().getParameterCount();
         int i = 1;
         for (Object arg : args) {
+            if(i > parameterCount) return;
             if (arg instanceof Integer) {
                 ps.setInt(i++, (Integer) arg);
             } else {
