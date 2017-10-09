@@ -18,7 +18,7 @@ public final class Connection {
      * The constructor. It immediately connects to the database.
      * @param config Active server configuration
      */
-    Connection(final Configuration config) {
+    public Connection(final Configuration config) {
         Properties props = new Properties();
         props.setProperty("user", config.getDbUser());
         props.setProperty("password", config.getDbPassword());

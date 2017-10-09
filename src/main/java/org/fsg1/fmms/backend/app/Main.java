@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.app;
 
+import org.fsg1.fmms.backend.database.Connection;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -25,6 +26,7 @@ public final class Main {
      */
     public static HttpServer startServer() {
         Configuration config = Configuration.fromEnv();
+        Connection connection = new Connection(config);
 
         // create a resource config that scans for JAX-RS resources and providers
         // in resources package
@@ -32,6 +34,7 @@ public final class Main {
 
         AppBinder di = new AppBinder();
         di.bind(config).to(Configuration.class);
+        di.bind(connection).to(Connection.class);
 
         rc.register(di);
         rc.packages("org.fsg1.fmms.backend.endpoints");
