@@ -28,8 +28,9 @@ public final class Connection {
     }
 
     /**
-     * Execute any query on the database using prepared statements.
-     * @param query The SQL String of the query you want to perform.
+     * Execute any query on the database using a <code>PreparedStatement</code>.
+     *
+     * @param query      The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
      * @throws SQLException if something goes wrong performing the query.
@@ -40,6 +41,18 @@ public final class Connection {
         return preparedStatement.executeQuery();
     }
 
+    /**
+     * Maps parameters to a PreparedStatement.
+     * Any objects given in the `args` array will be mapped sequentially to any question mark in the
+     * <code>PreparedStatement</code>. For example, a <code>PreparedStatement</code>
+     * with the query `SELECT * from ?` will have one open parameter to be mapped and the
+     * first object given will be mapped to that position. Any excess parameters will not be mapped.
+     *
+     * @param ps   PreparedStatement to map parameters to.
+     * @param args Array of Integers or Strings that represent the parameters.
+     * @throws SQLException if a database access error occurs or
+     * this method is called on a closed <code>PreparedStatement</code>.
+     */
     private void mapParams(final PreparedStatement ps, final Object... args) throws SQLException {
         int i = 1;
         for (Object arg : args) {
