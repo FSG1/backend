@@ -9,9 +9,11 @@ VOLUME /root/.m2
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-RUN mvn install -Dcheckstyle.skip
+RUN mvn clean package -Dcheckstyle.skip
 
 EXPOSE 8080
+# Cache maven dependencies
+VOLUME /root/.m2
 
 ENTRYPOINT [ "mvn" ]
 CMD [ "exec:java", "-Dcheckstyle.skip" ]
