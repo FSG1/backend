@@ -85,7 +85,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>jaxrs.Main</mainClass>
+                    <mainClass>org.fsg1.backend.jaxrs.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
