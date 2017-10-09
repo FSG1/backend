@@ -38,12 +38,12 @@ public final class Configuration {
 
         Builder builder = new Builder();
 
-        builder.setHost(env.getOrDefault("HOST", "0.0.0.0"));
-        builder.setPort(env.getOrDefault("PORT", "8080"));
-        builder.setBase(env.getOrDefault("BASE", "/fmms"));
-        builder.setDbUser(env.getOrDefault("DB_USER", "fmms"));
-        builder.setDbPassword(env.getOrDefault("DB_PASSWD", ""));
-        builder.setDb(env.getOrDefault("DB", "localhost:5432/fmms"));
+        builder.setHost(env.getOrDefault("HOST", "0.0.0.0"))
+                .setPort(env.getOrDefault("PORT", "8080"))
+                .setBase(env.getOrDefault("BASE", "/fmms"))
+                .setDbUser(env.getOrDefault("DB_USER", "fmms"))
+                .setDbPassword(env.getOrDefault("DB_PASSWD", ""))
+                .setDb(env.getOrDefault("DB", "localhost:5432/fmms"));
 
         return builder.build();
     }
