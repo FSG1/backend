@@ -1,6 +1,7 @@
 package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.fsg1.fmms.backend.database.Connection;
@@ -54,6 +55,8 @@ public class CurriculumService {
 
     private ObjectNode buildJsonResult(final String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
         ObjectNode resultObject = mapper.createObjectNode();
         ArrayNode resultArray = mapper.createArrayNode();
         resultObject.set("semesters", resultArray);
