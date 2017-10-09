@@ -79,7 +79,6 @@
             <property name="scope" value="package"/>
         </module>
         <module name="JavadocType"/>
-        <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
 
         <!-- Checks for Naming Conventions.                  -->
@@ -105,7 +104,9 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
+        <module name="LineLength">
+            <property name="max" value="110"/>
+        </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 
@@ -137,7 +138,9 @@
         <module name="AvoidNestedBlocks"/>
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
-        <module name="NeedBraces"/>
+        <module name="NeedBraces">
+            <property name="allowSingleLineStatement" value="true"/>
+        </module>
         <module name="RightCurly"/>
 
         <!-- Checks for common coding problems               -->
