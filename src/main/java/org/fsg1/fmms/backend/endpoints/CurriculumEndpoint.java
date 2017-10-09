@@ -1,4 +1,4 @@
-package org.fsg1.fmms.backend.resources;
+package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.fsg1.fmms.backend.services.CurriculumService;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
  * The class containing the curriculum endpoints.
  */
 @Path("curriculum")
-public class CurriculumResource {
+public class CurriculumEndpoint {
 
     private final CurriculumService service;
 
@@ -24,7 +24,7 @@ public class CurriculumResource {
      * @param curriculumService CurriculumService object.
      */
     @Inject
-    public CurriculumResource(final CurriculumService curriculumService) {
+    public CurriculumEndpoint(final CurriculumService curriculumService) {
         service = curriculumService;
     }
 

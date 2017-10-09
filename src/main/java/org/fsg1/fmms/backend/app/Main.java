@@ -18,16 +18,16 @@ public final class Main {
     }
 
     /**
-     * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     * Starts Grizzly HTTP server exposing JAX-RS endpoints defined in this application.
      *
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
-        // create a resource config that scans for JAX-RS resources and providers
-        // in resources package
+        // create a resource config that scans for JAX-RS endpoints and providers
+        // in endpoints package
         final ResourceConfig rc = new ResourceConfig();
         rc.register(new AppBinder());
-        rc.packages("org.fsg1.fmms.backend.resources");
+        rc.packages("org.fsg1.fmms.backend.endpoints");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

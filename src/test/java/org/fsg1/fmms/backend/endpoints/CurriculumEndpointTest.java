@@ -1,4 +1,4 @@
-package org.fsg1.fmms.backend.resources;
+package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class CurriculumResourceTest extends JerseyTest {
+public class CurriculumEndpointTest extends JerseyTest {
 
     private static RequestSpecification spec;
     private ObjectMapper mapper = new ObjectMapper();
@@ -48,7 +48,7 @@ public class CurriculumResourceTest extends JerseyTest {
     public ResourceConfig configure() {
         MockitoAnnotations.initMocks(this);
         return new ResourceConfig()
-                .register(CurriculumResource.class)
+                .register(CurriculumEndpoint.class)
                 .register(new AbstractBinder() {
                     @Override
                     protected void configure() {
