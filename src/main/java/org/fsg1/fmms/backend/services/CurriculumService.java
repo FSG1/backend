@@ -17,10 +17,14 @@ public class CurriculumService {
 
     private final Connection conn;
 
-    final String queryCurriculumSemesters =
+    private final String queryCurriculumSemesters =
             "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n"
             + "FROM study.curriculum_overview co\n"
             + "WHERE study_programme = ?;";
+
+    final String getQueryCurriculumSemesters() {
+        return queryCurriculumSemesters;
+    }
 
     /**
      * Constructor. Takes a connection object which it uses to query a database.

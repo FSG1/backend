@@ -56,7 +56,7 @@ public class CurriculumServiceTest {
         assertEquals(expectedJAVA.get("module_name").asText(), "Programming in Java 1");
         assertEquals(expectedJAVA.get("credits").asInt(), 5);
 
-        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemesters(), "SE");
     }
 
     @Test
@@ -74,7 +74,7 @@ public class CurriculumServiceTest {
         assertEquals(expectedBUA.get("module_name").asText(), "Business Administration 1");
         assertEquals(expectedBUA.get("credits").asInt(), 4);
 
-        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemesters(), "SE");
     }
 
     @Test
@@ -103,7 +103,7 @@ public class CurriculumServiceTest {
                 verifyModuleStructure(module);
             }
         }
-        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemesters(), "SE");
     }
 
     @Test
@@ -112,7 +112,7 @@ public class CurriculumServiceTest {
         ObjectNode result = service.getCurriculumSemesters("SE");
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 0);
-        verify(conn, times(1)).executeQuery(service.queryCurriculumSemesters, "SE");
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemesters(), "SE");
     }
 
     private void verifyModuleStructure(JsonNode module) {
