@@ -6,13 +6,16 @@ cache:
   directories:
     - $HOME/.m2
 
+# For install no tests, javadoc or checkstyle, just download all dependencies
 install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B
 
 script:
-  - mvn test -B
+  # Delete precompiles parts and start tests
+  - mvn clean test -B
 
 notifications:
   email:
     on_success: never
     on_failure: change
+
