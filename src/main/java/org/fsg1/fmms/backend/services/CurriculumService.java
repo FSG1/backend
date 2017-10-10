@@ -23,9 +23,7 @@ public class CurriculumService {
     private final String queryCurriculumSemesters =
             "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
                     + "FROM study.curriculum_overview co "
-                    + "  INNER JOIN study.studyprogramme "
-                    + "    ON co.study_programme = study.studyprogramme.code "
-                    + "WHERE study.studyprogramme.id = ?";
+                    + "WHERE co.study_programme_id = ?";
 
     /**
      * Constructor. Takes a connection object which it uses to query a database.
