@@ -19,3 +19,4 @@ ENTRYPOINT [ "mvn" ]
 
 # Execution without checkstyle and tests
 CMD [ "exec:java", "-Dcheckstyle.skip", "-DskipTests=true", "-B" ]
+
