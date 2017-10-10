@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,6 +10,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The service class for the curriculum endpoint.
@@ -19,8 +22,8 @@ public class CurriculumService {
 
     private final String queryCurriculumSemesters =
             "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]'::json) as semesters\n"
-            + "FROM study.curriculum_overview co\n"
-            + "WHERE study_programme = ?;";
+                    + "FROM study.curriculum_overview co\n"
+                    + "WHERE study_programme = ?;";
 
     final String getQueryCurriculumSemesters() {
         return queryCurriculumSemesters;
@@ -28,6 +31,7 @@ public class CurriculumService {
 
     /**
      * Constructor. Takes a connection object which it uses to query a database.
+     *
      * @param connection The connection object.
      */
     @Inject
@@ -48,50 +52,49 @@ public class CurriculumService {
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 
-        return buildJsonResult(jsonString);
+        return buildCurriculumSemesters(jsonString);
     }
 
-    private ObjectNode buildJsonResult(final String jsonString) throws IOException {
+    private ObjectNode buildCurriculumSemesters(final String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
         ObjectNode resultObject = mapper.createObjectNode();
-        ArrayNode resultArray = mapper.createArrayNode();
-        resultObject.set("semesters", resultArray);
+        ArrayNode semestersArray = mapper.createArrayNode();
+        resultObject.set("semesters", semestersArray);
 
-        ArrayNode jsonArray = (ArrayNode) mapper.readTree(jsonString);
-        if (jsonArray.size() == 0) return resultObject;
+        ArrayNode arrayOfModules = (ArrayNode) mapper.readTree(jsonString);
+        if (arrayOfModules.size() == 0) return resultObject;
 
-        ObjectNode currentModule = (ObjectNode) jsonArray.get(0);
-        int semester = currentModule.get("semester").asInt();
+        Set<Integer> seenSemesters = new HashSet<>();
 
-        cleanModuleNode(currentModule);
+        for (JsonNode module : arrayOfModules) {
+            int semester = module.get("semester").asInt();
+            if (seenSemesters.contains(semester)) continue;
 
-        ObjectNode currentSemester = mapper.createObjectNode();
-        currentSemester.put("semester", semester);
+            seenSemesters.add(semester);
 
-        ArrayNode currentSemesterModules = mapper.createArrayNode();
-        currentSemester.set("modules", currentSemesterModules);
+            ObjectNode currentSemester = mapper.createObjectNode();
+            currentSemester.put("semester", semester);
 
-        currentSemesterModules.add(currentModule);
+            ArrayNode currentSemesterModules = mapper.createArrayNode();
+            currentSemester.set("modules", currentSemesterModules);
 
-        for (int i = 1; i < jsonArray.size(); i++) {
-            currentModule = (ObjectNode) jsonArray.get(i);
-
-            if (currentModule.get("semester").asInt() != semester) {
-                resultArray.add(currentSemester);
-                currentSemester = mapper.createObjectNode();
-                semester = currentModule.get("semester").asInt();
-                currentSemester.put("semester", semester);
-
-                currentSemesterModules = mapper.createArrayNode();
-                currentSemester.set("modules", currentSemesterModules);
-
-            }
-
-            cleanModuleNode(currentModule);
-            currentSemesterModules.add(currentModule);
+            semestersArray.add(currentSemester);
         }
-        resultArray.add(currentSemester);
+
+        for (JsonNode module : arrayOfModules) {
+            int moduleSemester = module.get("semester").asInt();
+            cleanModuleNode((ObjectNode) module);
+
+            for (JsonNode semester : semestersArray) {
+                final JsonNode modules = semester.get("modules");
+                final int selectedSemester = semester.get("semester").asInt();
+                if (selectedSemester == moduleSemester) {
+                    ((ArrayNode) modules).add(module);
+                    break;
+                }
+            }
+        }
+
         return resultObject;
     }
 
