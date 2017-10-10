@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class CurriculumEndpointTest extends JerseyTest {
@@ -75,11 +74,11 @@ public class CurriculumEndpointTest extends JerseyTest {
         module.put("module_name", "Programming in Java");
         modules.add(module);
 
-        when(service.getCurriculumSemesters("SE"))
+        when(service.getCurriculumSemesters(1))
                 .thenReturn(result);
         given()
                 .spec(spec)
-                .get("curriculum/SE/semesters")
+                .get("curriculum/1/semesters")
                 .then()
                 .statusCode(200)
                 .body("semesters", iterableWithSize(1))
@@ -88,8 +87,8 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .root("semesters[0].modules.find { it.module_code == 'JAV1' }")
                 .body("credits", equalTo(5))
                 .body("module_name", equalTo("Programming in Java"));
-        verify(service, times(1)).getCurriculumSemesters("SE");
-        verify(service, times(1)).getCurriculumSemesters(anyString());
+        verify(service, times(1)).getCurriculumSemesters(1);
+        verify(service, times(1)).getCurriculumSemesters(anyInt());
         reset(service);
     }
 
@@ -111,11 +110,11 @@ public class CurriculumEndpointTest extends JerseyTest {
         module.put("module_name", "Business Administration");
         modules.add(module);
 
-        when(service.getCurriculumSemesters("BI"))
+        when(service.getCurriculumSemesters(2))
                 .thenReturn(result);
         given()
                 .spec(spec)
-                .get("curriculum/BI/semesters")
+                .get("curriculum/2/semesters")
                 .then()
                 .statusCode(200)
                 .body("semesters", iterableWithSize(1))
@@ -124,53 +123,40 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .root("semesters[0].modules.find { it.module_code == 'BUA' }")
                 .body("credits", equalTo(4))
                 .body("module_name", equalTo("Business Administration"));
-        verify(service, times(1)).getCurriculumSemesters("BI");
-        verify(service, times(1)).getCurriculumSemesters(anyString());
+        verify(service, times(1)).getCurriculumSemesters(2);
+        verify(service, times(1)).getCurriculumSemesters(anyInt());
         reset(service);
     }
 
     @Test
     public void testGetEmptySemester() throws SQLException, IOException {
-        when(service.getCurriculumSemesters(any()))
+        when(service.getCurriculumSemesters(anyInt()))
                 .thenReturn((ObjectNode) mapper.createObjectNode().set("semesters", mapper.createArrayNode()));
         given()
                 .spec(spec)
-                .get("curriculum//semesters")
+                .get("curriculum/1Fuio/semesters")
                 .then()
                 .statusCode(404);
 
         given()
                 .spec(spec)
-                .get("curriculum/ /semesters")
+                .get("curriculum/5/semesters")
                 .then()
                 .statusCode(200);
-        verify(service, times(1)).getCurriculumSemesters(" ");
-        verify(service, times(1)).getCurriculumSemesters(anyString());
+        verify(service, times(1)).getCurriculumSemesters(5);
+        verify(service, times(1)).getCurriculumSemesters(anyInt());
         reset(service);
 
 
     }
 
     @Test
-    public void testGetNotExistingSemester() throws SQLException, IOException {
-        when(service.getCurriculumSemesters(any()))
-                .thenReturn((ObjectNode) mapper.createObjectNode().set("semesters", mapper.createArrayNode()));
-        given()
-                .spec(spec)
-                .get("curriculum/1Fuio/semesters")
-                .then()
-                .statusCode(200);
-        verify(service, times(1)).getCurriculumSemesters("1Fuio");
-        verify(service, times(1)).getCurriculumSemesters(anyString());
-    }
-
-    @Test
     public void testExpectServerError() throws IOException, SQLException {
-        when(service.getCurriculumSemesters(any()))
+        when(service.getCurriculumSemesters(anyInt()))
                 .thenReturn(null);
         given()
                 .spec(spec)
-                .get("curriculum/1Fuio/semesters")
+                .get("curriculum/1/semesters")
                 .then()
                 .statusCode(500);
     }

@@ -21,6 +21,7 @@ public class CurriculumEndpoint {
 
     /**
      * Constructor which receives the service as dependency.
+     *
      * @param curriculumService CurriculumService object.
      */
     @Inject
@@ -37,7 +38,7 @@ public class CurriculumEndpoint {
     @GET
     @Path("/{curriculum_id}/semesters")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCurriculumSemesters(@PathParam("curriculum_id") final String curriculumId) {
+    public Response getCurriculumSemesters(@PathParam("curriculum_id") final int curriculumId) {
         try {
             final ObjectNode result = service.getCurriculumSemesters(curriculumId);
             final String jsonString = result.toString();
