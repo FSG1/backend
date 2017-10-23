@@ -10,7 +10,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -55,6 +57,15 @@ public class CurriculumService {
         return buildCurriculumSemesters(jsonString);
     }
 
+    /**
+     * Builds a complex JSON Object from a JSON array.
+     * First the algorithm loops through every module and for every unique semester, creates an
+     * entry for it in the resulting object.
+     * Then a second loop through every module matches the module to a semester.
+     * @param jsonString The JSON array in String form.
+     * @return A JSON Object which contains every semester and its modules in hierarchical format.
+     * @throws IOException If the JSON String is malformed.
+     */
     private ObjectNode buildCurriculumSemesters(final String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode resultObject = mapper.createObjectNode();
@@ -64,13 +75,11 @@ public class CurriculumService {
         ArrayNode arrayOfModules = (ArrayNode) mapper.readTree(jsonString);
         if (arrayOfModules.size() == 0) return resultObject;
 
-        Set<Integer> seenSemesters = new HashSet<>();
+        Map<Integer, ArrayNode> seenSemesters = new HashMap<>();
 
         for (JsonNode module : arrayOfModules) {
             int semester = module.get("semester").asInt();
-            if (seenSemesters.contains(semester)) continue;
-
-            seenSemesters.add(semester);
+            if (seenSemesters.containsKey(semester)) continue;
 
             ObjectNode currentSemester = mapper.createObjectNode();
             currentSemester.put("semester", semester);
@@ -79,20 +88,16 @@ public class CurriculumService {
             currentSemester.set("modules", currentSemesterModules);
 
             semestersArray.add(currentSemester);
+
+            seenSemesters.put(semester, currentSemesterModules);
         }
 
         for (JsonNode module : arrayOfModules) {
             int moduleSemester = module.get("semester").asInt();
             cleanModuleNode((ObjectNode) module);
 
-            for (JsonNode semester : semestersArray) {
-                final JsonNode modules = semester.get("modules");
-                final int selectedSemester = semester.get("semester").asInt();
-                if (selectedSemester == moduleSemester) {
-                    ((ArrayNode) modules).add(module);
-                    break;
-                }
-            }
+            final ArrayNode modules = seenSemesters.get(moduleSemester);
+            modules.add(module);
         }
 
         return resultObject;
