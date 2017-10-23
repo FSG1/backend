@@ -16,14 +16,7 @@ import java.util.Set;
 /**
  * The service class for the curriculum endpoint.
  */
-public class CurriculumService {
-
-    private final Connection conn;
-
-    private final String queryCurriculumSemesters =
-            "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
-                    + "FROM study.curriculum_overview co "
-                    + "WHERE co.study_programme_id = ?";
+public class CurriculumService extends Service {
 
     /**
      * Constructor. Takes a connection object which it uses to query a database.
@@ -31,24 +24,23 @@ public class CurriculumService {
      * @param connection The connection object.
      */
     @Inject
-    public CurriculumService(final Connection connection) {
-        conn = connection;
-    }
-
-    final String getQueryCurriculumSemesters() {
-        return queryCurriculumSemesters;
+    CurriculumService(final Connection connection) {
+        super(connection);
+        setQueryString(
+                "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
+                + "FROM study.curriculum_overview co "
+                + "WHERE co.study_programme_id = ?");
     }
 
     /**
+     * {@inheritDoc}
      * Gets all semesters and their modules in a given curriculum.
      *
-     * @param curriculumId The identifier of the curriculum.
+     * @param parameters The first parameter should be the identifier of the curriculum.
      * @return A JSON ObjectNode of the resulting JSON object.
-     * @throws SQLException If something goes wrong.
-     * @throws IOException  If something goes wrong.
      */
-    public ObjectNode getCurriculumSemesters(final int curriculumId) throws SQLException, IOException {
-        final ResultSet resultSet = conn.executeQuery(queryCurriculumSemesters, curriculumId);
+    public JsonNode execute(final Object... parameters) throws SQLException, IOException {
+        final ResultSet resultSet = getConn().executeQuery(getQueryString(), parameters[0]);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 

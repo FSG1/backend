@@ -37,7 +37,7 @@ public class CurriculaServiceTest {
                 "[{\"id\":1,\"code\":\"SE\",\"name\":\"Software Engineering\"}," +
                         "{\"id\":2,\"code\":\"BI\",\"name\":\"Business Informatics\"}]"
         );
-        JsonNode result = service.getCurricula();
+        JsonNode result = service.execute();
         assertEquals(result.size(), 2);
         assertEquals(result.get(0).get("id").asInt(), 1);
         assertEquals(result.get(0).get("code").asText(), "SE");
@@ -46,14 +46,14 @@ public class CurriculaServiceTest {
         assertEquals(result.get(1).get("code").asText(), "BI");
         assertEquals(result.get(1).get("name").asText(), "Business Informatics");
 
-        verify(conn, times(1)).executeQuery(service.getQueryCurricula());
+        verify(conn, times(1)).executeQuery(service.getQueryString());
     }
 
     @Test
     public void testProcessEmptySemesters() throws SQLException, IOException {
         when(mockResult.getString(anyString())).thenReturn("[]");
-        JsonNode result = service.getCurricula();
+        JsonNode result = service.execute();
         assertEquals(result.size(), 0);
-        verify(conn, times(1)).executeQuery(service.getQueryCurricula());
+        verify(conn, times(1)).executeQuery(service.getQueryString());
     }
 }

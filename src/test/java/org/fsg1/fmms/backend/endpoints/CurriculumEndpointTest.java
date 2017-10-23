@@ -74,7 +74,7 @@ public class CurriculumEndpointTest extends JerseyTest {
         module.put("module_name", "Programming in Java");
         modules.add(module);
 
-        when(service.getCurriculumSemesters(1))
+        when(service.execute(1))
                 .thenReturn(result);
         given()
                 .spec(spec)
@@ -87,8 +87,8 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .root("semesters[0].modules.find { it.module_code == 'JAV1' }")
                 .body("credits", equalTo(5))
                 .body("module_name", equalTo("Programming in Java"));
-        verify(service, times(1)).getCurriculumSemesters(1);
-        verify(service, times(1)).getCurriculumSemesters(anyInt());
+        verify(service, times(1)).execute(1);
+        verify(service, times(1)).execute(anyInt());
         reset(service);
     }
 
@@ -110,7 +110,7 @@ public class CurriculumEndpointTest extends JerseyTest {
         module.put("module_name", "Business Administration");
         modules.add(module);
 
-        when(service.getCurriculumSemesters(2))
+        when(service.execute(2))
                 .thenReturn(result);
         given()
                 .spec(spec)
@@ -123,14 +123,14 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .root("semesters[0].modules.find { it.module_code == 'BUA' }")
                 .body("credits", equalTo(4))
                 .body("module_name", equalTo("Business Administration"));
-        verify(service, times(1)).getCurriculumSemesters(2);
-        verify(service, times(1)).getCurriculumSemesters(anyInt());
+        verify(service, times(1)).execute(2);
+        verify(service, times(1)).execute(anyInt());
         reset(service);
     }
 
     @Test
     public void testGetEmptySemester() throws SQLException, IOException {
-        when(service.getCurriculumSemesters(anyInt()))
+        when(service.execute(anyInt()))
                 .thenReturn((ObjectNode) mapper.createObjectNode().set("semesters", mapper.createArrayNode()));
         given()
                 .spec(spec)
@@ -143,8 +143,8 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .get("curriculum/5/semesters")
                 .then()
                 .statusCode(200);
-        verify(service, times(1)).getCurriculumSemesters(5);
-        verify(service, times(1)).getCurriculumSemesters(anyInt());
+        verify(service, times(1)).execute(5);
+        verify(service, times(1)).execute(anyInt());
         reset(service);
 
 
@@ -152,7 +152,7 @@ public class CurriculumEndpointTest extends JerseyTest {
 
     @Test
     public void testExpectServerError() throws IOException, SQLException {
-        when(service.getCurriculumSemesters(anyInt()))
+        when(service.execute(anyInt()))
                 .thenReturn(null);
         given()
                 .spec(spec)
