@@ -39,13 +39,13 @@ public class ModuleService extends Service {
                         "acitivies AS (SELECT Array_to_json(Array_agg(Json_build_object('lifecycle_activity_id', id, 'lifecycle_activity_name', name, 'lifecycle_activity_description', description))) AS json FROM study.activity), " +
                         "als AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer_id', id, 'architectural_layer_name', name, 'architectural_layer_description', description))) AS json FROM study.architecturallayer) " +
                         "SELECT Json_build_object( " +
-                        "  'module_code', m.code, " +
-                        "  'module_name', m.name, " +
-                        "  'credits', m.credits, " +
-                        "  'lifecycle_activities', (SELECT json FROM acitivies), " +
-                        "  'architectural_layers', (SELECT json FROM als), " +
-                        "  'learning_goals', (SELECT json FROM lg WHERE lg.module_id = m.id) " +
-                        ") FROM study.MODULE AS m " +
+                        "'module_code', m.code, " +
+                        "'module_name', m.name, " +
+                        "'credits', m.credits, " +
+                        "'lifecycle_activities', (SELECT json FROM acitivies), " +
+                        "'architectural_layers', (SELECT json FROM als), " +
+                        "'learning_goals', (SELECT json FROM lg WHERE lg.module_id = m.id) " +
+                        ") AS module FROM study.MODULE AS m " +
                         "WHERE m.code = ?";
     }
 
