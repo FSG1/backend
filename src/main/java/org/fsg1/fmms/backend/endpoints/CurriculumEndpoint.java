@@ -2,6 +2,7 @@ package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.fsg1.fmms.backend.services.CurriculumService;
+import org.fsg1.fmms.backend.services.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -38,7 +39,8 @@ public class CurriculumEndpoint extends Endpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters(@PathParam("curriculum_id") final int curriculumId) {
         try {
-            final JsonNode result = getService().execute(curriculumId);
+            final CurriculumService service = (CurriculumService) getService();
+            final JsonNode result = service.get(service.getQueryCurriculumSemestersString(), curriculumId);
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (Exception e) {

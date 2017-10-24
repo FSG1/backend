@@ -37,7 +37,7 @@ public class CurriculumServiceTest {
         when(mockResult.getString(anyString())).thenReturn(
                 "[{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":1,\"module_code\":\"BUA1\",\"module_name\":\"Business Administration 1\",\"credits\":4},{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":1,\"module_code\":\"JAVA1\",\"module_name\":\"Programming in Java 1\",\"credits\":5}]"
         );
-        JsonNode result = service.execute(1);
+        JsonNode result = service.get(service.getQueryCurriculumSemestersString(), 1);
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 1);
 
@@ -55,13 +55,13 @@ public class CurriculumServiceTest {
         assertEquals(expectedJAVA.get("module_name").asText(), "Programming in Java 1");
         assertEquals(expectedJAVA.get("credits").asInt(), 5);
 
-        verify(conn, times(1)).executeQuery(service.getQueryString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
     public void testProcessOneModule() throws IOException, SQLException {
         when(mockResult.getString(anyString())).thenReturn("[{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":1,\"module_code\":\"BUA1\",\"module_name\":\"Business Administration 1\",\"credits\":4}]");
-        JsonNode result = service.execute(1);
+        JsonNode result = service.get(service.getQueryCurriculumSemestersString(), 1);
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 1);
 
@@ -73,7 +73,7 @@ public class CurriculumServiceTest {
         assertEquals(expectedBUA.get("module_name").asText(), "Business Administration 1");
         assertEquals(expectedBUA.get("credits").asInt(), 4);
 
-        verify(conn, times(1)).executeQuery(service.getQueryString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CurriculumServiceTest {
                         "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":8,\"module_code\":\"STG2\",\"module_name\":\"Graduation Project\",\"credits\":30}]"
 
         );
-        JsonNode result = service.execute(1);
+        JsonNode result = service.get(service.getQueryCurriculumSemestersString(), 1);
         final ArrayNode semesters = (ArrayNode) result.findValue("semesters");
         assertEquals(semesters.size(), 8);
         for (int i = 0; i < semesters.size(); i++) {
@@ -102,7 +102,7 @@ public class CurriculumServiceTest {
                 verifyModuleStructure(module);
             }
         }
-        verify(conn, times(1)).executeQuery(service.getQueryString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CurriculumServiceTest {
                         "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":6,\"module_code\":\"MINOR\",\"module_name\":\"Minor\",\"credits\":30}," +
                         "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":8,\"module_code\":\"STG2\",\"module_name\":\"Graduation Project\",\"credits\":30}]"
         );
-        JsonNode result = service.execute(1);
+        JsonNode result = service.get(service.getQueryCurriculumSemestersString(), 1);
         final ArrayNode semesters = (ArrayNode) result.findValue("semesters");
         assertEquals(semesters.size(), 8);
 
@@ -128,16 +128,16 @@ public class CurriculumServiceTest {
                 verifyModuleStructure(module);
             }
         }
-        verify(conn, times(1)).executeQuery(service.getQueryString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
     public void testProcessEmptySemesters() throws SQLException, IOException {
         when(mockResult.getString(anyString())).thenReturn("[]");
-        JsonNode result = service.execute(1);
+        JsonNode result = service.get(service.getQueryCurriculumSemestersString(), 1);
         final JsonNode semesters = result.findValue("semesters");
         assertEquals(semesters.size(), 0);
-        verify(conn, times(1)).executeQuery(service.getQueryString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     private void verifyModuleStructure(JsonNode module) {

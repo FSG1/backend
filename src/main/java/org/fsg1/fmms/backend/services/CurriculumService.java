@@ -26,10 +26,12 @@ public class CurriculumService extends Service {
     @Inject
     CurriculumService(final Connection connection) {
         super(connection);
-        setQueryString(
-                "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
+    }
+
+    public String getQueryCurriculumSemestersString() {
+        return "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
                 + "FROM study.curriculum_overview co "
-                + "WHERE co.study_programme_id = ?");
+                + "WHERE co.study_programme_id = ?";
     }
 
     /**
@@ -39,8 +41,10 @@ public class CurriculumService extends Service {
      * @param parameters The first parameter should be the identifier of the curriculum.
      * @return A JSON ObjectNode of the resulting JSON object.
      */
-    public JsonNode execute(final Object... parameters) throws SQLException, IOException {
-        final ResultSet resultSet = getConn().executeQuery(getQueryString(), parameters[0]);
+    @Override
+    public JsonNode get(String query, Object... parameters) throws SQLException, IOException {
+        final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
+                parameters[0]);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 
