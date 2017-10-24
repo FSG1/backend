@@ -40,7 +40,7 @@ public class CurriculumEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters(@PathParam("curriculum_id") final int curriculumId) {
         try {
-            final JsonNode result = service.execute(curriculumId);
+            final JsonNode result = service.get(service.getQueryCurriculumSemestersString(), curriculumId);
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (Exception e) {
