@@ -1,0 +1,214 @@
+{
+  "semesters": [
+    {
+      "semester": 1,
+      "modules": [
+        {
+          "code": "BUA1",
+          "name": "Business Administration 1",
+          "credits": 4
+        },
+        {
+          "code": "DBS1",
+          "name": "Databases",
+          "credits": 5
+        },
+        {
+          "code": "ENG1",
+          "name": "English",
+          "credits": 2
+        },
+        {
+          "code": "JAVA1",
+          "name": "Programming in Java 1",
+          "credits": 5
+        },
+        {
+          "code": "MAT1",
+          "name": "Mathematics",
+          "credits": 4
+        },
+        {
+          "code": "PRJ1",
+          "name": "Project 1",
+          "credits": 10
+        }
+      ]
+    },
+    {
+      "semester": 2,
+      "modules": [
+        {
+          "code": "BUMA",
+          "name": "Business Management",
+          "credits": 3
+        },
+        {
+          "code": "ITSM",
+          "name": "IT Service Management",
+          "credits": 5
+        },
+        {
+          "code": "JAVA2",
+          "name": "Programming in Java 2",
+          "credits": 5
+        },
+        {
+          "code": "MOD1",
+          "name": "Modeling 1",
+          "credits": 4
+        },
+        {
+          "code": "PRJ2",
+          "name": "Project 2",
+          "credits": 10
+        },
+        {
+          "code": "SEN1",
+          "name": "Software Engineering",
+          "credits": 3
+        }
+      ]
+    },
+    {
+      "semester": 3,
+      "modules": [
+        {
+          "code": "ALDA",
+          "name": "Algorithms and Data structures",
+          "credits": 4
+        },
+        {
+          "code": "APPL",
+          "name": "Applied Research",
+          "credits": 3
+        },
+        {
+          "code": "CON1",
+          "name": "IT Consultancy",
+          "credits": 4
+        },
+        {
+          "code": "CSA1",
+          "name": "Computer Systems Architecture 1",
+          "credits": 3
+        },
+        {
+          "code": "MOD2",
+          "name": "Modeling 2",
+          "credits": 5
+        },
+        {
+          "code": "PRJ3",
+          "name": "Project 3 Lift",
+          "credits": 3
+        },
+        {
+          "code": "RENG",
+          "name": "Requirements Engineering",
+          "credits": 4
+        },
+        {
+          "code": "STA1",
+          "name": "Statistics",
+          "credits": 4
+        }
+      ]
+    },
+    {
+      "semester": 4,
+      "modules": [
+        {
+          "code": "APPS",
+          "name": "App Development",
+          "credits": 4
+        },
+        {
+          "code": "CSA2",
+          "name": "Networks and security",
+          "credits": 3
+        },
+        {
+          "code": "CSA3",
+          "name": "Operating Systems",
+          "credits": 5
+        },
+        {
+          "code": "DNET",
+          "name": "Programming in C#.NET",
+          "credits": 5
+        },
+        {
+          "code": "JAVA3",
+          "name": "Java Concurrency",
+          "credits": 5
+        },
+        {
+          "code": "MAT2",
+          "name": "Mathematics 2",
+          "credits": 4
+        },
+        {
+          "code": "XMLJ",
+          "name": "XML and Java",
+          "credits": 4
+        }
+      ]
+    },
+    {
+      "semester": 5,
+      "modules": [
+        {
+          "code": "STG1",
+          "name": "Internship",
+          "credits": 30
+        }
+      ]
+    },
+    {
+      "semester": 6,
+      "modules": [
+        {
+          "code": "MINOR",
+          "name": "Minor",
+          "credits": 30
+        }
+      ]
+    },
+    {
+      "semester": 7,
+      "modules": [
+        {
+          "code": "COM7",
+          "name": "Communication",
+          "credits": 2
+        },
+        {
+          "code": "GRAP",
+          "name": "Graphics",
+          "credits": 5
+        },
+        {
+          "code": "JEE",
+          "name": "JEE and Software Architecture",
+          "credits": 5
+        },
+        {
+          "code": "SOFA",
+          "name": "Software Factory",
+          "credits": 18
+        }
+      ]
+    },
+    {
+      "semester": 8,
+      "modules": [
+        {
+          "code": "STG2",
+          "name": "Graduation Project",
+          "credits": 30
+        }
+      ]
+    }
+  ]
+}

@@ -33,9 +33,22 @@ public class CurriculumService extends Service {
      * @return Query string.
      */
     public String getQueryCurriculumSemestersString() {
-        return "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters " +
-                "FROM study.curriculum_overview co " +
-                "WHERE co.study_programme_id = ?";
+        return
+                "WITH " +
+                        "modules AS (SELECT Array_to_json(Array_agg(Json_build_object('code', " +
+                        "co.module_code, 'name', co.module_name, 'credits', co.credits))) AS json, " +
+                        "study_programme_id AS sid, semester AS s FROM study.curriculum_overview AS co " +
+                        "GROUP BY study_programme_id, semester), " +
+                        "semesters AS ( " +
+                        "      SELECT Json_build_object('semester', co2.semester, 'modules', " +
+                        "(SELECT json FROM modules WHERE sid = co2.study_programme_id AND s = " +
+                        "co2.semester)) AS json, co2.study_programme_id AS programme FROM " +
+                        "study.curriculum_overview AS co2 GROUP BY co2.study_programme_id, " +
+                        "co2.semester ORDER BY co2.semester) " +
+                        " " +
+                        "SELECT Json_build_object( " +
+                        "  'semesters', (Array_to_json(Array_agg(json))) " +
+                        ") AS semesters FROM semesters WHERE programme = ?;";
     }
 
     /**
@@ -47,65 +60,11 @@ public class CurriculumService extends Service {
      */
     @Override
     public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
         final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
                 parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
-
-        return buildCurriculumSemesters(jsonString);
-    }
-
-    /**
-     * Builds a complex JSON Object from a JSON array.
-     * First the algorithm loops through every module and for every unique semester, creates an
-     * entry for it in the resulting object.
-     * Then a second loop through every module matches the module to a semester.
-     * @param jsonString The JSON array in String form.
-     * @return A JSON Object which contains every semester and its modules in hierarchical format.
-     * @throws IOException If the JSON String is malformed.
-     */
-    private ObjectNode buildCurriculumSemesters(final String jsonString) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode resultObject = mapper.createObjectNode();
-        ArrayNode semestersArray = mapper.createArrayNode();
-        resultObject.set("semesters", semestersArray);
-
-        ArrayNode arrayOfModules = (ArrayNode) mapper.readTree(jsonString);
-        if (arrayOfModules.size() == 0) return resultObject;
-
-        //The capacity is 12 to prevent the HashMap from growing. There are only 8 semesters so a slightly
-        //larger number is chosen.
-        Map<Integer, ArrayNode> seenSemesters = new HashMap<>(12);
-
-        for (JsonNode module : arrayOfModules) {
-            int semester = module.get("semester").asInt();
-            if (seenSemesters.containsKey(semester)) continue;
-
-            ObjectNode currentSemester = mapper.createObjectNode();
-            currentSemester.put("semester", semester);
-
-            ArrayNode currentSemesterModules = mapper.createArrayNode();
-            currentSemester.set("modules", currentSemesterModules);
-
-            semestersArray.add(currentSemester);
-
-            seenSemesters.put(semester, currentSemesterModules);
-        }
-
-        for (JsonNode module : arrayOfModules) {
-            int moduleSemester = module.get("semester").asInt();
-            cleanModuleNode((ObjectNode) module);
-
-            final ArrayNode modules = seenSemesters.get(moduleSemester);
-            modules.add(module);
-        }
-
-        return resultObject;
-    }
-
-    private void cleanModuleNode(final ObjectNode currentModule) {
-        currentModule.remove("semester");
-        currentModule.remove("name");
-        currentModule.remove("study_programme");
+        return mapper.readTree(jsonString);
     }
 }
