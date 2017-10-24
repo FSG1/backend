@@ -12,19 +12,33 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Endpoint for modules.
+ */
 @Path("modules")
 public class ModulesEndpoint {
     private final Service service;
 
+    /**
+     * Constructor which receives the service as dependency.
+     *
+     * @param modulesService Service object.
+     */
     @Inject
     public ModulesEndpoint(final Service modulesService) {
         service = modulesService;
     }
 
+    /**
+     * Returns information of one module.
+     *
+     * @param moduleId Identifier of the module.
+     * @return All information of a module, plus the lifecycle activities and architectural layers.
+     */
     @GET
     @Path("/{module_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getModuleInformation(@PathParam("module_id") final int moduleId){
+    public Response getModuleInformation(@PathParam("module_id") final int moduleId) {
         try {
             final JsonNode result = service.execute(moduleId);
             return Response.status(Response.Status.OK).entity(result.toString()).build();

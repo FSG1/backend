@@ -37,7 +37,7 @@ public class ModuleServiceTest {
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
-    @Test (expected = EntityNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptyModule() throws SQLException, IOException {
         when(mockResult.getString(anyString())).thenReturn(null);
         service.execute(1);

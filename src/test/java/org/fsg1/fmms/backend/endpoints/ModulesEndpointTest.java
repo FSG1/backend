@@ -12,7 +12,6 @@ import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
-import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,8 +25,6 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.iterableWithSize;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
