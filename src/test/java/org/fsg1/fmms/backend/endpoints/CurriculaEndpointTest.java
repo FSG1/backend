@@ -9,6 +9,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.fsg1.fmms.backend.services.CurriculaService;
+import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -51,7 +52,7 @@ public class CurriculaEndpointTest extends JerseyTest {
                 .register(new AbstractBinder() {
                     @Override
                     protected void configure() {
-                        bind(service).to(CurriculaService.class);
+                        bind(service).to(Service.class);
                     }
                 });
     }
