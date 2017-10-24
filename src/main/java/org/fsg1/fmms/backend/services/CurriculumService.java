@@ -73,7 +73,9 @@ public class CurriculumService extends Service {
         ArrayNode arrayOfModules = (ArrayNode) mapper.readTree(jsonString);
         if (arrayOfModules.size() == 0) return resultObject;
 
-        Map<Integer, ArrayNode> seenSemesters = new HashMap<>();
+        //The capacity is 12 to prevent the HashMap from growing. There are only 8 semesters so a slightly
+        //larger number is chosen.
+        Map<Integer, ArrayNode> seenSemesters = new HashMap<>(12);
 
         for (JsonNode module : arrayOfModules) {
             int semester = module.get("semester").asInt();
