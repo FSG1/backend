@@ -107,32 +107,6 @@ public class CurriculumServiceTest {
     }
 
     @Test
-    public void testSemesterArbitraryOrder() throws SQLException, IOException {
-        when(mockResult.getString(anyString())).thenReturn(
-                "[{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":1,\"module_code\":\"BUA1\",\"module_name\":\"Business Administration 1\",\"credits\":4}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":3,\"module_code\":\"MOD2\",\"module_name\":\"Modeling 2\",\"credits\":5}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":2,\"module_code\":\"JAVA2\",\"module_name\":\"Programming in Java 2\",\"credits\":5}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":5,\"module_code\":\"STG1\",\"module_name\":\"Internship\",\"credits\":30}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":4,\"module_code\":\"JAVA3\",\"module_name\":\"Java Concurrency\",\"credits\":5}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":7,\"module_code\":\"COM7\",\"module_name\":\"Communication\",\"credits\":2}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":2,\"module_code\":\"RENG\",\"module_name\":\"Requirements Engineering\",\"credits\":7}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":6,\"module_code\":\"MINOR\",\"module_name\":\"Minor\",\"credits\":30}," +
-                        "{\"name\":\"2014_NEW\",\"study_programme\":\"SE\",\"semester\":8,\"module_code\":\"STG2\",\"module_name\":\"Graduation Project\",\"credits\":30}]"
-        );
-        ObjectNode result = service.getCurriculumSemesters(1);
-        final ArrayNode semesters = (ArrayNode) result.findValue("semesters");
-        assertEquals(semesters.size(), 8);
-
-        final List<JsonNode> modulesArray = semesters.findValues("modules");
-        for (JsonNode modules : modulesArray) {
-            for (JsonNode module : modules) {
-                verifyModuleStructure(module);
-            }
-        }
-        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemesters(), 1);
-    }
-
-    @Test
     public void testProcessEmptySemesters() throws SQLException, IOException {
         when(mockResult.getString(anyString())).thenReturn("[]");
         ObjectNode result = service.getCurriculumSemesters(1);
