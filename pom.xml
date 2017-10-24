@@ -150,6 +150,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/uk.co.datumedge/hamcrest-json -->
+        <dependency>
+            <groupId>uk.co.datumedge</groupId>
+            <artifactId>hamcrest-json</artifactId>
+            <version>0.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
