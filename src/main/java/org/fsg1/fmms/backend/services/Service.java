@@ -14,8 +14,6 @@ import java.sql.SQLException;
 public abstract class Service {
     private final Connection conn;
 
-    private String queryString;
-
     /**
      * Constructor. Takes a connection object which it uses to query a database.
      *
@@ -29,23 +27,15 @@ public abstract class Service {
         return conn;
     }
 
-    final String getQueryString() {
-        return queryString;
-    }
-
-    final void setQueryString(final String query) {
-        queryString = query;
-    }
-
     /**
-     * Execute the query on the database with any parameters.
+     * Execute a retrieval query on the database with any parameters.
      *
+     * @param query Query string to perform.
      * @param parameters Optional array of parameters to give to the query
      * @return The result of the query in JSON format.
-     * @throws SQLException            if the query was malformed.
-     * @throws IOException             if the database connection was broken.
-     * @throws EntityNotFoundException if no entity was found by the query.
+     * @throws SQLException if the query was malformed.
+     * @throws IOException if the database connection was broken.* @throws EntityNotFoundException if no entity was found by the query.
      */
-    public abstract JsonNode execute(Object... parameters) throws SQLException, IOException,
+    public abstract JsonNode get(String query, Object... parameters) throws SQLException, IOException,
             EntityNotFoundException;
 }

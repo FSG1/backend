@@ -22,9 +22,15 @@ public class CurriculaService extends Service {
     @Inject
     CurriculaService(final Connection connection) {
         super(connection);
-        setQueryString(
-                "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula "
-                + "FROM  study.studyprogramme sp");
+    }
+
+    /**
+     * Get the query string that retrieves every curriculum.
+     * @return Query string.
+     */
+    public String getQueryCurriculaString() {
+        return "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula \" " +
+                "+ \"FROM study.studyprogramme sp";
     }
 
     /**
@@ -33,8 +39,8 @@ public class CurriculaService extends Service {
      *
      * @return A JSON ObjectNode representing an array of curricula.
      */
-    public JsonNode execute(final Object... parameters) throws SQLException, IOException {
-        final ResultSet resultSet = getConn().executeQuery(getQueryString());
+    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
+        final ResultSet resultSet = getConn().executeQuery(query, parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("curricula");
         ObjectMapper mapper = new ObjectMapper();

@@ -73,7 +73,7 @@ public class CurriculaEndpointTest extends JerseyTest {
         resultArray.add(seNode);
         resultArray.add(biNode);
 
-        when(service.execute())
+        when(service.get(service.getQueryCurriculaString()))
                 .thenReturn(resultArray);
         given()
                 .spec(spec)
@@ -87,13 +87,13 @@ public class CurriculaEndpointTest extends JerseyTest {
                 .body("[1].code", equalTo("BI"))
                 .body("[1].name", equalTo("Business Informatics"))
                 .body("[1].id", equalTo(2));
-        verify(service, times(1)).execute();
+        verify(service, times(2)).get(service.getQueryCurriculaString());
         reset(service);
     }
 
     @Test
     public void testGetEmptySemester() throws SQLException, IOException {
-        when(service.execute())
+        when(service.get(service.getQueryCurriculaString()))
                 .thenReturn(mapper.createArrayNode());
 
         given()
@@ -102,13 +102,13 @@ public class CurriculaEndpointTest extends JerseyTest {
                 .then()
                 .body(".", iterableWithSize(0))
                 .statusCode(200);
-        verify(service, times(1)).execute();
+        verify(service, times(2)).getQueryCurriculaString();
         reset(service);
     }
 
     @Test
     public void testExpectServerError() throws IOException, SQLException {
-        when(service.execute())
+        when(service.get(service.getQueryCurriculaString()))
                 .thenReturn(null);
         given()
                 .spec(spec)
