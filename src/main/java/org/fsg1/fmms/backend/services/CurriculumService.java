@@ -48,7 +48,7 @@ public class CurriculumService extends Service {
     @Override
     public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
         final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
-                parameters[0]);
+                parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
 

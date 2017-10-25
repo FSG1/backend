@@ -40,7 +40,7 @@ public class CurriculaService extends Service {
      * @return A JSON ObjectNode representing an array of curricula.
      */
     public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
-        final ResultSet resultSet = getConn().executeQuery(query);
+        final ResultSet resultSet = getConn().executeQuery(query, parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("curricula");
         ObjectMapper mapper = new ObjectMapper();
