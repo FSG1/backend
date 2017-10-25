@@ -15,7 +15,7 @@ script:
   # Skip checkstyle
   - mvn clean test -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -B
   # Check style afterwards
-  - mvn checkstyle:checkstyle -Dmaven.javadoc.skip=true -B
+  - mvn checkstyle:check -Dmaven.javadoc.skip=true -B
 
 notifications:
   email:
