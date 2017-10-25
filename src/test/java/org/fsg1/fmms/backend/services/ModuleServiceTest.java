@@ -38,13 +38,13 @@ public class ModuleServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptyModule() throws SQLException, IOException {
+    public void testProcessEmptyModule() throws SQLException, IOException, EntityNotFoundException {
         when(mockResult.getString(anyString())).thenReturn(null);
         service.get(service.getQueryModuleInformation(), 1);
     }
 
     @Test
-    public void testProcessModule() throws IOException, SQLException {
+    public void testProcessModule() throws IOException, SQLException, EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();

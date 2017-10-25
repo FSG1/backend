@@ -60,7 +60,7 @@ public class ModulesEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetWrongEndpoint() throws SQLException, IOException {
+    public void testGetWrongEndpoint() throws SQLException, IOException, EntityNotFoundException {
         given()
                 .spec(spec)
                 .get("modules/opk")
@@ -70,7 +70,7 @@ public class ModulesEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetNoModule() throws SQLException, IOException {
+    public void testGetNoModule() throws SQLException, IOException, EntityNotFoundException {
         when(service.get(eq(service.getQueryModuleInformation()), eq(1)))
                 .thenThrow(EntityNotFoundException.class);
 
@@ -92,7 +92,7 @@ public class ModulesEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetModule() throws IOException, SQLException {
+    public void testGetModule() throws IOException, SQLException, EntityNotFoundException {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
 
         when(service.get(eq(service.getQueryModuleInformation()), eq(1)))
