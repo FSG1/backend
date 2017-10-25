@@ -28,10 +28,14 @@ public class CurriculumService extends Service {
         super(connection);
     }
 
+    /**
+     * Get the query string that retrieves every semester in a curriculum.
+     * @return Query string.
+     */
     public String getQueryCurriculumSemestersString() {
-        return "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters "
-                + "FROM study.curriculum_overview co "
-                + "WHERE co.study_programme_id = ?";
+        return "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters " +
+                "FROM study.curriculum_overview co " +
+                "WHERE co.study_programme_id = ?";
     }
 
     /**
@@ -42,7 +46,7 @@ public class CurriculumService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode get(String query, Object... parameters) throws SQLException, IOException {
+    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
         final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
                 parameters[0]);
         resultSet.next();
