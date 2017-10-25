@@ -2,16 +2,12 @@ package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.fsg1.fmms.backend.database.Connection;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * The service class for the curriculum endpoint.
@@ -33,9 +29,15 @@ public class CurriculumService extends Service {
      * @return Query string.
      */
     public String getQueryCurriculumSemestersString() {
-        return "SELECT coalesce(array_to_json(array_agg(row_to_json(co))), '[]' :: JSON) AS semesters " +
-                "FROM study.curriculum_overview co " +
-                "WHERE co.study_programme_id = ?";
+        return
+                "WITH " +
+                        "modules AS (SELECT Array_to_json(Array_agg(Json_build_object('code', co.module_code, 'name', co.module_name))) AS json, study_programme_id AS sid, semester AS s FROM study.curriculum_overview AS co GROUP BY study_programme_id, semester), " +
+                        "semesters AS ( " +
+                        "      SELECT Json_build_object('semester', co2.semester, 'modules', (SELECT json FROM modules WHERE sid = co2.study_programme_id AND s = co2.semester)) AS json, co2.study_programme_id AS programme FROM study.curriculum_overview AS co2 GROUP BY co2.study_programme_id, co2.semester ORDER BY co2.semester) " +
+                        " " +
+                        "SELECT Json_build_object( " +
+                        "  'semesters', (Array_to_json(Array_agg(json))) " +
+                        ") FROM semesters WHERE programme = ?;";
     }
 
     /**
@@ -47,60 +49,11 @@ public class CurriculumService extends Service {
      */
     @Override
     public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
         final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
                 parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("semesters");
-
-        return buildCurriculumSemesters(jsonString);
-    }
-
-    private ObjectNode buildCurriculumSemesters(final String jsonString) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode resultObject = mapper.createObjectNode();
-        ArrayNode semestersArray = mapper.createArrayNode();
-        resultObject.set("semesters", semestersArray);
-
-        ArrayNode arrayOfModules = (ArrayNode) mapper.readTree(jsonString);
-        if (arrayOfModules.size() == 0) return resultObject;
-
-        Set<Integer> seenSemesters = new HashSet<>();
-
-        for (JsonNode module : arrayOfModules) {
-            int semester = module.get("semester").asInt();
-            if (seenSemesters.contains(semester)) continue;
-
-            seenSemesters.add(semester);
-
-            ObjectNode currentSemester = mapper.createObjectNode();
-            currentSemester.put("semester", semester);
-
-            ArrayNode currentSemesterModules = mapper.createArrayNode();
-            currentSemester.set("modules", currentSemesterModules);
-
-            semestersArray.add(currentSemester);
-        }
-
-        for (JsonNode module : arrayOfModules) {
-            int moduleSemester = module.get("semester").asInt();
-            cleanModuleNode((ObjectNode) module);
-
-            for (JsonNode semester : semestersArray) {
-                final JsonNode modules = semester.get("modules");
-                final int selectedSemester = semester.get("semester").asInt();
-                if (selectedSemester == moduleSemester) {
-                    ((ArrayNode) modules).add(module);
-                    break;
-                }
-            }
-        }
-
-        return resultObject;
-    }
-
-    private void cleanModuleNode(final ObjectNode currentModule) {
-        currentModule.remove("semester");
-        currentModule.remove("name");
-        currentModule.remove("study_programme");
+        return mapper.readTree(jsonString);
     }
 }
