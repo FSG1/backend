@@ -2,6 +2,7 @@ package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,7 +34,9 @@ public abstract class Service {
      * @param parameters Optional array of parameters to give to the query
      * @return The result of the query in JSON format.
      * @throws SQLException if the query was malformed.
-     * @throws IOException  if the database connection was broken.
+     * @throws IOException if the database connection was broken.*
+     * @throws EntityNotFoundException if no entity was found by the query.
      */
-    public abstract JsonNode get(String query, Object... parameters) throws SQLException, IOException;
+    public abstract JsonNode get(String query, Object... parameters) throws SQLException, IOException,
+            EntityNotFoundException;
 }
