@@ -2,7 +2,6 @@ package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.fsg1.fmms.backend.services.CurriculumService;
-import org.fsg1.fmms.backend.services.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
