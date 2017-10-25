@@ -30,7 +30,7 @@ public class CurriculaService extends Service {
      */
     public String getQueryCurriculaString() {
         return "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula " +
-                + "FROM study.studyprogramme sp";
+                "FROM study.studyprogramme sp";
     }
 
     /**
