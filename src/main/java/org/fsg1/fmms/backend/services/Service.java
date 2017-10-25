@@ -29,6 +29,7 @@ public abstract class Service {
     /**
      * Execute a retrieval query on the database with any parameters.
      *
+     * @param query Query string to perform.
      * @param parameters Optional array of parameters to give to the query
      * @return The result of the query in JSON format.
      * @throws SQLException if the query was malformed.
