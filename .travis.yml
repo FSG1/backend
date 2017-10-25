@@ -12,7 +12,10 @@ install:
 
 script:
   # Delete precompiles parts and start tests
-  - mvn clean test -B
+  # Skip checkstyle
+  - mvn clean test -Dcheckstyle.skip -Dmaven.javadoc.skip=true -B
+  # Check style afterwards
+  - mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B
 
 notifications:
   email:
