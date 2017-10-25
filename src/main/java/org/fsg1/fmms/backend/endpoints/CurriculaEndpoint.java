@@ -14,18 +14,16 @@ import javax.ws.rs.core.Response;
  * The class containing the curricula endpoints.
  */
 @Path("curricula")
-public class CurriculaEndpoint {
-
-    private final CurriculaService service;
+public class CurriculaEndpoint extends Endpoint {
 
     /**
      * Constructor which receives the service as dependency.
      *
-     * @param curriculaService CurriculaService object.
+     * @param service Service object.
      */
     @Inject
-    public CurriculaEndpoint(final CurriculaService curriculaService) {
-        service = curriculaService;
+    public CurriculaEndpoint(final CurriculaService service) {
+        super(service);
     }
 
     /**
@@ -37,6 +35,7 @@ public class CurriculaEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters() {
         try {
+            final CurriculaService service = (CurriculaService) getService();
             final JsonNode result = service.get(service.getQueryCurriculaString());
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
