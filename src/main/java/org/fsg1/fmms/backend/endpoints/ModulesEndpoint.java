@@ -37,7 +37,7 @@ public class ModulesEndpoint extends Endpoint {
     @GET
     @Path("/{module_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getModuleInformation(@PathParam("module_id") final int moduleId) {
+    public Response getModuleInformation(@PathParam("module_id") final String moduleId) {
         try {
             final ModuleService service = (ModuleService) getService();
             final JsonNode result = service.get(service.getQueryModuleInformation(), moduleId);
