@@ -23,7 +23,14 @@ public class ModuleService extends Service {
     @Inject
     ModuleService(final Connection connection) {
         super(connection);
-        setQueryString(
+    }
+
+    /**
+     * Get the query string that retrieves the information of a module.
+     * @return Query string.
+     */
+    public String getQueryModuleInformation() {
+        return
                 "WITH " +
                         "alrow AS (SELECT Row_number() OVER () AS num, id FROM study.architecturallayer), " +
                         "acrow AS (SELECT Row_number() OVER () AS num, id FROM study.activity), " +
@@ -39,8 +46,7 @@ public class ModuleService extends Service {
                         "  'architectural_layers', (SELECT json FROM als), " +
                         "  'learning_goals', (SELECT json FROM lg WHERE lg.module_id = m.id) " +
                         ") FROM study.MODULE AS m " +
-                        "WHERE m.code = ?"
-        );
+                        "WHERE m.code = ?";
     }
 
     /**
@@ -51,10 +57,10 @@ public class ModuleService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode execute(final Object... parameters) throws SQLException, IOException,
+    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException,
             EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
-        final ResultSet resultSet = getConn().executeQuery(getQueryString(), parameters[0]);
+        final ResultSet resultSet = getConn().executeQuery(query, parameters);
         resultSet.next();
         final String jsonString = resultSet.getString("module");
 

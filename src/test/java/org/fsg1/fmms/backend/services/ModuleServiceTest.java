@@ -40,7 +40,7 @@ public class ModuleServiceTest {
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptyModule() throws SQLException, IOException {
         when(mockResult.getString(anyString())).thenReturn(null);
-        service.execute(1);
+        service.get(service.getQueryModuleInformation(), 1);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ModuleServiceTest {
 
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        final JsonNode node = service.execute(1);
+        final JsonNode node = service.get(service.getQueryModuleInformation(),1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
     }
 }

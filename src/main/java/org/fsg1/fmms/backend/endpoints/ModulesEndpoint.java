@@ -2,7 +2,7 @@ package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
-import org.fsg1.fmms.backend.services.Service;
+import org.fsg1.fmms.backend.services.ModuleService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -16,8 +16,7 @@ import javax.ws.rs.core.Response;
  * Endpoint for modules.
  */
 @Path("modules")
-public class ModulesEndpoint {
-    private final Service service;
+public class ModulesEndpoint extends Endpoint {
 
     /**
      * Constructor which receives the service as dependency.
@@ -25,8 +24,8 @@ public class ModulesEndpoint {
      * @param modulesService Service object.
      */
     @Inject
-    public ModulesEndpoint(final Service modulesService) {
-        service = modulesService;
+    public ModulesEndpoint(final ModuleService modulesService) {
+        super(modulesService);
     }
 
     /**
@@ -40,7 +39,8 @@ public class ModulesEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModuleInformation(@PathParam("module_id") final int moduleId) {
         try {
-            final JsonNode result = service.execute(moduleId);
+            final ModuleService service = (ModuleService) getService();
+            final JsonNode result = service.get(service.getQueryModuleInformation(), moduleId);
             return Response.status(Response.Status.OK).entity(result.toString()).build();
         } catch (EntityNotFoundException enfe) {
             return Response.status(Response.Status.NOT_FOUND).build();

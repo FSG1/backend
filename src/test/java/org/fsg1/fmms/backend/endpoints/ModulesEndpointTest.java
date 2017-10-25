@@ -8,6 +8,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
+import org.fsg1.fmms.backend.services.ModuleService;
 import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -34,7 +35,7 @@ public class ModulesEndpointTest extends JerseyTest {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Mock
-    private Service service;
+    private ModuleService service;
 
     @BeforeClass
     public static void initSpec() {
@@ -65,12 +66,12 @@ public class ModulesEndpointTest extends JerseyTest {
                 .get("modules/opk")
                 .then()
                 .statusCode(404);
-        verify(service, times(0)).execute();
+        verify(service, times(0)).get(anyString(), any());
     }
 
     @Test
     public void testGetNoModule() throws SQLException, IOException {
-        when(service.execute(anyInt()))
+        when(service.get(eq(service.getQueryModuleInformation()), eq(1)))
                 .thenThrow(EntityNotFoundException.class);
 
         given()
@@ -78,12 +79,12 @@ public class ModulesEndpointTest extends JerseyTest {
                 .get("modules/1")
                 .then()
                 .statusCode(404);
-        verify(service, times(0)).execute();
+        verify(service, times(0)).get(anyString(), any());
     }
 
     @Test
     public void testExpectServerError() throws IOException, SQLException {
-        when(service.execute(anyInt()))
+        when(service.get(anyString(), any()))
                 .thenReturn(null);
         given()
                 .spec(spec)
@@ -96,7 +97,7 @@ public class ModulesEndpointTest extends JerseyTest {
     public void testGetModule() throws IOException, SQLException {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
 
-        when(service.execute(anyInt()))
+        when(service.get(eq(service.getQueryModuleInformation()), eq(1)))
                 .thenReturn(node);
         given()
                 .spec(spec)
@@ -104,6 +105,6 @@ public class ModulesEndpointTest extends JerseyTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(1)).execute(1);
+        verify(service, times(2)).get(service.getQueryModuleInformation(), 1);
     }
 }
