@@ -45,7 +45,7 @@ public class ModuleService extends Service {
                         "  'lifecycle_activities', (SELECT json FROM acitivies), " +
                         "  'architectural_layers', (SELECT json FROM als), " +
                         "  'learning_goals', (SELECT json FROM lg WHERE lg.module_id = m.id) " +
-                        ") FROM study.MODULE AS m " +
+                        ") AS module FROM study.module AS m " +
                         "WHERE m.code = ?";
     }
 
