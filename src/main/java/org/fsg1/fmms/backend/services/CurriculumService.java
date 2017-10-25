@@ -37,7 +37,7 @@ public class CurriculumService extends Service {
                         " " +
                         "SELECT Json_build_object( " +
                         "  'semesters', (Array_to_json(Array_agg(json))) " +
-                        ") FROM semesters WHERE programme = ?;";
+                        ") AS semesters FROM semesters WHERE programme = ?;";
     }
 
     /**
