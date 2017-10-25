@@ -29,8 +29,8 @@ public class CurriculaService extends Service {
      * @return Query string.
      */
     public String getQueryCurriculaString() {
-        return "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula \" " +
-                "+ \"FROM study.studyprogramme sp";
+        return "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula " +
+                "FROM study.studyprogramme sp";
     }
 
     /**
