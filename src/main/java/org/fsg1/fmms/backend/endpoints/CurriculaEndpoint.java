@@ -37,7 +37,7 @@ public class CurriculaEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters() {
         try {
-            final JsonNode result = service.getCurricula();
+            final JsonNode result = service.get(service.getQueryCurriculaString());
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (Exception e) {
