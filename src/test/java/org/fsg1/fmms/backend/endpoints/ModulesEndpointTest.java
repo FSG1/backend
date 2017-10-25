@@ -84,8 +84,6 @@ public class ModulesEndpointTest extends JerseyTest {
 
     @Test
     public void testExpectServerError() throws IOException, SQLException {
-        when(service.get(anyString(), any()))
-                .thenReturn(null);
         given()
                 .spec(spec)
                 .get("modules/1")
