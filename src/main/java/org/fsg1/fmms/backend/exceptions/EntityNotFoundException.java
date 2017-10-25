@@ -3,7 +3,7 @@ package org.fsg1.fmms.backend.exceptions;
 /**
  * Exception to throw when no result is found by a query.
  */
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends Exception {
     /**
      * Constructor.
      */
