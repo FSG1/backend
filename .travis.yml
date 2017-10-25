@@ -8,17 +8,16 @@ cache:
 
 # For install no tests, javadoc or checkstyle, just download all dependencies
 install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true -B
 
 script:
   # Delete precompiles parts and start tests
   # Skip checkstyle
-  - mvn clean test -Dcheckstyle.skip -Dmaven.javadoc.skip=true -B
+  - mvn clean test -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -B
   # Check style afterwards
-  - mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -B
+  - mvn checkstyle:checkstyle -Dmaven.javadoc.skip=true -B
 
 notifications:
   email:
     on_success: never
     on_failure: change
-
