@@ -32,11 +32,12 @@ public abstract class Service {
      *
      * @param query      Query string to perform.
      * @param parameters Optional array of parameters to give to the query
+     * @param columnName Name of the column of the result.
      * @return The result of the query in JSON format.
      * @throws SQLException            if the query was malformed.
      * @throws IOException             if the database connection was broken.*
      * @throws EntityNotFoundException if no entity was found by the query.
      */
-    public abstract JsonNode get(String query, Object... parameters) throws SQLException, IOException,
+    public abstract JsonNode get(String query, String columnName, Object... parameters) throws SQLException, IOException,
             EntityNotFoundException;
 }

@@ -17,6 +17,7 @@ public final class Connection {
 
     /**
      * The constructor. It immediately connects to the database.
+     *
      * @param config Active server configuration
      */
     @Inject
@@ -57,7 +58,7 @@ public final class Connection {
      * @param ps   PreparedStatement to map parameters to.
      * @param args Array of Integers or Strings that represent the parameters.
      * @throws SQLException if a database access error occurs or
-     * this method is called on a closed <code>PreparedStatement</code>.
+     *                      this method is called on a closed <code>PreparedStatement</code>.
      */
     private void mapParams(final PreparedStatement ps, final Object... args) throws SQLException {
         final int parameterCount = ps.getParameterMetaData().getParameterCount();

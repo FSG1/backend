@@ -37,7 +37,7 @@ public class CurriculaEndpoint extends Endpoint {
     public Response getCurriculumSemesters() {
         try {
             final CurriculaService service = (CurriculaService) getService();
-            final JsonNode result = service.get(service.getQueryCurriculaString());
+            final JsonNode result = service.get(service.getQueryCurriculaString(), "curricula");
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (EntityNotFoundException enfe) {

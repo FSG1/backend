@@ -76,6 +76,10 @@
       "name": "LG 1",
       "description": "give a definition of enterprises, businesses and organisations",
       "type": "personal",
+      "weight": null,
+      "assesment_types": [
+        "Written Exam"
+      ],
       "skillmatrix": [
         {
           "architectural_layer": 1,
@@ -88,6 +92,10 @@
       "name": "LG 2",
       "description": "explain the primary and secondary processes of a business",
       "type": "personal",
+      "weight": null,
+      "assesment_types": [
+        "Written Exam"
+      ],
       "skillmatrix": [
         {
           "architectural_layer": 1,
@@ -100,6 +108,10 @@
       "name": "LG 3",
       "description": "explain the legal form of an organisation",
       "type": "personal",
+      "weight": null,
+      "assesment_types": [
+        "Written Exam"
+      ],
       "skillmatrix": [
         {
           "architectural_layer": 1,
@@ -112,6 +124,10 @@
       "name": "LG 4",
       "description": "make a distinction between the different relations of an organisation and its environment",
       "type": "personal",
+      "weight": null,
+      "assesment_types": [
+        "Written Exam"
+      ],
       "skillmatrix": [
         {
           "architectural_layer": 1,
@@ -120,5 +136,24 @@
         }
       ]
     }
+  ],
+  "lectures_in_week": null,
+  "practical_hours_week": null,
+  "total_effort": 0,
+  "introductorytext": "This is the module introduction to BUA.",
+  "teaching_material": "You will need something. Maybe a book or two.",
+  "additional_information": "This module contains of real information about unreal businesses.",
+  "topics": [
+    "Some real topic",
+    "Some not-so-real topic",
+    "Something you wouldn't guess.",
+    "Something you do not have time to address."
+  ],
+  "semester": 1,
+  "prior_knowledge_references": [
+
+  ],
+  "qualifications": [
+
   ]
 }

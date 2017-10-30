@@ -43,6 +43,49 @@ public class CurriculumService extends Service {
     }
 
     /**
+     * Get the query string that retrieves the information of a module.
+     *
+     * @return Query string.
+     */
+    public String getQueryModuleInformation() {
+        return
+                "WITH " +
+                        "    prior AS (SELECT Json_build_object('module_code',m.code , 'module_name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END)) AS prior_modules, md.module_id AS MODULE FROM study.moduledependency AS md inner join study.MODULE AS m ON m.id = md.dependency_module_id), " +
+                        "    alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
+                        "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
+                        "    astype AS (SELECT Array_to_json(Array_agg(DISTINCT at.name)) AS names, as2lg.learninggoal_id AS lg FROM study.moduleasssementtype AS AT inner join study.moduleassessment_moduleassessmenttype AS ma2at ON ma2at.moduleassessmenttype_id = at.id inner join study.moduleassessment_learninggoal AS as2lg ON ma2at.moduleassessment_id = as2lg.moduleassessment_id GROUP BY as2lg.learninggoal_id), " +
+                        "    skills AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer', (SELECT (num - 1) FROM alrow WHERE alrow.id = q.architecturallayer_id), 'lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE acrow.id = q.activity_id), 'level', los.LEVEL))) AS json, lq.learninggoal_id FROM study.learninggoal_qualification AS lq inner join study.qualification AS q ON q.id = lq.qualification_id inner join study.levelofskill AS los ON los.id = q.levelofskill_id GROUP BY lq.learninggoal_id), " +
+                        "    lg AS (SELECT Array_to_json(Array_agg(Json_build_object('name', Concat('LG ', sequenceno), 'description', description, 'type', (CASE lg.groupgoal WHEN TRUE THEN 'group' ELSE 'personal' END), 'weight', weight, 'assesment_types', (SELECT Coalesce(names, '[]'::json) FROM astype WHERE lg = lg.id), 'skillmatrix', Coalesce((SELECT json FROM skills WHERE skills.learninggoal_id = lg.id), '[]'::json)))) AS json, lg.module_id FROM study.learninggoal AS lg GROUP BY module_id), " +
+                        "    acitivies AS (SELECT Array_to_json(Array_agg(Json_build_object('lifecycle_activity_id', id, 'lifecycle_activity_name', name, 'lifecycle_activity_description', description))) AS json FROM study.activity), " +
+                        "    als AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer_id', id, 'architectural_layer_name', name, 'architectural_layer_description', description))) AS json FROM study.architecturallayer), " +
+                        "    topics AS (SELECT array_to_json(array_agg(t.description order BY t.sequenceno)) AS topics, t.module_id AS MODULE FROM study.moduletopic AS t GROUP BY t.module_id) " +
+                        "SELECT json_build_object( " +
+                        "  'module_code', m.code, " +
+                        "  'module_name', m.name, " +
+                        "  'credits', m.credits, " +
+                        "  'lifecycle_activities', (SELECT json FROM acitivies), " +
+                        "  'architectural_layers', (SELECT json FROM als), " +
+                        "  'learning_goals', (SELECT json FROM lg WHERE lg.module_id = m.id), " +
+                        "  'lectures_in_week', m.lecturesperweek, " +
+                        "  'practical_hours_week', m.practicalperweek, " +
+                        "  'total_effort', m.totaleffort, " +
+                        "  'introductorytext', coalesce(md.introduction, ''), " +
+                        "  'teaching_material', coalesce(md.teachingmaterial, ''), " +
+                        "  'additional_information', coalesce(md.additionalinfo, ''), " +
+                        "  'topics', (SELECT coalesce(topics, '[]'::json) FROM topics WHERE MODULE = m.id), " +
+                        "  'semester', mp.semester, " +
+                        "  'prior_knowledge_references', (SELECT coalesce(array_to_json(array_agg(PRIOR.prior_modules)), '[]'::json) FROM PRIOR WHERE PRIOR.MODULE = m.id), " +
+                        "  'qualifications', (SELECT '[]'::json) " +
+                        ") as module FROM study.MODULE AS m " +
+                        "  left join study.moduledescription AS md ON md.module_id = m.id " +
+                        " " +
+                        "  left join study.module_profile AS mp ON mp.module_id = m.id " +
+                        "  left join study.PROFILE AS p ON mp.profile_id = p.id " +
+                        " " +
+                        "WHERE m.code = ? AND p.studyprogramme_id = ?";
+    }
+
+    /**
      * {@inheritDoc}
      * Gets all semesters and their modules in a given curriculum.
      *
@@ -50,12 +93,13 @@ public class CurriculumService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException,
-            EntityNotFoundException {
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws SQLException, IOException, EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
             if (!resultSet.next()) throw new EntityNotFoundException();
-            final String jsonString = resultSet.getString("semesters");
+            final String jsonString = resultSet.getString(columnName);
+
+        if (jsonString == null) throw new EntityNotFoundException();
             return mapper.readTree(jsonString);
         }
     }

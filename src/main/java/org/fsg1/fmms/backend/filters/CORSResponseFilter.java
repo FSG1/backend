@@ -14,7 +14,7 @@ public class CORSResponseFilter
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Filters responses to add CORS Headers.
      */
     public void filter(final ContainerRequestContext requestContext,
