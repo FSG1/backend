@@ -50,8 +50,7 @@ public class CurriculumService extends Service {
     public String getQueryModuleInformation() {
         return
                 "WITH " +
-                        "    prior AS (SELECT Json_build_object('module_code',m.code , 'module_name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END)) AS PRIOR, md.module_id AS json FROM study.moduledependency AS md inner join study.MODULE AS m ON m.id = md.dependency_module_id), " +
-                        "    semester AS (SELECT mp.semester, mp.module_id, p.studyprogramme_id FROM study.module_profile AS mp inner join study.PROFILE AS p ON p.id = mp.profile_id), " +
+                        "    prior AS (SELECT Json_build_object('module_code',m.code , 'module_name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END)) AS prior_modules, md.module_id AS MODULE FROM study.moduledependency AS md inner join study.MODULE AS m ON m.id = md.dependency_module_id), " +
                         "    alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
                         "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
                         "    astype AS (SELECT Array_to_json(Array_agg(DISTINCT at.name)) AS names, as2lg.learninggoal_id AS lg FROM study.moduleasssementtype AS AT inner join study.moduleassessment_moduleassessmenttype AS ma2at ON ma2at.moduleassessmenttype_id = at.id inner join study.moduleassessment_learninggoal AS as2lg ON ma2at.moduleassessment_id = as2lg.moduleassessment_id GROUP BY as2lg.learninggoal_id), " +
@@ -74,13 +73,16 @@ public class CurriculumService extends Service {
                         "  'teaching_material', coalesce(md.teachingmaterial, ''), " +
                         "  'additional_information', coalesce(md.additionalinfo, ''), " +
                         "  'topics', (SELECT coalesce(topics, '[]'::json) FROM topics WHERE MODULE = m.id), " +
-                        "  'semester', (SELECT semester FROM semester AS s WHERE s.module_id = m.id AND s.studyprogramme_id = ?), " +
-                        "  'prior_knowledge_references', (SELECT coalesce(array_to_json(array_agg(PRIOR.PRIOR)), '[]'::json) FROM PRIOR WHERE module_id = m.id), " +
+                        "  'semester', mp.semester, " +
+                        "  'prior_knowledge_references', (SELECT coalesce(array_to_json(array_agg(PRIOR.prior_modules)), '[]'::json) FROM PRIOR WHERE PRIOR.MODULE = m.id), " +
                         "  'qualifications', (SELECT '[]'::json) " +
-                        ") as module FROM study.module AS m " +
+                        ") as module FROM study.MODULE AS m " +
                         "  left join study.moduledescription AS md ON md.module_id = m.id " +
                         " " +
-                        "WHERE m.code = ?";
+                        "  left join study.module_profile AS mp ON mp.module_id = m.id " +
+                        "  left join study.PROFILE AS p ON mp.profile_id = p.id " +
+                        " " +
+                        "WHERE m.code = ? AND p.studyprogramme_id = ?";
     }
 
     /**
