@@ -63,7 +63,7 @@ public class CurriculaEndpointTest extends JerseyTest {
     public void testGetCurricula() throws IOException, SQLException, EntityNotFoundException {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/curricula.json")));
 
-        when(service.get(eq(service.getQueryCurriculaString(), "curricula")))
+        when(service.get(eq(service.getQueryCurriculaString()), eq("curricula")))
                 .thenReturn(node);
         given()
                 .spec(spec)
@@ -71,7 +71,7 @@ public class CurriculaEndpointTest extends JerseyTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(2)).get(service.getQueryCurriculaString(), 1);
+        verify(service, times(2)).get(service.getQueryCurriculaString(), "curricula");
     }
 
     @Test

@@ -38,7 +38,7 @@ public class CurriculumServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptySemester() throws SQLException, IOException, EntityNotFoundException {
-        service.get(service.getQueryCurriculumSemestersString(), 1);
+        service.get(service.getQueryCurriculumSemestersString(), "semesters", 1);
     }
 
     @Test
@@ -80,6 +80,7 @@ public class CurriculumServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();
 
+        when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
         final JsonNode node = service.get(service.getQueryModuleInformation(),"module", 1);

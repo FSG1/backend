@@ -39,7 +39,7 @@ public class CurriculaServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptySemesters() throws SQLException, IOException, EntityNotFoundException {
-        service.get(service.getQueryCurriculaString());
+        service.get(service.getQueryCurriculaString(), "curricula");
     }
 
     @Test
@@ -51,8 +51,8 @@ public class CurriculaServiceTest {
         when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        final JsonNode node = service.get(service.getQueryCurriculaString(), 1);
+        final JsonNode node = service.get(service.getQueryCurriculaString(), "curricula");
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-        verify(conn, times(1)).executeQuery(service.getQueryCurriculaString(), 1);
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculaString());
     }
 }

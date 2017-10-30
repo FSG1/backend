@@ -93,7 +93,7 @@ public class CurriculumService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode get(final String query, final String columnName, finalObject... parameters) throws SQLException, IOException, EntityNotFoundException {
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws SQLException, IOException, EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
             if (!resultSet.next()) throw new EntityNotFoundException();
