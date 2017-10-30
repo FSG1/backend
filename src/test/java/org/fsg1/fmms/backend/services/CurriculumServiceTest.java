@@ -47,6 +47,7 @@ public class CurriculumServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterMultipleModules.json"))).toString();
 
+        when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
         final JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
@@ -60,6 +61,7 @@ public class CurriculumServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterOneModule.json"))).toString();
 
+        when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
         JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);

@@ -61,12 +61,10 @@ public class ModuleService extends Service {
     public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException,
             EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
-        final ResultSet resultSet = getConn().executeQuery(query, parameters);
-        resultSet.next();
-        final String jsonString = resultSet.getString("module");
-
-        if (jsonString == null) throw new EntityNotFoundException();
-
-        return mapper.readTree(jsonString);
+        try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
+            if (!resultSet.next()) throw new EntityNotFoundException();
+            final String jsonString = resultSet.getString("module");
+            return mapper.readTree(jsonString);
+        }
     }
 }

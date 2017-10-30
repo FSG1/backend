@@ -48,6 +48,7 @@ public class ModuleServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();
 
+        when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
         final JsonNode node = service.get(service.getQueryModuleInformation(), 1);
