@@ -50,7 +50,7 @@ public class CurriculumServiceTest {
         when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        final JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
+        final JsonNode node = service.get(service.getQueryCurriculumSemestersString(), "semesters", 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
         verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
@@ -64,8 +64,25 @@ public class CurriculumServiceTest {
         when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
+        JsonNode node = service.get(service.getQueryCurriculumSemestersString(), "semesters", 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
         verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testProcessEmptyModule() throws SQLException, IOException, EntityNotFoundException {
+        service.get(service.getQueryModuleInformation(), "module", 1, "1");
+    }
+
+    @Test
+    public void testProcessModule() throws IOException, SQLException, EntityNotFoundException {
+        ObjectMapper mapper = new ObjectMapper();
+        final String jsonString = mapper.readTree(Files.readAllBytes(Paths
+                .get("src/test/resources/json/module.json"))).toString();
+
+        when(mockResult.getString(anyString())).thenReturn(jsonString);
+
+        final JsonNode node = service.get(service.getQueryModuleInformation(),"module", 1);
+        assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
     }
 }

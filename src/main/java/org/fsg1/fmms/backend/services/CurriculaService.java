@@ -41,11 +41,11 @@ public class CurriculaService extends Service {
      *
      * @return A JSON ObjectNode representing an array of curricula.
      */
-    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException,
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws SQLException, IOException,
             EntityNotFoundException {
         try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
             if (!resultSet.next()) throw new EntityNotFoundException();
-            final String jsonString = resultSet.getString("curricula");
+            final String jsonString = resultSet.getString(columnName);
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readTree(jsonString);
         }

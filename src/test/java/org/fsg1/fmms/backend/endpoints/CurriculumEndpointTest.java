@@ -94,5 +94,39 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .get("curriculum/1/semesters")
                 .then()
                 .statusCode(500);
+
+        given()
+                .spec(spec)
+                .get("curriculum/1/modules/1")
+                .then()
+                .statusCode(500);
+    }
+
+    @Test
+    public void testGetNoModule() throws SQLException, IOException, EntityNotFoundException {
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1")))
+                .thenThrow(EntityNotFoundException.class);
+
+        given()
+                .spec(spec)
+                .get("curriculum/1/modules/1")
+                .then()
+                .statusCode(404);
+        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1"));
+    }
+
+    @Test
+    public void testGetModule() throws IOException, SQLException, EntityNotFoundException {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
+
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1")))
+                .thenReturn(node);
+        given()
+                .spec(spec)
+                .get("curriculum/1/modules/1")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1"));
     }
 }
