@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class CurriculumService extends Service {
 
     /**
      * Get the query string that retrieves every semester in a curriculum.
+     *
      * @return Query string.
      */
     public String getQueryCurriculumSemestersString() {
@@ -48,12 +50,13 @@ public class CurriculumService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException {
+    public JsonNode get(final String query, final Object... parameters) throws SQLException, IOException,
+            EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
-        final ResultSet resultSet = getConn().executeQuery(getQueryCurriculumSemestersString(),
-                parameters);
-        resultSet.next();
-        final String jsonString = resultSet.getString("semesters");
-        return mapper.readTree(jsonString);
+        try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
+            if (!resultSet.next()) throw new EntityNotFoundException();
+            final String jsonString = resultSet.getString("semesters");
+            return mapper.readTree(jsonString);
+        }
     }
 }

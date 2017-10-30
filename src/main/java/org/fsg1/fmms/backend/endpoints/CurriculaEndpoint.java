@@ -1,6 +1,7 @@
 package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.services.CurriculaService;
 
 import javax.inject.Inject;
@@ -39,6 +40,8 @@ public class CurriculaEndpoint extends Endpoint {
             final JsonNode result = service.get(service.getQueryCurriculaString());
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
+        } catch (EntityNotFoundException enfe) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();

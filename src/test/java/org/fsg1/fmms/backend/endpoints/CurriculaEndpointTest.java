@@ -1,13 +1,13 @@
 package org.fsg1.fmms.backend.endpoints;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.services.CurriculaService;
 import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
@@ -15,17 +15,20 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.iterableWithSize;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CurriculaEndpointTest extends JerseyTest {
 
     private static RequestSpecification spec;
@@ -46,7 +49,6 @@ public class CurriculaEndpointTest extends JerseyTest {
 
     @Override
     public ResourceConfig configure() {
-        MockitoAnnotations.initMocks(this);
         return new ResourceConfig()
                 .register(CurriculaEndpoint.class)
                 .register(new AbstractBinder() {
@@ -58,58 +60,35 @@ public class CurriculaEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetCurricula() throws IOException, SQLException {
-        ArrayNode resultArray = mapper.createArrayNode();
-        ObjectNode seNode = mapper.createObjectNode();
-        seNode.put("id", 1);
-        seNode.put("code", "SE");
-        seNode.put("name", "Software Engineering");
+    public void testGetCurricula() throws IOException, SQLException, EntityNotFoundException {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/curricula.json")));
 
-        ObjectNode biNode = mapper.createObjectNode();
-        biNode.put("id", 2);
-        biNode.put("code", "BI");
-        biNode.put("name", "Business Informatics");
-
-        resultArray.add(seNode);
-        resultArray.add(biNode);
-
-        when(service.get(service.getQueryCurriculaString()))
-                .thenReturn(resultArray);
+        when(service.get(eq(service.getQueryCurriculaString())))
+                .thenReturn(node);
         given()
                 .spec(spec)
                 .get("curricula")
                 .then()
                 .statusCode(200)
-                .body(".", iterableWithSize(2))
-                .body("[0].code", equalTo("SE"))
-                .body("[0].name", equalTo("Software Engineering"))
-                .body("[0].id", equalTo(1))
-                .body("[1].code", equalTo("BI"))
-                .body("[1].name", equalTo("Business Informatics"))
-                .body("[1].id", equalTo(2));
-        verify(service, times(2)).get(service.getQueryCurriculaString());
-        reset(service);
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(service.getQueryCurriculaString(), 1);
     }
 
     @Test
-    public void testGetEmptySemester() throws SQLException, IOException {
+    public void testGetEmptySemester() throws SQLException, IOException, EntityNotFoundException {
         when(service.get(service.getQueryCurriculaString()))
-                .thenReturn(mapper.createArrayNode());
+                .thenThrow(EntityNotFoundException.class);
 
         given()
                 .spec(spec)
                 .get("curricula")
                 .then()
-                .body(".", iterableWithSize(0))
-                .statusCode(200);
+                .statusCode(404);
         verify(service, times(2)).getQueryCurriculaString();
-        reset(service);
     }
 
     @Test
-    public void testExpectServerError() throws IOException, SQLException {
-        when(service.get(service.getQueryCurriculaString()))
-                .thenReturn(null);
+    public void testExpectServerError() throws IOException, SQLException, EntityNotFoundException {
         given()
                 .spec(spec)
                 .get("curricula")

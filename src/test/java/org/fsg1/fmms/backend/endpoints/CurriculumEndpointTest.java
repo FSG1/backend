@@ -1,13 +1,13 @@
 package org.fsg1.fmms.backend.endpoints;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.services.CurriculumService;
 import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
@@ -15,17 +15,20 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.iterableWithSize;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CurriculumEndpointTest extends JerseyTest {
 
     private static RequestSpecification spec;
@@ -46,7 +49,6 @@ public class CurriculumEndpointTest extends JerseyTest {
 
     @Override
     public ResourceConfig configure() {
-        MockitoAnnotations.initMocks(this);
         return new ResourceConfig()
                 .register(CurriculumEndpoint.class)
                 .register(new AbstractBinder() {
@@ -58,103 +60,35 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetSESemesters() throws SQLException, IOException {
-        ObjectNode result = mapper.createObjectNode();
-        ArrayNode resultSemesterArray = mapper.createArrayNode();
-        result.set("semesters", resultSemesterArray);
+    public void testGetSemesters() throws SQLException, IOException, EntityNotFoundException {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/semesterMultipleModules.json")));
 
-        final ObjectNode semesterResult = mapper.createObjectNode();
-        semesterResult.put("semester", 1);
-        final ArrayNode modules = mapper.createArrayNode();
-        semesterResult.set("modules", modules);
-        resultSemesterArray.add(semesterResult);
-
-        ObjectNode module = mapper.createObjectNode();
-        module.put("module_code", "JAV1");
-        module.put("credits", 5);
-        module.put("module_name", "Programming in Java");
-        modules.add(module);
-
-        when(service.get(service.getQueryCurriculumSemestersString(), 1))
-                .thenReturn(result);
+        when(service.get(eq(service.getQueryCurriculumSemestersString()), eq(1)))
+                .thenReturn(node);
         given()
                 .spec(spec)
                 .get("curriculum/1/semesters")
                 .then()
                 .statusCode(200)
-                .body("semesters", iterableWithSize(1))
-                .body("semesters[0].semester", equalTo(1))
-                .body("semesters.modules", iterableWithSize(1))
-                .root("semesters[0].modules.find { it.module_code == 'JAV1' }")
-                .body("credits", equalTo(5))
-                .body("module_name", equalTo("Programming in Java"));
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), eq(1));
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), anyInt());
-        reset(service);
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
-    public void testGetBISemesters() throws SQLException, IOException {
-        ObjectNode result = mapper.createObjectNode();
-        ArrayNode resultSemesterArray = mapper.createArrayNode();
-        result.set("semesters", resultSemesterArray);
-
-        final ObjectNode semesterResult = mapper.createObjectNode();
-        semesterResult.put("semester", 1);
-        final ArrayNode modules = mapper.createArrayNode();
-        semesterResult.set("modules", modules);
-        resultSemesterArray.add(semesterResult);
-
-        ObjectNode module = mapper.createObjectNode();
-        module.put("module_code", "BUA");
-        module.put("credits", 4);
-        module.put("module_name", "Business Administration");
-        modules.add(module);
-
-        when(service.get(service.getQueryCurriculumSemestersString(), 2))
-                .thenReturn(result);
-        given()
-                .spec(spec)
-                .get("curriculum/2/semesters")
-                .then()
-                .statusCode(200)
-                .body("semesters", iterableWithSize(1))
-                .body("semesters[0].semester", equalTo(1))
-                .body("semesters.modules", iterableWithSize(1))
-                .root("semesters[0].modules.find { it.module_code == 'BUA' }")
-                .body("credits", equalTo(4))
-                .body("module_name", equalTo("Business Administration"));
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), eq(2));
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), anyInt());
-        reset(service);
-    }
-
-    @Test
-    public void testGetEmptySemester() throws SQLException, IOException {
-        when(service.get(eq(service.getQueryCurriculumSemestersString()), anyInt()))
-                .thenReturn(mapper.createObjectNode().set("semesters", mapper.createArrayNode()));
-        given()
-                .spec(spec)
-                .get("curriculum/1Fuio/semesters")
-                .then()
-                .statusCode(404);
+    public void testGetEmptySemester() throws SQLException, IOException, EntityNotFoundException {
+        when(service.get(eq(service.getQueryCurriculumSemestersString()), eq(5)))
+                .thenThrow(EntityNotFoundException.class);
 
         given()
                 .spec(spec)
                 .get("curriculum/5/semesters")
                 .then()
-                .statusCode(200);
+                .statusCode(404);
         verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), eq(5));
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), anyInt());
-        reset(service);
-
-
     }
 
     @Test
-    public void testExpectServerError() throws IOException, SQLException {
-        when(service.get(eq(service.getQueryCurriculumSemestersString()), anyInt()))
-                .thenReturn(null);
+    public void testExpectServerError() throws IOException, SQLException, EntityNotFoundException {
         given()
                 .spec(spec)
                 .get("curriculum/1/semesters")

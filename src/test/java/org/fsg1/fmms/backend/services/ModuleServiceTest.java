@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ModuleServiceTest {
@@ -39,7 +39,6 @@ public class ModuleServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptyModule() throws SQLException, IOException, EntityNotFoundException {
-        when(mockResult.getString(anyString())).thenReturn(null);
         service.get(service.getQueryModuleInformation(), 1);
     }
 
@@ -49,9 +48,11 @@ public class ModuleServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();
 
+        when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        final JsonNode node = service.get(service.getQueryModuleInformation(),1);
+        final JsonNode node = service.get(service.getQueryModuleInformation(), 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
+        verify(conn, times(1)).executeQuery(service.getQueryModuleInformation(), 1);
     }
 }
