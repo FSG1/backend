@@ -23,7 +23,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     private Configuration configMock;
 
     @Before
-    public void setupJDBC(){
+    public void setupJDBC() {
         getJDBCMockObjectFactory().registerMockDriver();
 
         Mockito.when(configMock.getDbString()).thenReturn("jdbc:postgresql://localhost:5432/fmms");
