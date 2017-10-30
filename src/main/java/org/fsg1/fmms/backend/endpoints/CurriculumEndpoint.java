@@ -65,7 +65,7 @@ public class CurriculumEndpoint extends Endpoint {
                                            @PathParam("module_id") final String moduleId) {
         try {
             final CurriculumService service = (CurriculumService) getService();
-            final JsonNode result = service.get(service.getQueryModuleInformation(), "module", curriculumId, moduleId);
+            final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId,  curriculumId);
             final String jsonString = result.toString();
             return Response.status(Response.Status.OK).entity(jsonString).build();
         } catch (EntityNotFoundException enfe) {
