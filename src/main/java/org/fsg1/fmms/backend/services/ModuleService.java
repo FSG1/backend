@@ -27,6 +27,7 @@ public class ModuleService extends Service {
 
     /**
      * Get the query string that retrieves the information of a module.
+     *
      * @return Query string.
      */
     public String getQueryModuleInformation() {

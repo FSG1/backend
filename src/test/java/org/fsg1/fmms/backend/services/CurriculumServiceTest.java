@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,34 +36,32 @@ public class CurriculumServiceTest {
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
+    @Test(expected = EntityNotFoundException.class)
+    public void testProcessEmptySemester() throws SQLException, IOException, EntityNotFoundException {
+        service.get(service.getQueryCurriculumSemestersString(), 1);
+    }
+
     @Test
-    public void testProcessMultipleSemesters() throws SQLException, IOException {
+    public void testProcessMultipleSemesters() throws SQLException, IOException, EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterMultipleModules.json"))).toString();
+
         when(mockResult.getString(anyString())).thenReturn(jsonString);
-        JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
+
+        final JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
         verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
     @Test
-    public void testProcessOneModule() throws IOException, SQLException {
+    public void testProcessOneModule() throws IOException, SQLException, EntityNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterOneModule.json"))).toString();
-        when(mockResult.getString(anyString())).thenReturn(jsonString);
-        JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
-        assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-        verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
-    }
 
-    @Test
-    public void testProcessEmptySemesters() throws SQLException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        final String jsonString = mapper.readTree(Files.readAllBytes(Paths
-                .get("src/test/resources/json/semesterEmpty.json"))).toString();
         when(mockResult.getString(anyString())).thenReturn(jsonString);
+
         JsonNode node = service.get(service.getQueryCurriculumSemestersString(), 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
         verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);

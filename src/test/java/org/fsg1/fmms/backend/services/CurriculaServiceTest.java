@@ -1,21 +1,28 @@
 package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CurriculaServiceTest {
     @Mock
     private Connection conn;
@@ -26,34 +33,25 @@ public class CurriculaServiceTest {
 
     @Before
     public void initMocks() throws SQLException {
-        MockitoAnnotations.initMocks(this);
         service = new CurriculaService(conn);
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
-    @Test
-    public void testProcessCurricula() throws SQLException, IOException {
-        when(mockResult.getString("curricula")).thenReturn(
-                "[{\"id\":1,\"code\":\"SE\",\"name\":\"Software Engineering\"}," +
-                        "{\"id\":2,\"code\":\"BI\",\"name\":\"Business Informatics\"}]"
-        );
-        JsonNode result = service.get(service.getQueryCurriculaString());
-        assertEquals(result.size(), 2);
-        assertEquals(result.get(0).get("id").asInt(), 1);
-        assertEquals(result.get(0).get("code").asText(), "SE");
-        assertEquals(result.get(0).get("name").asText(), "Software Engineering");
-        assertEquals(result.get(1).get("id").asInt(), 2);
-        assertEquals(result.get(1).get("code").asText(), "BI");
-        assertEquals(result.get(1).get("name").asText(), "Business Informatics");
-
-        verify(conn, times(1)).executeQuery(service.getQueryCurriculaString());
+    @Test(expected = EntityNotFoundException.class)
+    public void testProcessEmptySemesters() throws SQLException, IOException, EntityNotFoundException {
+        service.get(service.getQueryCurriculaString());
     }
 
     @Test
-    public void testProcessEmptySemesters() throws SQLException, IOException {
-        when(mockResult.getString(anyString())).thenReturn("[]");
-        JsonNode result = service.get(service.getQueryCurriculaString());
-        assertEquals(result.size(), 0);
-        verify(conn, times(1)).executeQuery(service.getQueryCurriculaString());
+    public void testProcessCurricula() throws SQLException, IOException, EntityNotFoundException {
+        ObjectMapper mapper = new ObjectMapper();
+        final String jsonString = mapper.readTree(Files.readAllBytes(Paths
+                .get("src/test/resources/json/curricula.json"))).toString();
+
+        when(mockResult.getString(anyString())).thenReturn(jsonString);
+
+        final JsonNode node = service.get(service.getQueryCurriculaString(), 1);
+        assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
+        verify(conn, times(1)).executeQuery(service.getQueryCurriculaString(), 1);
     }
 }
