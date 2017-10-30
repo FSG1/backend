@@ -31,7 +31,7 @@ public class CurriculumService extends Service {
     public String getQueryCurriculumSemestersString() {
         return
                 "WITH " +
-                        "modules AS (SELECT Array_to_json(Array_agg(Json_build_object('code', co.module_code, 'name', co.module_name, 'credits', co.credits))) AS json, study_programme_id AS sid, semester AS s FROM study.curriculum_overview AS co GROUP BY study_programme_id, semester), " +
+                        "modules AS (SELECT Array_to_json(Array_agg(Json_build_object('module_code', co.module_code, 'module_name', co.module_name, 'credits', co.credits))) AS json, study_programme_id AS sid, semester AS s FROM study.curriculum_overview AS co GROUP BY study_programme_id, semester), " +
                         "semesters AS ( " +
                         "      SELECT Json_build_object('semester', co2.semester, 'modules', (SELECT json FROM modules WHERE sid = co2.study_programme_id AND s = co2.semester)) AS json, co2.study_programme_id AS programme FROM study.curriculum_overview AS co2 GROUP BY co2.study_programme_id, co2.semester ORDER BY co2.semester) " +
                         " " +
