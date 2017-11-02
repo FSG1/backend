@@ -7,6 +7,7 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.fsg1.fmms.backend.exceptions.AppExceptionMapper;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.services.CurriculumService;
 import org.fsg1.fmms.backend.services.Service;
@@ -20,10 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.*;
@@ -56,11 +55,12 @@ public class CurriculumEndpointTest extends JerseyTest {
                     protected void configure() {
                         bind(service).to(Service.class);
                     }
-                });
+                })
+                .register(AppExceptionMapper.class);
     }
 
     @Test
-    public void testGetSemesters() throws SQLException, IOException, EntityNotFoundException {
+    public void testGetSemesters() throws Exception {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/semesterMultipleModules.json")));
 
         when(service.get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(1)))
@@ -75,7 +75,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetEmptySemester() throws SQLException, IOException, EntityNotFoundException {
+    public void testGetEmptySemester() throws Exception {
         when(service.get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(5)))
                 .thenThrow(EntityNotFoundException.class);
 
@@ -88,7 +88,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testExpectServerError() throws IOException, SQLException, EntityNotFoundException {
+    public void testExpectServerError() throws Exception {
         given()
                 .spec(spec)
                 .get("curriculum/1/semesters")
@@ -103,9 +103,9 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetNoModule() throws SQLException, IOException, EntityNotFoundException {
+    public void testGetNoModule() throws Exception {
         when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("1"), eq(1)))
-                .thenThrow(EntityNotFoundException.class);
+                .thenThrow(new EntityNotFoundException());
 
         given()
                 .spec(spec)
@@ -116,7 +116,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetModule() throws IOException, SQLException, EntityNotFoundException {
+    public void testGetModule() throws Exception {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
 
         when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("1"), eq(1)))

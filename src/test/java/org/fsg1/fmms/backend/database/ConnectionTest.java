@@ -4,6 +4,7 @@ import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import org.fsg1.fmms.backend.app.Configuration;
+import org.fsg1.fmms.backend.exceptions.AppException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,7 +32,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public void testExecuteQuery() throws SQLException {
+    public void testExecuteQuery() throws AppException {
         Connection conn = new Connection(configMock);
 
         conn.executeQuery("param1: '?' , param2: '?'", "stringparam", 4);
@@ -47,7 +47,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public void testSetParameters() throws SQLException {
+    public void testSetParameters() throws AppException {
         Connection conn = new Connection(configMock);
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};

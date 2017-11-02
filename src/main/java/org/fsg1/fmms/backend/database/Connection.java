@@ -1,6 +1,7 @@
 package org.fsg1.fmms.backend.database;
 
 import org.fsg1.fmms.backend.app.Configuration;
+import org.fsg1.fmms.backend.exceptions.AppException;
 
 import javax.inject.Inject;
 import java.sql.DriverManager;
@@ -21,7 +22,7 @@ public final class Connection {
      * @param config Active server configuration
      */
     @Inject
-    public Connection(final Configuration config) {
+    public Connection(final Configuration config) throws AppException {
         Properties props = new Properties();
         props.setProperty("user", config.getDbUser());
         props.setProperty("password", config.getDbPassword());
@@ -30,7 +31,7 @@ public final class Connection {
             String url = config.getDbString();
             conn = DriverManager.getConnection(url, props);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new AppException(500, "An error occured connecting to the database.", "Make sure the database is online");
         }
     }
 
@@ -40,12 +41,17 @@ public final class Connection {
      * @param query      The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
-     * @throws SQLException if something goes wrong performing the query.
+     * @throws AppException if something goes wrong performing the query.
      */
-    public ResultSet executeQuery(final String query, final Object... parameters) throws SQLException {
-        final PreparedStatement preparedStatement = conn.prepareStatement(query);
-        mapParams(preparedStatement, parameters);
-        return preparedStatement.executeQuery();
+    public ResultSet executeQuery(final String query, final Object... parameters) throws AppException {
+        final PreparedStatement preparedStatement;
+        try {
+            preparedStatement = conn.prepareStatement(query);
+            mapParams(preparedStatement, parameters);
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new AppException(500, "An error occurred querying the database.", "Make sure the database is online and your query is valid");
+        }
     }
 
     /**

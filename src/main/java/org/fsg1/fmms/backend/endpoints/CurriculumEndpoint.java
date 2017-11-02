@@ -55,25 +55,18 @@ public class CurriculumEndpoint extends Endpoint {
      * Returns all semesters in a curriculum.
      *
      * @param curriculumId Identifier of the curriculum.
-     * @param moduleId Identifier of the module.
+     * @param moduleId     Identifier of the module.
      * @return A JSON list of all semesters in this curriculum.
      */
     @GET
     @Path("/modules/{module_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModuleInformation(@PathParam("curriculum_id") final int curriculumId,
-                                           @PathParam("module_id") final String moduleId) {
-        try {
-            final CurriculumService service = (CurriculumService) getService();
-            final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
-            final String jsonString = result.toString();
-            return Response.status(Response.Status.OK).entity(jsonString).build();
-        } catch (EntityNotFoundException enfe) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.serverError().build();
-        }
+                                         @PathParam("module_id") final String moduleId) throws Exception {
+        final CurriculumService service = (CurriculumService) getService();
+        final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
+        final String jsonString = result.toString();
+        return Response.status(Response.Status.OK).entity(jsonString).build();
     }
 }
 

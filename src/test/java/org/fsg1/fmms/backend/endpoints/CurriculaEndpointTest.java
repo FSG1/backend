@@ -7,6 +7,7 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.fsg1.fmms.backend.exceptions.AppExceptionMapper;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.services.CurriculaService;
 import org.fsg1.fmms.backend.services.Service;
@@ -56,11 +57,12 @@ public class CurriculaEndpointTest extends JerseyTest {
                     protected void configure() {
                         bind(service).to(Service.class);
                     }
-                });
+                })
+                .register(AppExceptionMapper.class);
     }
 
     @Test
-    public void testGetCurricula() throws IOException, SQLException, EntityNotFoundException {
+    public void testGetCurricula() throws Exception {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/curricula.json")));
 
         when(service.get(eq(service.getQueryCurriculaString()), eq("curricula")))
@@ -75,9 +77,9 @@ public class CurriculaEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetEmptySemester() throws SQLException, IOException, EntityNotFoundException {
+    public void testGetEmptySemester() throws Exception {
         when(service.get(service.getQueryCurriculaString(), "curricula"))
-                .thenThrow(EntityNotFoundException.class);
+                .thenThrow(new EntityNotFoundException());
 
         given()
                 .spec(spec)

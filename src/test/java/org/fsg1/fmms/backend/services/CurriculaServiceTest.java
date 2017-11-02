@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.AppException;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -32,18 +31,18 @@ public class CurriculaServiceTest {
     private CurriculaService service;
 
     @Before
-    public void initMocks() throws SQLException {
+    public void initMocks() throws AppException {
         service = new CurriculaService(conn);
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptySemesters() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessEmptySemesters() throws Exception {
         service.get(service.getQueryCurriculaString(), "curricula");
     }
 
     @Test
-    public void testProcessCurricula() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessCurricula() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/curricula.json"))).toString();

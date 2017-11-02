@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.AppException;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -31,18 +30,18 @@ public class CurriculumServiceTest {
     private CurriculumService service;
 
     @Before
-    public void initMocks() throws SQLException {
+    public void initMocks() throws AppException {
         service = new CurriculumService(conn);
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptySemester() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessEmptySemester() throws Exception {
         service.get(service.getQueryCurriculumSemestersString(), "semesters", 1);
     }
 
     @Test
-    public void testProcessMultipleSemesters() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessMultipleSemesters() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterMultipleModules.json"))).toString();
@@ -56,7 +55,7 @@ public class CurriculumServiceTest {
     }
 
     @Test
-    public void testProcessOneModule() throws IOException, SQLException, EntityNotFoundException {
+    public void testProcessOneModule() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/semesterOneModule.json"))).toString();
@@ -70,12 +69,12 @@ public class CurriculumServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptyModule() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessEmptyModule() throws Exception {
         service.get(service.getQueryModuleInformation(), "module", 1, "1");
     }
 
     @Test
-    public void testProcessModule() throws IOException, SQLException, EntityNotFoundException {
+    public void testProcessModule() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();
@@ -83,7 +82,7 @@ public class CurriculumServiceTest {
         when(mockResult.next()).thenReturn(true);
         when(mockResult.getString(anyString())).thenReturn(jsonString);
 
-        final JsonNode node = service.get(service.getQueryModuleInformation(),"module", 1);
+        final JsonNode node = service.get(service.getQueryModuleInformation(), "module", 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
     }
 }

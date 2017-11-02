@@ -38,6 +38,5 @@ public abstract class Service {
      * @throws IOException             if the database connection was broken.*
      * @throws EntityNotFoundException if no entity was found by the query.
      */
-    public abstract JsonNode get(String query, String columnName, Object... parameters) throws SQLException, IOException,
-            EntityNotFoundException;
+    public abstract JsonNode get(String query, String columnName, Object... parameters) throws Exception;
 }
