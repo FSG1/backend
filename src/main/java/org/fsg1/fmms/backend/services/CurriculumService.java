@@ -58,7 +58,8 @@ public class CurriculumService extends Service {
                         "    lg AS (SELECT Array_to_json(Array_agg(Json_build_object('name', Concat('LG ', sequenceno), 'description', description, 'type', (CASE lg.groupgoal WHEN TRUE THEN 'group' ELSE 'personal' END), 'weight', weight, 'assesment_types', (SELECT Coalesce(names, '[]'::json) FROM astype WHERE lg = lg.id), 'skillmatrix', Coalesce((SELECT json FROM skills WHERE skills.learninggoal_id = lg.id), '[]'::json)))) AS json, lg.module_id FROM study.learninggoal AS lg GROUP BY module_id), " +
                         "    acitivies AS (SELECT Array_to_json(Array_agg(Json_build_object('lifecycle_activity_id', id, 'lifecycle_activity_name', name, 'lifecycle_activity_description', description))) AS json FROM study.activity), " +
                         "    als AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer_id', id, 'architectural_layer_name', name, 'architectural_layer_description', description))) AS json FROM study.architecturallayer), " +
-                        "    topics AS (SELECT array_to_json(array_agg(t.description order BY t.sequenceno)) AS topics, t.module_id AS MODULE FROM study.moduletopic AS t GROUP BY t.module_id) " +
+                        "    topics AS (SELECT array_to_json(array_agg(t.description order BY t.sequenceno)) AS topics, t.module_id AS MODULE FROM study.moduletopic AS t GROUP BY t.module_id), " +
+                        "    moduleskills AS (SELECT lg.module_id AS MODULE, json_build_object('lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE id = q.activity_id), 'architectural_layer', (SELECT (num - 1) FROM alrow WHERE id = q.architecturallayer_id), 'level', max(los.LEVEL)) AS json FROM study.learninggoal AS lg inner join study.learninggoal_qualification AS lg2q ON lg2q.learninggoal_id = lg.id inner join study.qualification AS q ON lg2q.qualification_id = q.id inner join study.levelofskill AS los ON los.id = q.levelofskill_id GROUP BY lg.module_id, q.activity_id, q.architecturallayer_id) " +
                         "SELECT json_build_object( " +
                         "  'module_code', m.code, " +
                         "  'module_name', m.name, " +
@@ -75,10 +76,9 @@ public class CurriculumService extends Service {
                         "  'topics', (SELECT coalesce(topics, '[]'::json) FROM topics WHERE MODULE = m.id), " +
                         "  'semester', mp.semester, " +
                         "  'prior_knowledge_references', (SELECT coalesce(array_to_json(array_agg(PRIOR.prior_modules)), '[]'::json) FROM PRIOR WHERE PRIOR.MODULE = m.id), " +
-                        "  'qualifications', (SELECT '[]'::json) " +
-                        ") as module FROM study.MODULE AS m " +
+                        "  'qualifications', (SELECT array_to_json(array_agg(json)) FROM moduleskills WHERE MODULE = m.id) " +
+                        ") FROM study.module AS m " +
                         "  left join study.moduledescription AS md ON md.module_id = m.id " +
-                        " " +
                         "  left join study.module_profile AS mp ON mp.module_id = m.id " +
                         "  left join study.PROFILE AS p ON mp.profile_id = p.id " +
                         " " +
