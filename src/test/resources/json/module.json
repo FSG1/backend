@@ -2,6 +2,11 @@
   "module_code": "BUA1",
   "module_name": "Business Administration 1",
   "credits": 4,
+  "credentials": "What?No money?",
+  "lecturers": [
+    "Gregor Schwake",
+    "Sander Bruinsma"
+  ],
   "lifecycle_activities": [
     {
       "lifecycle_activity_id": 1,
@@ -73,10 +78,10 @@
   ],
   "learning_goals": [
     {
-      "name": "LG 1",
-      "description": "give a definition of enterprises, businesses and organisations",
+      "name": "LG 2",
+      "description": "explain the primary and secondary processes of a business",
       "type": "personal",
-      "weight": null,
+      "weight": 0.25,
       "assesment_types": [
         "Written Exam"
       ],
@@ -89,10 +94,26 @@
       ]
     },
     {
-      "name": "LG 2",
-      "description": "explain the primary and secondary processes of a business",
+      "name": "LG 4",
+      "description": "make a distinction between the different relations of an organisation and its environment",
+      "type": "group",
+      "weight": 0.25,
+      "assesment_types": [
+        "Written Exam"
+      ],
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "LG 1",
+      "description": "give a definition of enterprises, businesses and organisations",
       "type": "personal",
-      "weight": null,
+      "weight": 0.25,
       "assesment_types": [
         "Written Exam"
       ],
@@ -108,23 +129,7 @@
       "name": "LG 3",
       "description": "explain the legal form of an organisation",
       "type": "personal",
-      "weight": null,
-      "assesment_types": [
-        "Written Exam"
-      ],
-      "skillmatrix": [
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 1,
-          "level": 1
-        }
-      ]
-    },
-    {
-      "name": "LG 4",
-      "description": "make a distinction between the different relations of an organisation and its environment",
-      "type": "personal",
-      "weight": null,
+      "weight": 0.25,
       "assesment_types": [
         "Written Exam"
       ],
@@ -137,9 +142,9 @@
       ]
     }
   ],
-  "lectures_in_week": null,
-  "practical_hours_week": null,
-  "total_effort": 0,
+  "lectures_in_week": 4,
+  "practical_hours_week": 1,
+  "total_effort": 112,
   "introductorytext": "This is the module introduction to BUA.",
   "teaching_material": "You will need something. Maybe a book or two.",
   "additional_information": "This module contains of real information about unreal businesses.",
@@ -151,9 +156,18 @@
   ],
   "semester": 1,
   "prior_knowledge_references": [
-
+    {
+      "module_code": "BUMA",
+      "module_name": "Business Management",
+      "type": "previous",
+      "remarks": ""
+    }
   ],
   "qualifications": [
-
+    {
+      "lifecycle_activity": 1,
+      "architectural_layer": 1,
+      "level": 1
+    }
   ]
 }
