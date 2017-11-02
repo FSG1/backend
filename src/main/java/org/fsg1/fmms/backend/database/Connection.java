@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+
 /**
  * The class used for connecting with the Database. It uses the JDBC Driver.
  */
@@ -19,7 +21,8 @@ public final class Connection {
     /**
      * The constructor. It immediately connects to the database.
      *
-     * @param config Active server configuration
+     * @param config Active server configuration.
+     * @throws AppException if the database connection closed or the query was malformed.
      */
     @Inject
     public Connection(final Configuration config) throws AppException {
@@ -31,7 +34,7 @@ public final class Connection {
             String url = config.getDbString();
             conn = DriverManager.getConnection(url, props);
         } catch (SQLException e) {
-            throw new AppException(500, "An error occured connecting to the database.", "Make sure the database is online");
+            throw new AppException(INTERNAL_SERVER_ERROR.getStatusCode(), "An error occured connecting to the database.", "Make sure the database is online");
         }
     }
 
@@ -50,7 +53,7 @@ public final class Connection {
             mapParams(preparedStatement, parameters);
             return preparedStatement.executeQuery();
         } catch (SQLException e) {
-            throw new AppException(500, "An error occurred querying the database.", "Make sure the database is online and your query is valid");
+            throw new AppException(INTERNAL_SERVER_ERROR.getStatusCode(), "An error occurred querying the database.", "Make sure the database is online and your query is valid");
         }
     }
 

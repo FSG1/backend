@@ -2,10 +2,6 @@ package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.fsg1.fmms.backend.database.Connection;
-import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * An abstract class representing a Service to be used by the REST API.
@@ -34,9 +30,7 @@ public abstract class Service {
      * @param parameters Optional array of parameters to give to the query
      * @param columnName Name of the column of the result.
      * @return The result of the query in JSON format.
-     * @throws SQLException            if the query was malformed.
-     * @throws IOException             if the database connection was broken.*
-     * @throws EntityNotFoundException if no entity was found by the query.
+     * @throws Exception if the query was malformed, the connection broken or no entity was found.
      */
     public abstract JsonNode get(String query, String columnName, Object... parameters) throws Exception;
 }

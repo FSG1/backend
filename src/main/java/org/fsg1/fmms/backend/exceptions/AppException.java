@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
- * Class to map application related exceptions
+ * Class to map application related exceptions.
  */
 @XmlRootElement
 public class AppException extends Exception implements Serializable {
@@ -31,42 +31,42 @@ public class AppException extends Exception implements Serializable {
     private String developerMessage;
 
     /**
-     * @param status           status code
-     * @param errorMessage     error message
-     * @param developerMessage specific message for developers
+     * @param status           status code.
+     * @param errorMessage     error message.
+     * @param developerMessage specific message for developers.
      */
-    public AppException(int status, String errorMessage,
-                        String developerMessage) {
+    public AppException(final int status, final String errorMessage,
+                        final String developerMessage) {
         super(errorMessage);
         this.status = status;
         this.errorMessage = errorMessage;
         this.developerMessage = developerMessage;
     }
 
+    /**
+     * Default constructor so object mapping from Jackson does not break.
+     */
     public AppException() {
     }
 
+    /**
+     * @return The status.
+     */
     public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
+    /**
+     * @return The error message.
+     */
     public String errorMessage() {
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
+    /**
+     * @return The developer message.
+     */
     public String getDeveloperMessage() {
         return developerMessage;
-    }
-
-    public void setDeveloperMessage(String developerMessage) {
-        this.developerMessage = developerMessage;
     }
 }

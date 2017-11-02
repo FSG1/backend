@@ -57,6 +57,7 @@ public class CurriculumEndpoint extends Endpoint {
      * @param curriculumId Identifier of the curriculum.
      * @param moduleId     Identifier of the module.
      * @return A JSON list of all semesters in this curriculum.
+     * @throws Exception In case the querying goes wrong.
      */
     @GET
     @Path("/modules/{module_id}")

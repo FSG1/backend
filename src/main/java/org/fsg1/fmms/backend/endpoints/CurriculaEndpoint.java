@@ -30,6 +30,7 @@ public class CurriculaEndpoint extends Endpoint {
      * Returns all curricula.
      *
      * @return A JSON array of all the curricula.
+     * @throws Exception In case the querying goes wrong.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)

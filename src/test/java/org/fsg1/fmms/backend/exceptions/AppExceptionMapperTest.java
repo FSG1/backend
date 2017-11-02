@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class AppExceptionMapperTest {
     @Test
-    public void testAppException(){
+    public void testAppException() {
         final AppException exception = new AppException(312, "Something happened", "Notify the administrator");
         AppExceptionMapper mapper = new AppExceptionMapper();
         final Response response = mapper.toResponse(exception);
@@ -18,7 +18,7 @@ public class AppExceptionMapperTest {
     }
 
     @Test
-    public void testException(){
+    public void testException() {
         final Exception exception = new Exception("Nobody could have expected this");
         AppExceptionMapper mapper = new AppExceptionMapper();
         final Response response = mapper.toResponse(exception);
