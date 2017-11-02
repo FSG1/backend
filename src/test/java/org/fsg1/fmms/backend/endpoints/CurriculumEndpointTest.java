@@ -77,7 +77,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     @Test
     public void testGetEmptySemester() throws Exception {
         when(service.get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(5)))
-                .thenThrow(EntityNotFoundException.class);
+                .thenThrow(new EntityNotFoundException());
 
         given()
                 .spec(spec)
