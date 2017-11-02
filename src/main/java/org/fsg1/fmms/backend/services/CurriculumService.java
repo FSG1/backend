@@ -6,9 +6,7 @@ import org.fsg1.fmms.backend.database.Connection;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * The service class for the curriculum endpoint.
@@ -92,13 +90,11 @@ public class CurriculumService extends Service {
      * @return A JSON ObjectNode of the resulting JSON object.
      */
     @Override
-    public JsonNode get(final String query, final String columnName, final Object... parameters) throws SQLException, IOException, EntityNotFoundException {
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
             if (!resultSet.next()) throw new EntityNotFoundException();
             final String jsonString = resultSet.getString(columnName);
-
-        if (jsonString == null) throw new EntityNotFoundException();
             return mapper.readTree(jsonString);
         }
     }

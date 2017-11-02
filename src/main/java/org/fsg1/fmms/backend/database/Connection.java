@@ -18,20 +18,16 @@ public final class Connection {
     /**
      * The constructor. It immediately connects to the database.
      *
-     * @param config Active server configuration
+     * @param config Active server configuration.
+     * @throws SQLException if the database connection closed or the query was malformed.
      */
     @Inject
-    public Connection(final Configuration config) {
+    public Connection(final Configuration config) throws SQLException {
         Properties props = new Properties();
         props.setProperty("user", config.getDbUser());
         props.setProperty("password", config.getDbPassword());
-
-        try {
-            String url = config.getDbString();
-            conn = DriverManager.getConnection(url, props);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String url = config.getDbString();
+        conn = DriverManager.getConnection(url, props);
     }
 
     /**
@@ -43,7 +39,8 @@ public final class Connection {
      * @throws SQLException if something goes wrong performing the query.
      */
     public ResultSet executeQuery(final String query, final Object... parameters) throws SQLException {
-        final PreparedStatement preparedStatement = conn.prepareStatement(query);
+        final PreparedStatement preparedStatement;
+        preparedStatement = conn.prepareStatement(query);
         mapParams(preparedStatement, parameters);
         return preparedStatement.executeQuery();
     }

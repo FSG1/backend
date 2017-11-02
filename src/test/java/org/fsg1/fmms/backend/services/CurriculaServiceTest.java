@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -38,12 +37,12 @@ public class CurriculaServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptySemesters() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessEmptySemesters() throws Exception {
         service.get(service.getQueryCurriculaString(), "curricula");
     }
 
     @Test
-    public void testProcessCurricula() throws SQLException, IOException, EntityNotFoundException {
+    public void testProcessCurricula() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/curricula.json"))).toString();
