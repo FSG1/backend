@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Class to map application related exceptions.
  */
 @XmlRootElement
-public class AppException extends Exception implements Serializable {
+class AppException extends Exception implements Serializable {
 
     /**
      * Contains redundantly the HTTP status of the response sent back to the client in case of error, so that
@@ -35,8 +35,8 @@ public class AppException extends Exception implements Serializable {
      * @param errorMessage     error message.
      * @param developerMessage specific message for developers.
      */
-    public AppException(final int status, final String errorMessage,
-                        final String developerMessage) {
+    AppException(final int status, final String errorMessage,
+                 final String developerMessage) {
         super(errorMessage);
         this.status = status;
         this.errorMessage = errorMessage;
@@ -46,27 +46,27 @@ public class AppException extends Exception implements Serializable {
     /**
      * Default constructor so object mapping from Jackson does not break.
      */
-    public AppException() {
+    AppException() {
     }
 
     /**
      * @return The status.
      */
-    public Integer getStatus() {
+    int getStatus() {
         return status;
     }
 
     /**
      * @return The error message.
      */
-    public String errorMessage() {
+    String getErrorMessage() {
         return errorMessage;
     }
 
     /**
      * @return The developer message.
      */
-    public String getDeveloperMessage() {
+    String getDeveloperMessage() {
         return developerMessage;
     }
 }
