@@ -1,7 +1,6 @@
 package org.fsg1.fmms.backend.database;
 
 import org.fsg1.fmms.backend.app.Configuration;
-import org.fsg1.fmms.backend.exceptions.AppException;
 
 import javax.inject.Inject;
 import java.sql.DriverManager;
@@ -9,8 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
  * The class used for connecting with the Database. It uses the JDBC Driver.
@@ -22,20 +19,15 @@ public final class Connection {
      * The constructor. It immediately connects to the database.
      *
      * @param config Active server configuration.
-     * @throws AppException if the database connection closed or the query was malformed.
+     * @throws SQLException if the database connection closed or the query was malformed.
      */
     @Inject
-    public Connection(final Configuration config) throws AppException {
+    public Connection(final Configuration config) throws SQLException {
         Properties props = new Properties();
         props.setProperty("user", config.getDbUser());
         props.setProperty("password", config.getDbPassword());
-
-        try {
-            String url = config.getDbString();
-            conn = DriverManager.getConnection(url, props);
-        } catch (SQLException e) {
-            throw new AppException(INTERNAL_SERVER_ERROR.getStatusCode(), "An error occured connecting to the database.", "Make sure the database is online");
-        }
+        String url = config.getDbString();
+        conn = DriverManager.getConnection(url, props);
     }
 
     /**
@@ -44,17 +36,13 @@ public final class Connection {
      * @param query      The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
-     * @throws AppException if something goes wrong performing the query.
+     * @throws SQLException if something goes wrong performing the query.
      */
-    public ResultSet executeQuery(final String query, final Object... parameters) throws AppException {
+    public ResultSet executeQuery(final String query, final Object... parameters) throws SQLException {
         final PreparedStatement preparedStatement;
-        try {
-            preparedStatement = conn.prepareStatement(query);
-            mapParams(preparedStatement, parameters);
-            return preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            throw new AppException(INTERNAL_SERVER_ERROR.getStatusCode(), "An error occurred querying the database.", "Make sure the database is online and your query is valid");
-        }
+        preparedStatement = conn.prepareStatement(query);
+        mapParams(preparedStatement, parameters);
+        return preparedStatement.executeQuery();
     }
 
     /**

@@ -3,7 +3,6 @@ package org.fsg1.fmms.backend.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
-import org.fsg1.fmms.backend.exceptions.AppException;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +14,7 @@ import uk.co.datumedge.hamcrest.json.SameJSONAs;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -31,7 +31,7 @@ public class CurriculaServiceTest {
     private CurriculaService service;
 
     @Before
-    public void initMocks() throws AppException {
+    public void initMocks() throws SQLException {
         service = new CurriculaService(conn);
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
