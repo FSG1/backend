@@ -85,4 +85,24 @@ public class CurriculumServiceTest {
         final JsonNode node = service.get(service.getQueryModuleInformation(), "module", 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
     }
+
+    @Test
+    public void testProcessCompleteSemester() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        final String jsonString = mapper.readTree(Files.readAllBytes(Paths
+                .get("src/test/resources/json/completeSemester.json"))).toString();
+
+        when(mockResult.next()).thenReturn(true);
+        when(mockResult.getString(anyString())).thenReturn(jsonString);
+
+        final JsonNode node = service.get(service.getQueryCompleteSemester(), "complete_semester", 1, 1);
+        assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
+
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testProcessEmptyCompleteSemester() throws Exception {
+        service.get(service.getQueryCompleteSemester(), "complete_semester", 1, 1);
+
+    }
 }

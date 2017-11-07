@@ -1,0 +1,13 @@
+{
+  "semester": 1,
+  "modules": [
+    {},{},{}
+  ],
+  "qualifications": [
+    {
+      "lifecycle_activity": 1,
+      "architectural_layer": 1,
+      "level": 1
+    }
+  ]
+}
