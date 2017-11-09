@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.exceptions;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
@@ -18,13 +19,9 @@ public class AppExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(final Exception ex) {
-        if (ex instanceof AppException) {
-            return Response.status(((AppException) (ex)).getStatus())
-                    .entity(ex)
-                    .build();
-        }
+        if (ex instanceof WebApplicationException) return ((WebApplicationException) (ex)).getResponse();
         return Response.status(INTERNAL_SERVER_ERROR)
-                .entity(ex)
+                .entity(ex.toString())
                 .build();
     }
 }
