@@ -26,6 +26,13 @@ public class QualificationsService extends Service {
      */
     public String getQualificationsQuery() {
         return
-                "";
+                "WITH " +
+                        "  activities AS (SELECT Array_to_json(Array_agg(Json_build_object('lifecycle_activity_id', id, 'lifecycle_activity_name', NAME, 'lifecycle_activity_description', description))) AS json FROM study.activity), " +
+                        "  als AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer_id', id, 'architectural_layer_name', NAME, 'architectural_layer_description', description))) AS json FROM study.architecturallayer) " +
+                        "SELECT Json_build_object( " +
+                        "  'curricula', (SELECT Array_to_json(Array_agg(Row_to_json(sp))) FROM study.studyprogramme sp), " +
+                        "  'architectural_layers', (SELECT json FROM als), " +
+                        "  'lifecycle_activities', (SELECT json FROM activities) " +
+                        ") as qualifications";
     }
 }
