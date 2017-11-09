@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("sp/qualifications")
+@Path("qualifications")
 public class QualificationsEndpoint extends Endpoint {
     /**
      * Constructor which receives the service as dependency.
