@@ -41,6 +41,16 @@ public class CurriculumService extends Service {
     }
 
     /**
+     * Get the query string that retrieves a complete semester.
+     *
+     * @return Query string
+     */
+    public String getQueryCompleteSemester() {
+        return
+                "";
+    }
+
+    /**
      * Get the query string that retrieves the information of a module.
      *
      * @return Query string.
@@ -100,15 +110,5 @@ public class CurriculumService extends Service {
             final String jsonString = resultSet.getString(columnName);
             return mapper.readTree(jsonString);
         }
-    }
-
-    /**
-     * Get the query string that retrieves a complete semester.
-     *
-     * @return Query string
-     */
-    public String getQueryCompleteSemester() {
-        return
-                "";
     }
 }
