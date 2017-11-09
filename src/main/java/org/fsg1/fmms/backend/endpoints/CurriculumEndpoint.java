@@ -45,6 +45,25 @@ public class CurriculumEndpoint extends Endpoint {
     }
 
     /**
+     * Get the complete information of one semester in a curriculum.
+     *
+     * @param curriculumId Identifier of the curriculum.
+     * @param semesterId   Identifier of the semester.
+     * @throws Exception In case the querying goes wrong.
+     * @return A JSON Object containing the complete information of this semester.
+     */
+    @GET
+    @Path("/semesters/{semester_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCompleteSemester(@PathParam("curriculum_id") final int curriculumId,
+                                        @PathParam("semester_id") final int semesterId) throws Exception {
+        final CurriculumService service = (CurriculumService) getService();
+        final JsonNode result = service.get(service.getQueryCompleteSemester(), "complete_semester", curriculumId, semesterId);
+        final String jsonString = result.toString();
+        return Response.status(Response.Status.OK).entity(jsonString).build();
+    }
+
+    /**
      * Returns all semesters in a curriculum.
      *
      * @param curriculumId Identifier of the curriculum.
