@@ -1,7 +1,11 @@
 package org.fsg1.fmms.backend.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
+
+import java.sql.ResultSet;
 
 /**
  * An abstract class representing a Service to be used by the REST API.
@@ -19,7 +23,7 @@ public abstract class Service {
         conn = connection;
     }
 
-    final Connection getConn() {
+    private Connection getConn() {
         return conn;
     }
 
@@ -32,5 +36,12 @@ public abstract class Service {
      * @return The result of the query in JSON format.
      * @throws Exception if the query was malformed, the connection broken or no entity was found.
      */
-    public abstract JsonNode get(String query, String columnName, Object... parameters) throws Exception;
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws Exception {
+        try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
+            if (!resultSet.next()) throw new EntityNotFoundException();
+            final String jsonString = resultSet.getString(columnName);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readTree(jsonString);
+        }
+    }
 }
