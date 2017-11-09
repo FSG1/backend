@@ -26,9 +26,7 @@ import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QualificationsEndpointTest extends JerseyTest {

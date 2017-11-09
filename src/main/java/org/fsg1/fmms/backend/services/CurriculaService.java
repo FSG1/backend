@@ -1,12 +1,8 @@
 package org.fsg1.fmms.backend.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
-import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import javax.inject.Inject;
-import java.sql.ResultSet;
 
 /**
  * The service class for the curricula endpoint.

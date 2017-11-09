@@ -36,7 +36,7 @@ public abstract class Service {
      * @return The result of the query in JSON format.
      * @throws Exception if the query was malformed, the connection broken or no entity was found.
      */
-    public JsonNode get(String query, String columnName, Object... parameters) throws Exception {
+    public JsonNode get(final String query, final String columnName, final Object... parameters) throws Exception {
         try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
             if (!resultSet.next()) throw new EntityNotFoundException();
             final String jsonString = resultSet.getString(columnName);

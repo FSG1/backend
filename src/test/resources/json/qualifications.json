@@ -1,5 +1,14 @@
 {
-  "curricula": [{},{}],
-  "lifecycle_activities": [{},{}],
-  "architectural_layers": [{},{}]
+  "curricula": [
+    {},
+    {}
+  ],
+  "lifecycle_activities": [
+    {},
+    {}
+  ],
+  "architectural_layers": [
+    {},
+    {}
+  ]
 }
