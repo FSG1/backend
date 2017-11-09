@@ -32,19 +32,4 @@ public class CurriculaService extends Service {
         return "SELECT array_to_json(array_agg(row_to_json(sp))) as curricula " +
                 "FROM study.studyprogramme sp";
     }
-
-    /**
-     * {@inheritDoc}
-     * Gets the ids, names and codes of all curricula.
-     *
-     * @return A JSON ObjectNode representing an array of curricula.
-     */
-    public JsonNode get(final String query, final String columnName, final Object... parameters) throws Exception {
-        try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
-            if (!resultSet.next()) throw new EntityNotFoundException();
-            final String jsonString = resultSet.getString(columnName);
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readTree(jsonString);
-        }
-    }
 }

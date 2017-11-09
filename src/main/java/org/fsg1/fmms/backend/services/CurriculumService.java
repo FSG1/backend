@@ -1,12 +1,8 @@
 package org.fsg1.fmms.backend.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
-import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import javax.inject.Inject;
-import java.sql.ResultSet;
 
 /**
  * The service class for the curriculum endpoint.
@@ -83,22 +79,5 @@ public class CurriculumService extends Service {
                         "  left join study.module_profile AS mp ON mp.module_id = m.id " +
                         "  left join study.PROFILE AS p ON mp.profile_id = p.id " +
                         "WHERE m.code = ? AND p.studyprogramme_id = ?";
-    }
-
-    /**
-     * {@inheritDoc}
-     * Gets all semesters and their modules in a given curriculum.
-     *
-     * @param parameters The first parameter should be the identifier of the curriculum.
-     * @return A JSON ObjectNode of the resulting JSON object.
-     */
-    @Override
-    public JsonNode get(final String query, final String columnName, final Object... parameters) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        try (ResultSet resultSet = getConn().executeQuery(query, parameters)) {
-            if (!resultSet.next()) throw new EntityNotFoundException();
-            final String jsonString = resultSet.getString(columnName);
-            return mapper.readTree(jsonString);
-        }
     }
 }
