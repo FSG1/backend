@@ -1,308 +1,45 @@
-[
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "BUA1",
-    "module_name": "Business Administration 1",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "DBS1",
-    "module_name": "Databases",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "ENG1",
-    "module_name": "English",
-    "credits": 2,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "JAVA1",
-    "module_name": "Programming in Java 1",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "MAT1",
-    "module_name": "Mathematics",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 1,
-    "module_code": "PRJ1",
-    "module_name": "Project 1",
-    "credits": 10,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "BUMA",
-    "module_name": "Business Management",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "ITSM",
-    "module_name": "IT Service Management",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "JAVA2",
-    "module_name": "Programming in Java 2",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "MOD1",
-    "module_name": "Modeling 1",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "PRJ2",
-    "module_name": "Project 2",
-    "credits": 10,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 2,
-    "module_code": "SEN1",
-    "module_name": "Software Engineering",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "ALDA",
-    "module_name": "Algorithms and Data structures",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "APPL",
-    "module_name": "Applied Research",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "CON1",
-    "module_name": "IT Consultancy",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "CSA1",
-    "module_name": "Computer Systems Architecture 1",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "MOD2",
-    "module_name": "Modeling 2",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "PRJ3",
-    "module_name": "Project 3 Lift",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "RENG",
-    "module_name": "Requirements Engineering",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 3,
-    "module_code": "STA1",
-    "module_name": "Statistics",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "APPS",
-    "module_name": "App Development",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "CSA2",
-    "module_name": "Networks and security",
-    "credits": 3,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "CSA3",
-    "module_name": "Operating Systems",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "DNET",
-    "module_name": "Programming in C#.NET",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "JAVA3",
-    "module_name": "Java Concurrency",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "MAT2",
-    "module_name": "Mathematics 2",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 4,
-    "module_code": "XMLJ",
-    "module_name": "XML and Java",
-    "credits": 4,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 5,
-    "module_code": "STG1",
-    "module_name": "Internship",
-    "credits": 30,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 6,
-    "module_code": "MINOR",
-    "module_name": "Minor",
-    "credits": 30,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 7,
-    "module_code": "COM7",
-    "module_name": "Communication",
-    "credits": 2,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 7,
-    "module_code": "GRAP",
-    "module_name": "Graphics",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 7,
-    "module_code": "JEE",
-    "module_name": "JEE and Software Architecture",
-    "credits": 5,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 7,
-    "module_code": "SOFA",
-    "module_name": "Software Factory",
-    "credits": 18,
-    "study_programme_id": 1
-  },
-  {
-    "name": "2014_NEW",
-    "study_programme": "SE",
-    "semester": 8,
-    "module_code": "STG2",
-    "module_name": "Graduation Project",
-    "credits": 30,
-    "study_programme_id": 1
-  }
-]
+{
+  "semesters": [
+    {
+      "semester": 1,
+      "modules": [
+        {
+          "code": "BUA1",
+          "name": "Business Administration 1",
+          "credits": 4,
+          "is_project": false
+        },
+        {
+          "code": "DBS1",
+          "name": "Databases",
+          "credits": 5,
+          "is_project": false
+        },
+        {
+          "code": "ENG1",
+          "name": "English",
+          "credits": 2,
+          "is_project": false
+        },
+        {
+          "code": "MAT1",
+          "name": "Mathematics",
+          "credits": 4,
+          "is_project": false
+        },
+        {
+          "code": "JAVA1",
+          "name": "Programming in Java 1",
+          "credits": 5,
+          "is_project": false
+        },
+        {
+          "code": "PRJ1",
+          "name": "Project 1",
+          "credits": 10,
+          "is_project": false
+        }
+      ]
+    }
+  ]
+}
