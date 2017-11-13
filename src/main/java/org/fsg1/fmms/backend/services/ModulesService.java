@@ -62,4 +62,14 @@ public class ModulesService extends Service {
                         "  left join study.PROFILE AS p ON mp.profile_id = p.id " +
                         "WHERE m.code = ? AND p.studyprogramme_id = ?";
     }
+
+    /**
+     * Get the query string that retrieves the overview for a qualification.
+     *
+     * @return The query string.
+     */
+    public String getQueryQualificationsOverview() {
+        return
+                "";
+    }
 }
