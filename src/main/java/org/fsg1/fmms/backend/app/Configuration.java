@@ -41,9 +41,9 @@ public final class Configuration {
         builder.setHost(env.getOrDefault("HOST", "0.0.0.0"))
                 .setPort(env.getOrDefault("PORT", "8080"))
                 .setBase(env.getOrDefault("BASE", "/fmms"))
-                .setDbUser(env.getOrDefault("DB_USER", "fmms"))
+                .setDbUser(env.getOrDefault("DB_USER", "module"))
                 .setDbPassword(env.getOrDefault("DB_PASSWD", ""))
-                .setDb(env.getOrDefault("DB", "172.17.0.1:5432/fmms"));
+                .setDb(env.getOrDefault("DB", "172.17.0.1:5432/modulemanagement"));
 
         return builder.build();
     }
