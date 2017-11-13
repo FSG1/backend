@@ -10,8 +10,8 @@ public class ConfigurationTest {
     public void testDefaults() {
         final Configuration configuration = Configuration.fromEnv();
         assertEquals("", configuration.getDbPassword());
-        assertEquals("jdbc:postgresql://172.17.0.1:5432/fmms", configuration.getDbString());
-        assertEquals("fmms", configuration.getDbUser());
+        assertEquals("jdbc:postgresql://172.17.0.1:5432/modulemanagement", configuration.getDbString());
+        assertEquals("module", configuration.getDbUser());
         assertEquals("http://0.0.0.0:8080/fmms", configuration.getServerString());
     }
 
