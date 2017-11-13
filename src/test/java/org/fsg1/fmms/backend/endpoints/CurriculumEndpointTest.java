@@ -140,7 +140,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     public void testGetCompleteSemester() throws Exception {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/completeSemester.json")));
 
-        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1)))
+        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1)))
                 .thenReturn(node);
         given()
                 .spec(spec)
@@ -148,12 +148,12 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1));
+        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1));
     }
 
     @Test
     public void testGetNoSemester() throws Exception {
-        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1)))
+        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1)))
                 .thenThrow(new EntityNotFoundException());
 
         given()
@@ -161,6 +161,6 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .get("curriculum/1/semesters/1")
                 .then()
                 .statusCode(404);
-        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1));
+        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1));
     }
 }
