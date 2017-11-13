@@ -4,6 +4,9 @@ import org.fsg1.fmms.backend.database.Connection;
 
 import javax.inject.Inject;
 
+/**
+ * Service class for the 'modules' endpoint.
+ */
 public class ModulesService extends Service {
     /**
      * Constructor. Takes a connection object which it uses to query a database.
@@ -11,7 +14,7 @@ public class ModulesService extends Service {
      * @param connection The connection object.
      */
     @Inject
-    ModulesService(Connection connection) {
+    ModulesService(final Connection connection) {
         super(connection);
     }
 

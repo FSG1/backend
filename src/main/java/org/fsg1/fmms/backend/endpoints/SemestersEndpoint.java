@@ -23,7 +23,7 @@ public class SemestersEndpoint extends Endpoint {
      * @param service Service object.
      */
     @Inject
-    SemestersEndpoint(SemestersService service) {
+    SemestersEndpoint(final SemestersService service) {
         super(service);
     }
 

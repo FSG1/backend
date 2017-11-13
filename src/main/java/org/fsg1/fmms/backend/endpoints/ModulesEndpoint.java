@@ -23,7 +23,7 @@ public class ModulesEndpoint extends Endpoint {
      * @param service Service object.
      */
     @Inject
-    ModulesEndpoint(ModulesService service) {
+    ModulesEndpoint(final ModulesService service) {
         super(service);
     }
 
