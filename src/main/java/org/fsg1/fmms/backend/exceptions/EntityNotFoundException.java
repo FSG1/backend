@@ -10,7 +10,7 @@ public class EntityNotFoundException extends AppException {
      * Constructor.
      */
     public EntityNotFoundException() {
-        super(NOT_FOUND.getStatusCode(), "No entity was found by the request.", "Make sure the query " +
+        super(NOT_FOUND.getStatusCode(), "No entity was found by the request. Make sure the query " +
                 "parameters are accurate and your requested entity exists in the database.");
     }
 }
