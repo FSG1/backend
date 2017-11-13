@@ -1,7 +1,7 @@
 package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.fsg1.fmms.backend.services.CurriculumService;
+import org.fsg1.fmms.backend.services.SemestersService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -12,18 +12,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The class containing the curriculum endpoints.
+ * The class containing the 'semesters' endpoints.
  */
 @Path("curriculum/{curriculum_id}")
-public class CurriculumEndpoint extends Endpoint {
-
+public class SemestersEndpoint extends Endpoint {
     /**
-     * Constructor which receives the service as dependency.
+     * Constructor which receives the service as dependency. In subclasses this dependency is automatically
+     * injected by Jersey's DPI system.
      *
      * @param service Service object.
      */
     @Inject
-    public CurriculumEndpoint(final CurriculumService service) {
+    SemestersEndpoint(SemestersService service) {
         super(service);
     }
 
@@ -38,7 +38,7 @@ public class CurriculumEndpoint extends Endpoint {
     @Path("/semesters")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters(@PathParam("curriculum_id") final int curriculumId) throws Exception {
-        final CurriculumService service = (CurriculumService) getService();
+        final SemestersService service = (SemestersService) getService();
         final JsonNode result = service.get(service.getQueryCurriculumSemestersString(), "semesters", curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
@@ -57,29 +57,10 @@ public class CurriculumEndpoint extends Endpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompleteSemester(@PathParam("curriculum_id") final int curriculumId,
                                         @PathParam("semester_id") final int semesterId) throws Exception {
-        final CurriculumService service = (CurriculumService) getService();
+        final SemestersService service = (SemestersService) getService();
         final JsonNode result = service.get(service.getQueryCompleteSemester(), "complete_semester", semesterId, curriculumId, semesterId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
     }
 
-    /**
-     * Returns all semesters in a curriculum.
-     *
-     * @param curriculumId Identifier of the curriculum.
-     * @param moduleId     Identifier of the module.
-     * @return A JSON list of all semesters in this curriculum.
-     * @throws Exception In case the querying goes wrong.
-     */
-    @GET
-    @Path("/modules/{module_id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getModuleInformation(@PathParam("curriculum_id") final int curriculumId,
-                                         @PathParam("module_id") final String moduleId) throws Exception {
-        final CurriculumService service = (CurriculumService) getService();
-        final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
-        final String jsonString = result.toString();
-        return Response.status(Response.Status.OK).entity(jsonString).build();
-    }
 }
-

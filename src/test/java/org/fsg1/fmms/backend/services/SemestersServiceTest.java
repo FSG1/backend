@@ -17,21 +17,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CurriculumServiceTest {
+public class SemestersServiceTest {
     @Mock
     private Connection conn;
     @Mock
     private ResultSet mockResult;
-    private CurriculumService service;
+    private SemestersService service;
 
     @Before
     public void initMocks() throws SQLException {
-        service = new CurriculumService(conn);
+        service = new SemestersService(conn);
         when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
@@ -54,24 +54,6 @@ public class CurriculumServiceTest {
         verify(conn, times(1)).executeQuery(service.getQueryCurriculumSemestersString(), 1);
     }
 
-    @Test(expected = EntityNotFoundException.class)
-    public void testProcessEmptyModule() throws Exception {
-        service.get(service.getQueryModuleInformation(), "module", 1, "1");
-    }
-
-    @Test
-    public void testProcessModule() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        final String jsonString = mapper.readTree(Files.readAllBytes(Paths
-                .get("src/test/resources/json/module.json"))).toString();
-
-        when(mockResult.next()).thenReturn(true);
-        when(mockResult.getString(anyString())).thenReturn(jsonString);
-
-        final JsonNode node = service.get(service.getQueryModuleInformation(), "module", 1);
-        assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-    }
-
     @Test
     public void testProcessCompleteSemester() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
@@ -83,12 +65,12 @@ public class CurriculumServiceTest {
 
         final JsonNode node = service.get(service.getQueryCompleteSemester(), "complete_semester", 1, 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-
+        verify(conn, times(1)).executeQuery(service.getQueryCompleteSemester(), 1, 1);
     }
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptyCompleteSemester() throws Exception {
         service.get(service.getQueryCompleteSemester(), "complete_semester", 1, 1);
-
+        verify(conn, times(1)).executeQuery(service.getQueryCompleteSemester(), 1, 1);
     }
 }
