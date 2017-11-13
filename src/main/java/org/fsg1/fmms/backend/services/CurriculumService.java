@@ -58,7 +58,7 @@ public class CurriculumService extends Service {
                         "  (SELECT Array_to_json(Array_agg(json)) FROM ( " +
                         "  SELECT Json_build_object('lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE id = q.activity_id), 'architectural_layer', (SELECT (num - 1) FROM alrow WHERE id = q.architecturallayer_id), 'level', Max(los.LEVEL)) AS json " +
                         "  FROM study.learninggoal AS lg inner join study.learninggoal_qualification AS lg2q ON lg2q.learninggoal_id = lg.id inner join study.qualification AS q ON lg2q.qualification_id = q.id inner join study.levelofskill AS los ON los.id = q.levelofskill_id inner join study.module_profile AS mp ON mp.module_id = lg.module_id inner join study.PROFILE AS p ON p.id = mp.profile_id " +
-                        "  WHERE p.studyprogramme_id = 1 AND semester <= mp.semester " +
+                        "  WHERE p.studyprogramme_id = 1 AND semester <= ? " +
                         "  GROUP BY q.activity_id, q.architecturallayer_id " +
                         ") AS tmp) " +
                         ") as complete_semester FROM study.module_profile AS mp " +
