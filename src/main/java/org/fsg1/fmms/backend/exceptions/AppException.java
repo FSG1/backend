@@ -10,8 +10,8 @@ import javax.ws.rs.core.Response;
 class AppException extends WebApplicationException {
 
     /**
-     * @param status           status code.
-     * @param errorMessage     error message.
+     * @param status       status code.
+     * @param errorMessage error message.
      */
     AppException(final int status, final String errorMessage) {
         super(Response

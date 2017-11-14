@@ -9,7 +9,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.fsg1.fmms.backend.exceptions.AppExceptionMapper;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
-import org.fsg1.fmms.backend.services.CurriculumService;
+import org.fsg1.fmms.backend.services.ModulesService;
 import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -28,13 +28,12 @@ import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CurriculumEndpointTest extends JerseyTest {
+public class ModulesEndpointTest extends JerseyTest {
 
     private static RequestSpecification spec;
     private ObjectMapper mapper = new ObjectMapper();
-
     @Mock
-    private CurriculumService service;
+    private ModulesService service;
 
     @BeforeClass
     public static void initSpec() {
@@ -49,7 +48,7 @@ public class CurriculumEndpointTest extends JerseyTest {
     @Override
     public ResourceConfig configure() {
         return new ResourceConfig()
-                .register(CurriculumEndpoint.class)
+                .register(ModulesEndpoint.class)
                 .register(new AbstractBinder() {
                     @Override
                     protected void configure() {
@@ -60,50 +59,10 @@ public class CurriculumEndpointTest extends JerseyTest {
     }
 
     @Test
-    public void testGetSemesters() throws Exception {
-        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/semesterMultipleModules.json")));
-
-        when(service.get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(1)))
-                .thenReturn(node);
-        given()
-                .spec(spec)
-                .get("curriculum/1/semesters")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(1));
-    }
-
-    @Test
-    public void testGetEmptySemester() throws Exception {
-        when(service.get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(5)))
-                .thenThrow(new EntityNotFoundException());
-
-        given()
-                .spec(spec)
-                .get("curriculum/5/semesters")
-                .then()
-                .statusCode(404);
-        verify(service, times(2)).get(eq(service.getQueryCurriculumSemestersString()), eq("semesters"), eq(5));
-    }
-
-    @Test
     public void testExpectServerError() throws Exception {
         given()
                 .spec(spec)
-                .get("curriculum/1/semesters")
-                .then()
-                .statusCode(500);
-
-        given()
-                .spec(spec)
                 .get("curriculum/1/modules/1")
-                .then()
-                .statusCode(500);
-
-        given()
-                .spec(spec)
-                .get("curriculum/1/semesters/1")
                 .then()
                 .statusCode(500);
     }
@@ -134,33 +93,5 @@ public class CurriculumEndpointTest extends JerseyTest {
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
         verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1"));
-    }
-
-    @Test
-    public void testGetCompleteSemester() throws Exception {
-        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/completeSemester.json")));
-
-        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1)))
-                .thenReturn(node);
-        given()
-                .spec(spec)
-                .get("curriculum/1/semesters/1")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1));
-    }
-
-    @Test
-    public void testGetNoSemester() throws Exception {
-        when(service.get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1)))
-                .thenThrow(new EntityNotFoundException());
-
-        given()
-                .spec(spec)
-                .get("curriculum/1/semesters/1")
-                .then()
-                .statusCode(404);
-        verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1));
     }
 }

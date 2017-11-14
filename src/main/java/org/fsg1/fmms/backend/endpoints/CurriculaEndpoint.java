@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
  * The class containing the curricula endpoints.
  */
 @Path("curricula")
-public class CurriculaEndpoint extends Endpoint {
+public class CurriculaEndpoint extends Endpoint<CurriculaService> {
 
     /**
      * Constructor which receives the service as dependency.
@@ -35,7 +35,7 @@ public class CurriculaEndpoint extends Endpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters() throws Exception {
-        final CurriculaService service = (CurriculaService) getService();
+        final CurriculaService service = getService();
         final JsonNode result = service.get(service.getQueryCurriculaString(), "curricula");
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
