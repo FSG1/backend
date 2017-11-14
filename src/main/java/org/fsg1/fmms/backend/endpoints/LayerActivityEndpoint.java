@@ -31,9 +31,9 @@ public class LayerActivityEndpoint extends Endpoint {
      * Get the complete overview of a specific qualification which is the combination of an architectural layer
      * and lifecycle activity as defined by the HBO-I matrix.
      *
-     * @param curriculumId  Identifier of the curriculum.
-     * @param layerId       The number of the architectural layer.
-     * @param activityId    The number of the lifecycle activity.
+     * @param curriculumId Identifier of the curriculum.
+     * @param layerId      The number of the architectural layer.
+     * @param activityId   The number of the lifecycle activity.
      * @return A JSON Object of the whole qualifications overview.
      * @throws Exception In case the querying goes wrong.
      */

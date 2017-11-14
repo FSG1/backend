@@ -2,11 +2,7 @@ package org.fsg1.fmms.backend.app;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.database.Connection;
-import org.fsg1.fmms.backend.services.CurriculaService;
-import org.fsg1.fmms.backend.services.LayerActivityService;
-import org.fsg1.fmms.backend.services.ModulesService;
-import org.fsg1.fmms.backend.services.SemestersService;
-import org.fsg1.fmms.backend.services.QualificationsService;
+import org.fsg1.fmms.backend.services.*;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
 import javax.inject.Singleton;
