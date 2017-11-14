@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
  * The class containing the 'modules' endpoints.
  */
 @Path("curriculum/{curriculum_id}")
-public class ModulesEndpoint extends Endpoint {
+public class ModulesEndpoint extends Endpoint<ModulesService> {
     /**
      * Constructor which receives the service as dependency. In subclasses this dependency is automatically
      * injected by Jersey's DPI system.
@@ -40,7 +40,7 @@ public class ModulesEndpoint extends Endpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModuleInformation(@PathParam("curriculum_id") final int curriculumId,
                                          @PathParam("module_id") final String moduleId) throws Exception {
-        final ModulesService service = (ModulesService) getService();
+        final ModulesService service = getService();
         final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();

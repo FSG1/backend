@@ -4,9 +4,10 @@ import org.fsg1.fmms.backend.services.Service;
 
 /**
  * Abstract class for an Endpoint.
+ * @param <ServiceType> Type of Service this endpoint uses.
  */
-public abstract class Endpoint {
-    private final Service service;
+public abstract class Endpoint<ServiceType extends Service> {
+    private final ServiceType service;
 
     /**
      * Constructor which receives the service as dependency. In subclasses this dependency is automatically
@@ -14,7 +15,7 @@ public abstract class Endpoint {
      *
      * @param service Service object.
      */
-    Endpoint(final Service service) {
+    Endpoint(final ServiceType service) {
         this.service = service;
     }
 
@@ -23,7 +24,7 @@ public abstract class Endpoint {
      *
      * @return the service.
      */
-    public Service getService() {
+    public ServiceType getService() {
         return service;
     }
 }

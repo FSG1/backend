@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
  * The qualifications endpoints.
  */
 @Path("qualifications")
-public class QualificationsEndpoint extends Endpoint {
+public class QualificationsEndpoint extends Endpoint<QualificationsService> {
 
     /**
      * Constructor which receives the service as dependency.
@@ -32,7 +32,7 @@ public class QualificationsEndpoint extends Endpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQualifications() throws Exception {
-        final QualificationsService service = (QualificationsService) getService();
+        final QualificationsService service = getService();
         final JsonNode result = service.get(service.getQualificationsQuery(), "qualifications");
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();

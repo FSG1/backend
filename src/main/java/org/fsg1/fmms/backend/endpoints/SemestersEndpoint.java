@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
  * The class containing the 'semesters' endpoints.
  */
 @Path("curriculum/{curriculum_id}")
-public class SemestersEndpoint extends Endpoint {
+public class SemestersEndpoint extends Endpoint<SemestersService> {
     /**
      * Constructor which receives the service as dependency. In subclasses this dependency is automatically
      * injected by Jersey's DPI system.
@@ -38,7 +38,7 @@ public class SemestersEndpoint extends Endpoint {
     @Path("/semesters")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurriculumSemesters(@PathParam("curriculum_id") final int curriculumId) throws Exception {
-        final SemestersService service = (SemestersService) getService();
+        final SemestersService service = getService();
         final JsonNode result = service.get(service.getQueryCurriculumSemestersString(), "semesters", curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
@@ -57,7 +57,7 @@ public class SemestersEndpoint extends Endpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompleteSemester(@PathParam("curriculum_id") final int curriculumId,
                                         @PathParam("semester_id") final int semesterId) throws Exception {
-        final SemestersService service = (SemestersService) getService();
+        final SemestersService service = getService();
         final JsonNode result = service.get(service.getQueryCompleteSemester(), "complete_semester", semesterId, curriculumId, semesterId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
