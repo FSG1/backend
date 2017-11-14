@@ -11,6 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * The class containing the architecturallayer/activity endpoints.
+ */
 @Path("curriculum/{curriculum_id}/architecturallayer/{layer_id}/activity/{activity_id}")
 public class LayerActivityEndpoint extends Endpoint {
     /**
@@ -20,7 +23,7 @@ public class LayerActivityEndpoint extends Endpoint {
      * @param service Service object.
      */
     @Inject
-    LayerActivityEndpoint(LayerActivityService service) {
+    LayerActivityEndpoint(final LayerActivityService service) {
         super(service);
     }
 

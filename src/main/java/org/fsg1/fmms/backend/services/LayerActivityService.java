@@ -4,6 +4,9 @@ import org.fsg1.fmms.backend.database.Connection;
 
 import javax.inject.Inject;
 
+/**
+ * The service class for the architecturallayer/activity endpoint.
+ */
 public class LayerActivityService extends Service {
     /**
      * Constructor. Takes a connection object which it uses to query a database.
@@ -11,7 +14,7 @@ public class LayerActivityService extends Service {
      * @param connection The connection object.
      */
     @Inject
-    LayerActivityService(Connection connection) {
+    LayerActivityService(final Connection connection) {
         super(connection);
     }
 
