@@ -1,33 +1,35 @@
 package org.fsg1.fmms.backend.database;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
 
 import javax.inject.Inject;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * The class used for connecting with the Database. It uses the JDBC Driver.
  */
 public final class Connection {
-    private java.sql.Connection conn = null;
+    private BasicDataSource connectionPool;
 
     /**
-     * The constructor. It immediately connects to the database.
+     * The constructor. It immediately connects to the database. Uses a connection pool with an
+     * initial size of 2.
      *
      * @param config Active server configuration.
+     * @param connectionPool The connection pool to obtain Connections from.
      * @throws SQLException if the database connection closed or the query was malformed.
      */
     @Inject
-    public Connection(final Configuration config) throws SQLException {
-        Properties props = new Properties();
-        props.setProperty("user", config.getDbUser());
-        props.setProperty("password", config.getDbPassword());
-        String url = config.getDbString();
-        conn = DriverManager.getConnection(url, props);
+    public Connection(final Configuration config, final BasicDataSource connectionPool) throws SQLException {
+        this.connectionPool = connectionPool;
+        this.connectionPool.setUsername(config.getDbUser());
+        this.connectionPool.setPassword(config.getDbPassword());
+        this.connectionPool.setUrl(config.getDbString());
+        this.connectionPool.setDriverClassName("org.postgresql.Driver");
+        this.connectionPool.setInitialSize(2);
     }
 
     /**
@@ -39,8 +41,9 @@ public final class Connection {
      * @throws SQLException if something goes wrong performing the query.
      */
     public ResultSet executeQuery(final String query, final Object... parameters) throws SQLException {
+        java.sql.Connection connection = connectionPool.getConnection();
         final PreparedStatement preparedStatement;
-        preparedStatement = conn.prepareStatement(query);
+        preparedStatement = connection.prepareStatement(query);
         mapParams(preparedStatement, parameters);
         return preparedStatement.executeQuery();
     }
