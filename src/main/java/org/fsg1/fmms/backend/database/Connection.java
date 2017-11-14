@@ -30,12 +30,6 @@ public final class Connection {
         this.connectionPool.setUrl(config.getDbString());
         this.connectionPool.setDriverClassName("org.postgresql.Driver");
         this.connectionPool.setInitialSize(2);
-
-//        Properties props = new Properties();
-//        props.setProperty("user", config.getDbUser());
-//        props.setProperty("password", config.getDbPassword());
-//        String url = config.getDbString();
-//        conn = DriverManager.getConnection(url, props);
     }
 
     /**
