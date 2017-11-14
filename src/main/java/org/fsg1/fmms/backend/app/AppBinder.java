@@ -1,5 +1,6 @@
 package org.fsg1.fmms.backend.app;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.database.Connection;
 import org.fsg1.fmms.backend.services.CurriculaService;
 import org.fsg1.fmms.backend.services.CurriculumService;
@@ -19,6 +20,7 @@ public final class AppBinder extends AbstractBinder {
      */
     @Override
     protected void configure() {
+        bind(BasicDataSource.class).to(BasicDataSource.class).in(Singleton.class);
         bind(CurriculumService.class).to(CurriculumService.class).in(Singleton.class);
         bind(CurriculaService.class).to(CurriculaService.class).in(Singleton.class);
         bind(Connection.class).to(Connection.class).in(Singleton.class);
