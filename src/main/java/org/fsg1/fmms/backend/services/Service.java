@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 
 /**
  * An abstract class representing a Service to be used by the REST API.
- * A service contains
  */
 public abstract class Service {
     private final Connection conn;
