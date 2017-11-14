@@ -1,0 +1,99 @@
+[
+  {
+    "skills_level": 1,
+    "qualifications_overview_semesters": [
+      {
+        "semester": 1,
+        "qualifications_modules": [
+          {
+            "module_code": "BUA1",
+            "module_name": "Business Administration 1",
+            "credits": 4,
+            "learning_goals": [
+              {
+                "name": "LG 1",
+                "description": "give a definition of enterprises, businesses and organisations"
+              },
+              {
+                "name": "LG 2",
+                "description": "explain the primary and secondary processes of a business"
+              },
+              {
+                "name": "LG 3",
+                "description": "explain the legal form of an organisation"
+              },
+              {
+                "name": "LG 4",
+                "description": "make a distinction between the different relations of an organisation and its environment"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "semester": 2,
+        "qualifications_modules": [
+          {
+            "module_code": "MOD1",
+            "module_name": "Modeling 1",
+            "credits": 4,
+            "learning_goals": [
+              {
+                "name": "LG 1",
+                "description": "Construct, based on a given business case, and interpret simple business process models using UML activity diagrams"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "skills_level": 2,
+    "qualifications_overview_semesters": [
+      {
+        "semester": 2,
+        "qualifications_modules": [
+          {
+            "module_code": "ITSM",
+            "module_name": "IT Service Management",
+            "credits": 5,
+            "learning_goals": [
+              {
+                "name": "LG 1",
+                "description": "Analyse, design and advice on a complete IT service organisation (Organisation, Processes) based on a given case"
+              }
+            ]
+          },
+          {
+            "module_code": "PRJ2",
+            "module_name": "Project 2",
+            "credits": 10,
+            "learning_goals": [
+              {
+                "name": "LG 1",
+                "description": "PRJ21 - Explain the difference between as-is and to-be business processes and demonstrate how use cases support the to-be process by making use of activity diagrams"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "semester": 3,
+        "qualifications_modules": [
+          {
+            "module_code": "CON1",
+            "module_name": "IT Consultancy",
+            "credits": 4,
+            "learning_goals": [
+              {
+                "name": "LG 2",
+                "description": "Students are able to familiarize with a given topic (emerging technology\/technique) and are able to prepare a solution (proposal) for this topic within a given context (paper)."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

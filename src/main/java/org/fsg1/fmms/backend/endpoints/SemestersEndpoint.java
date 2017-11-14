@@ -62,5 +62,4 @@ public class SemestersEndpoint extends Endpoint<SemestersService> {
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
     }
-
 }
