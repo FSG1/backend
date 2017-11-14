@@ -23,7 +23,6 @@ public final class AppBinder extends AbstractBinder {
     protected void configure() {
         bind(BasicDataSource.class).to(BasicDataSource.class).in(Singleton.class);
         bind(Connection.class).to(Connection.class).in(Singleton.class);
-        bind(CurriculumService.class).to(CurriculumService.class).in(Singleton.class);
         bind(CurriculaService.class).to(CurriculaService.class).in(Singleton.class);
         bind(ModulesService.class).to(ModulesService.class).in(Singleton.class);
         bind(SemestersService.class).to(SemestersService.class).in(Singleton.class);
