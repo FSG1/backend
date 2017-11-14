@@ -43,7 +43,7 @@ public class LayerActivityEndpoint extends Endpoint {
                                               @PathParam("layer_id") final int layerId,
                                               @PathParam("activity_id") final int activityId) throws Exception {
         final LayerActivityService service = (LayerActivityService) getService();
-        final JsonNode result = service.get(service.getQueryQualificationsOverview(), "qualifications_overview", curriculumId, layerId, activityId);
+        final JsonNode result = service.get(service.getQueryQualificationsOverview(), "qualifications_overview", layerId, activityId, curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
     }
