@@ -25,20 +25,18 @@ import static org.mockito.Mockito.*;
 public class ModulesServiceTest {
     @Mock
     private Connection conn;
-    @Mock
-    private ResultSet mockResult;
     private ModulesService service;
 
     @Before
-    public void initMocks() throws SQLException {
+    public void initMocks() throws Exception {
         service = new ModulesService(conn);
-        when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessEmptyModule() throws Exception {
+        when(conn.executeQuery("module", service.getQueryModuleInformation(), 1, "1")).thenThrow(new EntityNotFoundException());
         service.get(service.getQueryModuleInformation(), "module", 1, "1");
-        verify(conn, times(1)).executeQuery(service.getQueryModuleInformation(), 1, "1");
+        verify(conn, times(1)).executeQuery("module", service.getQueryModuleInformation(), 1, "1");
     }
 
     @Test
@@ -47,12 +45,11 @@ public class ModulesServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/module.json"))).toString();
 
-        when(mockResult.next()).thenReturn(true);
-        when(mockResult.getString(anyString())).thenReturn(jsonString);
+        when(conn.executeQuery("module", service.getQueryModuleInformation(), 1, "1")).thenReturn(jsonString);
 
-        final JsonNode node = service.get(service.getQueryModuleInformation(), "module", 1);
+        final JsonNode node = service.get(service.getQueryModuleInformation(), "module", 1, "1");
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-        verify(conn, times(1)).executeQuery(service.getQueryModuleInformation(), 1);
+        verify(conn, times(1)).executeQuery("module", service.getQueryModuleInformation(), 1, "1");
 
     }
 }

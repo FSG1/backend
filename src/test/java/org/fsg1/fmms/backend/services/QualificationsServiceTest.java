@@ -25,18 +25,16 @@ import static org.mockito.Mockito.*;
 public class QualificationsServiceTest {
     @Mock
     private Connection conn;
-    @Mock
-    private ResultSet mockResult;
     private QualificationsService service;
 
     @Before
     public void initMocks() throws SQLException {
         service = new QualificationsService(conn);
-        when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessNoQualifications() throws Exception {
+        when(conn.executeQuery("qualifications", service.getQualificationsQuery())).thenThrow(new EntityNotFoundException());
         service.get(service.getQualificationsQuery(), "qualifications");
     }
 
@@ -46,11 +44,10 @@ public class QualificationsServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/qualifications.json"))).toString();
 
-        when(mockResult.next()).thenReturn(true);
-        when(mockResult.getString(anyString())).thenReturn(jsonString);
+        when(conn.executeQuery("qualifications", service.getQualificationsQuery())).thenReturn(jsonString);
 
         final JsonNode node = service.get(service.getQualificationsQuery(), "qualifications");
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-        verify(conn, times(1)).executeQuery(service.getQualificationsQuery());
+        verify(conn, times(1)).executeQuery("qualifications", service.getQualificationsQuery());
     }
 }

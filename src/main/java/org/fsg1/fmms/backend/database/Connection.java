@@ -2,6 +2,7 @@ package org.fsg1.fmms.backend.database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
@@ -35,17 +36,23 @@ public final class Connection {
     /**
      * Execute any query on the database using a <code>PreparedStatement</code>.
      *
+     * @param columnName The name of the column that is returned by the query.
      * @param query      The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
-     * @throws SQLException if something goes wrong performing the query.
+     * @throws Exception if something goes wrong performing the query.
      */
-    public ResultSet executeQuery(final String query, final Object... parameters) throws SQLException {
-        java.sql.Connection connection = connectionPool.getConnection();
-        final PreparedStatement preparedStatement;
-        preparedStatement = connection.prepareStatement(query);
-        mapParams(preparedStatement, parameters);
-        return preparedStatement.executeQuery();
+    public String executeQuery(final String columnName, final String query, final Object... parameters) throws Exception {
+        try (java.sql.Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                mapParams(preparedStatement, parameters);
+
+                try (ResultSet result = preparedStatement.executeQuery()) {
+                    if (!result.next()) throw new EntityNotFoundException();
+                    return result.getString(columnName);
+                }
+            }
+        }
     }
 
     /**

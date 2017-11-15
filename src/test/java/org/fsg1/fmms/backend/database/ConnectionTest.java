@@ -5,6 +5,8 @@ import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
+import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,34 +38,42 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     }
 
     @Test
-    public void testExecuteQuery() throws SQLException {
+    public void testExecuteQuery() throws Exception {
         Connection conn = new Connection(configMock, bds);
 
-        conn.executeQuery("param1: '?' , param2: '?'", "stringparam", 4);
-        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
-                .getPreparedStatementResultSetHandler().getPreparedStatements();
-        assertEquals(preparedStatements.size(), 1);
-        assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
-        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-        assertEquals(parameterMap.size(), 2);
-        assertEquals(parameterMap.get(1), "stringparam");
-        assertEquals(parameterMap.get(2), 4);
+        try {
+            conn.executeQuery("", "param1: '?' , param2: '?'", "stringparam", 4);
+            Assert.fail();
+        } catch (EntityNotFoundException enfe) {
+            final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                    .getPreparedStatementResultSetHandler().getPreparedStatements();
+            assertEquals(preparedStatements.size(), 1);
+            assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
+            final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+            assertEquals(parameterMap.size(), 2);
+            assertEquals(parameterMap.get(1), "stringparam");
+            assertEquals(parameterMap.get(2), 4);
+        }
     }
 
     @Test
-    public void testSetParameters() throws SQLException {
+    public void testSetParameters() throws Exception {
         Connection conn = new Connection(configMock, bds);
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
-        conn.executeQuery(query, params);
 
-        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
-                .getPreparedStatementResultSetHandler().getPreparedStatements();
-        assertEquals(preparedStatements.size(), 1);
-        assertEquals(preparedStatements.get(0).getSQL(), query);
+        try {
+            conn.executeQuery("", query, params);
+            Assert.fail();
+        } catch (EntityNotFoundException enfe) {
+            final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                    .getPreparedStatementResultSetHandler().getPreparedStatements();
+            assertEquals(preparedStatements.size(), 1);
+            assertEquals(preparedStatements.get(0).getSQL(), query);
 
-        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-        assertEquals(parameterMap.size(), 1);
-        assertEquals(parameterMap.get(1), "tablename");
+            final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+            assertEquals(parameterMap.size(), 1);
+            assertEquals(parameterMap.get(1), "tablename");
+        }
     }
 }
