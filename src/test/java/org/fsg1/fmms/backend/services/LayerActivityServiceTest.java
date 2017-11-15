@@ -25,14 +25,11 @@ import static org.mockito.Mockito.*;
 public class LayerActivityServiceTest {
     @Mock
     private Connection conn;
-    @Mock
-    private ResultSet mockResult;
     private LayerActivityService service;
 
     @Before
-    public void initMocks() throws SQLException {
+    public void initMocks() throws Exception {
         service = new LayerActivityService(conn);
-        when(conn.executeQuery(anyString(), any())).thenReturn(mockResult);
     }
 
     @Test
@@ -41,17 +38,17 @@ public class LayerActivityServiceTest {
         final String jsonString = mapper.readTree(Files.readAllBytes(Paths
                 .get("src/test/resources/json/qualificationsOverview.json"))).toString();
 
-        when(mockResult.next()).thenReturn(true);
-        when(mockResult.getString(anyString())).thenReturn(jsonString);
+        when(conn.executeQuery("qualifications_overview", service.getQueryQualificationsOverview(), 1, 1, 1)).thenReturn(jsonString);
 
         final JsonNode node = service.get(service.getQueryQualificationsOverview(), "qualifications_overview", 1, 1, 1);
         assertThat(jsonString, SameJSONAs.sameJSONAs(node.toString()));
-        verify(conn, times(1)).executeQuery(service.getQueryQualificationsOverview(), 1, 1, 1);
+        verify(conn, times(1)).executeQuery("qualifications_overview", service.getQueryQualificationsOverview(), 1, 1, 1);
     }
 
     @Test(expected = EntityNotFoundException.class)
     public void testProcessNoQualificationsOverview() throws Exception {
+        when(conn.executeQuery("qualifications_overview", service.getQueryQualificationsOverview(), 1, 1, 1)).thenThrow(new EntityNotFoundException());
         service.get(service.getQueryQualificationsOverview(), "qualifications_overview", 1, 1, 1);
-        verify(conn, times(1)).executeQuery(service.getQueryQualificationsOverview(), 1, 1, 1);
+        verify(conn, times(1)).executeQuery("qualifications_overview", service.getQueryQualificationsOverview(), 1, 1, 1);
     }
 }
