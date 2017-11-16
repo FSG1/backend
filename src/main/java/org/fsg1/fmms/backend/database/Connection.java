@@ -48,7 +48,7 @@ public final class Connection {
                 mapParams(preparedStatement, parameters);
 
                 try (ResultSet result = preparedStatement.executeQuery()) {
-                    if (!result.next()) throw new EntityNotFoundException();
+                    if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
                     return result.getString(columnName);
                 }
             }
