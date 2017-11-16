@@ -36,6 +36,5 @@ public abstract class Service {
         final String jsonString = getConn().executeQuery(columnName, query, parameters);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(jsonString);
-
     }
 }

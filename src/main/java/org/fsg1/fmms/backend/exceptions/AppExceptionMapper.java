@@ -19,6 +19,7 @@ public class AppExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(final Exception ex) {
+        ex.printStackTrace();
         if (ex instanceof WebApplicationException) return ((WebApplicationException) (ex)).getResponse();
         return Response.status(INTERNAL_SERVER_ERROR)
                 .entity(ex.toString())
