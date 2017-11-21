@@ -36,7 +36,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
      * @throws Exception In case the querying goes wrong.
      */
     @GET
-    @Path("/modules/{module_id}")
+    @Path("/module/{module_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModuleInformation(@PathParam("curriculum_id") final int curriculumId,
                                          @PathParam("module_id") final String moduleId) throws Exception {

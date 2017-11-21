@@ -47,8 +47,8 @@ public class LayerActivityService extends Service {
                         "        lgs.level AS level, " +
                         "        m.code AS code, " +
                         "        json_build_object( " +
-                        "            'module_code', m.code, " +
-                        "            'module_name', m.name, " +
+                        "            'code', m.code, " +
+                        "            'name', m.name, " +
                         "            'credits', m.credits, " +
                         "            'learning_goals', array_agg(lgs.json order BY lgs.seq) " +
                         "        )         AS json " +
@@ -84,6 +84,6 @@ public class LayerActivityService extends Service {
                         "  ) " +
                         "SELECT " +
                         "  array_to_json(array_agg(json)) as qualifications_overview " +
-                        "FROM skills";
+                        "FROM skills;";
     }
 }
