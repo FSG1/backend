@@ -3,7 +3,9 @@
   "name": "Business Administration 1",
   "credits": 4,
   "credentials": "",
-  "lecturers": null,
+  "lecturers": [
+
+  ],
   "lifecycle_activities": [
     {
       "id": 1,
@@ -119,9 +121,13 @@
   "total_effort": 112,
   "introductorytext": "",
   "additional_information": "",
-  "topics": null,
+  "topics": [
+
+  ],
   "semester": 1,
-  "teaching_material": null,
+  "teaching_material": [
+
+  ],
   "prior_knowledge_references": [
 
   ],
