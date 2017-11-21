@@ -60,9 +60,9 @@ public class SemestersService extends Service {
                         "  WHERE p.studyprogramme_id = ? AND semester <= ? " +
                         "  GROUP BY q.activity_id, q.architecturallayer_id " +
                         ") as tmp) " +
-                        ") from study.module_profile as mp " +
+                        ") as complete_semester from study.module_profile as mp " +
                         "  inner join study.profile as p on p.id = mp.profile_id " +
-                        "  inner join  study.studyprogramme as sp on sp.id = p.studyprogramme_id " +
+                        "  inner join study.studyprogramme as sp on sp.id = p.studyprogramme_id " +
                         "  where sp.id = ? and mp.semester = ? " +
                         "group by sp.id, sp.name, mp.semester;";
     }
