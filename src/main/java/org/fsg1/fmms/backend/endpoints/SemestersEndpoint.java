@@ -53,7 +53,7 @@ public class SemestersEndpoint extends Endpoint<SemestersService> {
      * @throws Exception In case the querying goes wrong.
      */
     @GET
-    @Path("/semesters/{semester_id}")
+    @Path("/semester/{semester_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCompleteSemester(@PathParam("curriculum_id") final int curriculumId,
                                         @PathParam("semester_id") final int semesterId) throws Exception {

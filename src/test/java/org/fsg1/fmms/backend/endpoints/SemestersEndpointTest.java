@@ -97,7 +97,7 @@ public class SemestersEndpointTest extends JerseyTest {
 
         given()
                 .spec(spec)
-                .get("curriculum/1/semesters/1")
+                .get("curriculum/1/semester/1")
                 .then()
                 .statusCode(500);
     }
@@ -110,7 +110,7 @@ public class SemestersEndpointTest extends JerseyTest {
                 .thenReturn(node);
         given()
                 .spec(spec)
-                .get("curriculum/1/semesters/1")
+                .get("curriculum/1/semester/1")
                 .then()
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
@@ -124,7 +124,7 @@ public class SemestersEndpointTest extends JerseyTest {
 
         given()
                 .spec(spec)
-                .get("curriculum/1/semesters/1")
+                .get("curriculum/1/semester/1")
                 .then()
                 .statusCode(404);
         verify(service, times(2)).get(eq(service.getQueryCompleteSemester()), eq("complete_semester"), eq(1), eq(1), eq(1), eq(1));
