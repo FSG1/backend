@@ -3,81 +3,81 @@
     {
       "id": 1,
       "code": "SE",
-      "name": "Software Engineering"
+      "name": "Informatics - Advanced Software Concepts"
     },
     {
       "id": 2,
       "code": "BI",
-      "name": "Business Informatics"
+      "name": "Informatics - Business Informatics"
     }
   ],
   "architectural_layers": [
     {
-      "architectural_layer_id": 1,
-      "architectural_layer_name": "User interaction",
-      "architectural_layer_description": "Relates to the communication of the (end) user with the IT system. User interaction during the creation and realization of an IT system is explicitly excluded from this, as this is a recurring issue in each architectural layer."
+      "id": 1,
+      "name": "User interaction",
+      "description": "Relates to the communication of the (end) user with the IT system. User interaction during the creation and realization of an IT system is explicitly excluded from this, as this is a recurring issue in each architectural layer."
     },
     {
-      "architectural_layer_id": 2,
-      "architectural_layer_name": "Business processes",
-      "architectural_layer_description": "Relate to facilitating organisational processes using IT systems. These processes deal with the functionality of the overall system (automated and non-automated components) within the context of organisational objectives to be achieved."
+      "id": 2,
+      "name": "Business processes",
+      "description": "Relate to facilitating organisational processes using IT systems. These processes deal with the functionality of the overall system (automated and non-automated components) within the context of organisational objectives to be achieved."
     },
     {
-      "architectural_layer_id": 3,
-      "architectural_layer_name": "Infrastructure",
-      "architectural_layer_description": "This concerns the full range of IT systems deployed to facilitate business processes. Emphasis lies on creating and maintaining availability of both the traditional hardware infrastructure and the software infrastructure, and the configuring thereof."
+      "id": 3,
+      "name": "Infrastructure",
+      "description": "This concerns the full range of IT systems deployed to facilitate business processes. Emphasis lies on creating and maintaining availability of both the traditional hardware infrastructure and the software infrastructure, and the configuring thereof."
     },
     {
-      "architectural_layer_id": 4,
-      "architectural_layer_name": "Software",
-      "architectural_layer_description": "This concerns the development of various software that is incorporated in an IT infrastructure after delivery."
+      "id": 4,
+      "name": "Software",
+      "description": "This concerns the development of various software that is incorporated in an IT infrastructure after delivery."
     },
     {
-      "architectural_layer_id": 5,
-      "architectural_layer_name": "Hardware interfacing",
-      "architectural_layer_description": "This applies when software interacts with available hardware, and when situations occur whereby the software explicitly has to take into account both the possibilities and the limitations of the available hardware.\nThe term computersystem has been chosen as an overall generic term. Depending on the context, this can be further specified as 'embedded system', industrial automation, 'virtual system', and so forth.\n"
+      "id": 5,
+      "name": "Hardware interfacing",
+      "description": "This applies when software interacts with available hardware, and when situations occur whereby the software explicitly has to take into account both the possibilities and the limitations of the available hardware.\nThe term computersystem has been chosen as an overall generic term. Depending on the context, this can be further specified as 'embedded system', industrial automation, 'virtual system', and so forth.\n"
     },
     {
-      "architectural_layer_id": 6,
-      "architectural_layer_name": "UNDEFINED",
-      "architectural_layer_description": "UNDEFINED"
+      "id": 6,
+      "name": "UNDEFINED",
+      "description": "UNDEFINED"
     }
   ],
   "lifecycle_activities": [
     {
-      "lifecycle_activity_id": 1,
-      "lifecycle_activity_name": "Manage",
-      "lifecycle_activity_description": "Management and control of all activities aimed at the process of development and deployment of IT systems and of IT service management."
+      "id": 1,
+      "name": "Manage",
+      "description": "Management and control of all activities aimed at the process of development and deployment of IT systems and of IT service management."
     },
     {
-      "lifecycle_activity_id": 2,
-      "lifecycle_activity_name": "Analyse",
-      "lifecycle_activity_description": "The analysis of relationships between processes, products and data flows within the context of the environment."
+      "id": 2,
+      "name": "Analyse",
+      "description": "The analysis of relationships between processes, products and data flows within the context of the environment."
     },
     {
-      "lifecycle_activity_id": 3,
-      "lifecycle_activity_name": "Advise",
-      "lifecycle_activity_description": "Advice regarding the reorganisation of processes and \/ or data flows. Advise on new IT systems to be developed or purchased on the basis of an analysis and in consultation with stakeholders."
+      "id": 3,
+      "name": "Advise",
+      "description": "Advice regarding the reorganisation of processes and \/ or data flows. Advise on new IT systems to be developed or purchased on the basis of an analysis and in consultation with stakeholders."
     },
     {
-      "lifecycle_activity_id": 4,
-      "lifecycle_activity_name": "Design",
-      "lifecycle_activity_description": "Design of an IT system on the basis of set specifications, and within predefined frameworks."
+      "id": 4,
+      "name": "Design",
+      "description": "Design of an IT system on the basis of set specifications, and within predefined frameworks."
     },
     {
-      "lifecycle_activity_id": 5,
-      "lifecycle_activity_name": "Implement",
-      "lifecycle_activity_description": "Build an IT system on the basis of a specific design and within a set framework."
+      "id": 5,
+      "name": "Implement",
+      "description": "Build an IT system on the basis of a specific design and within a set framework."
     },
     {
-      "lifecycle_activity_id": 6,
-      "lifecycle_activity_name": "Professional Behaviour",
-      "lifecycle_activity_description": "Show professional behaviour"
+      "id": 6,
+      "name": "Show Professional Behaviour",
+      "description": "Show professional behaviour"
     },
     {
-      "lifecycle_activity_id": 7,
-      "lifecycle_activity_name": "Research Skills",
-      "lifecycle_activity_description": "Show Research Skills"
+      "id": 7,
+      "name": "Show Research Skills",
+      "description": "Show Research Skills"
     }
   ]
 }
