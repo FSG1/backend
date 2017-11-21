@@ -58,7 +58,7 @@ public class ModulesService extends Service {
                         "  'prior_knowledge_references', coalesce((SELECT array_to_json(array_agg(PRIOR.prior_modules)) FROM PRIOR WHERE PRIOR.module = m.id), '[]'::json), " +
                         "  'qualifications', coalesce((SELECT array_to_json(array_agg(json)) FROM moduleskills WHERE module = m.id), '[]'::json), " +
                         "  'assesment_parts', coalesce((SELECT array_to_json(json) FROM grading WHERE module = m.id), '[]'::json) " +
-                        ") FROM study.module AS m " +
+                        ") as module FROM study.module AS m " +
                         "  left join study.moduledescription AS md ON md.module_id = m.id " +
                         "  left join study.module_profile AS mp ON mp.module_id = m.id " +
                         "  left join study.profile AS p ON mp.profile_id = p.id " +
