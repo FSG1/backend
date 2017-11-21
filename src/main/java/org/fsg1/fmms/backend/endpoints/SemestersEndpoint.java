@@ -58,7 +58,7 @@ public class SemestersEndpoint extends Endpoint<SemestersService> {
     public Response getCompleteSemester(@PathParam("curriculum_id") final int curriculumId,
                                         @PathParam("semester_id") final int semesterId) throws Exception {
         final SemestersService service = getService();
-        final JsonNode result = service.get(service.getQueryCompleteSemester(), "complete_semester", semesterId, curriculumId, semesterId);
+        final JsonNode result = service.get(service.getQueryCompleteSemester(), "complete_semester", curriculumId, semesterId, curriculumId, semesterId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
     }
