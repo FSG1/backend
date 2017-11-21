@@ -27,12 +27,12 @@ public class QualificationsService extends Service {
     public String getQualificationsQuery() {
         return
                 "WITH " +
-                        "  activities as (select array_to_json(array_agg(json_build_object('id', id, 'name', name, 'description', description))) as json from study.activity), " +
-                        "  als as (select array_to_json(array_agg(json_build_object('id', id, 'name', name, 'description', description))) as json from study.architecturallayer) " +
-                        "SELECT json_build_object( " +
-                        "  'curricula', (SELECT array_to_json(array_agg(row_to_json(sp))) from study.studyprogramme sp), " +
-                        "  'architectural_layers', (select json from als), " +
-                        "  'lifecycle_activities', (select json from activities) " +
-                        ") as qualifications;";
+                        "  activities AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.activity), " +
+                        "  als AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.architecturallayer) " +
+                        "SELECT Json_build_object( " +
+                        "  'curricula', (SELECT Array_to_json(Array_agg(Row_to_json(sp))) FROM study.studyprogramme sp), " +
+                        "  'architectural_layers', (SELECT json FROM als), " +
+                        "  'lifecycle_activities', (SELECT json FROM activities) " +
+                        ") AS qualifications;";
     }
 }

@@ -43,28 +43,28 @@ public class SemestersService extends Service {
     public String getQueryCompleteSemester() {
         return
                 "WITH " +
-                        "  alrow as (select row_number() over () as num, id from study.architecturallayer), " +
-                        "  acrow as (select row_number() over () as num, id from study.activity), " +
-                        "  activities as (select array_to_json(array_agg(json_build_object('id', id, 'name', name, 'description', description))) as json from study.activity), " +
-                        "  als as (select array_to_json(array_agg(json_build_object('id', id, 'name', name, 'description', description))) as json from study.architecturallayer), " +
-                        "  modules as (select p.studyprogramme_id as sp, mp.semester as s, array_to_json(array_agg(json_build_object('code', m.code, 'name', m.name, 'credits', m.credits, 'is_project', 0))) as json from study.module as m inner join study.module_profile as mp on mp.module_id = m.id inner join study.profile as p on p.id = mp.profile_id group by p.studyprogramme_id, mp.semester) " +
-                        "select json_build_object( " +
+                        "  alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
+                        "  acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
+                        "  activities AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.activity), " +
+                        "  als AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.architecturallayer), " +
+                        "  modules AS (SELECT p.studyprogramme_id AS sp, mp.semester AS s, Array_to_json(Array_agg(Json_build_object('code', m.code, 'name', m.name, 'credits', m.credits, 'is_project', 0))) AS json FROM study.module AS m inner join study.module_profile AS mp ON mp.module_id = m.id inner join study.profile AS p ON p.id = mp.profile_id GROUP BY p.studyprogramme_id, mp.semester) " +
+                        "SELECT Json_build_object( " +
                         "  'curriculum_name', sp.name, " +
-                        "  'modules', (select json from modules where sp = sp.id and s = mp.semester), " +
-                        "  'lifecycle_activities', (select json from activities), " +
-                        "  'architectural_layers', (select json from als), " +
+                        "  'modules', (SELECT json FROM modules WHERE sp = sp.id AND s = mp.semester), " +
+                        "  'lifecycle_activities', (SELECT json FROM activities), " +
+                        "  'architectural_layers', (SELECT json FROM als), " +
                         "  'qualifications', " +
-                        "  (select array_to_json(array_agg(json)) from ( " +
-                        "  SELECT json_build_object('lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE id = q.activity_id), 'architectural_layer', (SELECT (num - 1) FROM alrow WHERE id = q.architecturallayer_id), 'level', max(los.level)) AS json " +
-                        "  FROM study.learninggoal AS lg INNER JOIN study.learninggoal_qualification AS lg2q ON lg2q.learninggoal_id = lg.id INNER JOIN study.qualification AS q ON lg2q.qualification_id = q.id INNER JOIN study.levelofskill AS los ON los.id = q.levelofskill_id INNER JOIN study.module_profile AS mp ON mp.module_id = lg.module_id INNER JOIN study.profile AS p ON p.id = mp.profile_id " +
+                        "  (SELECT Array_to_json(Array_agg(json)) FROM ( " +
+                        "  SELECT Json_build_object('lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE id = q.activity_id), 'architectural_layer', (SELECT (num - 1) FROM alrow WHERE id = q.architecturallayer_id), 'level', Max(los.LEVEL)) AS json " +
+                        "  FROM study.learninggoal AS lg inner join study.learninggoal_qualification AS lg2q ON lg2q.learninggoal_id = lg.id inner join study.qualification AS q ON lg2q.qualification_id = q.id inner join study.levelofskill AS los ON los.id = q.levelofskill_id inner join study.module_profile AS mp ON mp.module_id = lg.module_id inner join study.profile AS p ON p.id = mp.profile_id " +
                         "  WHERE p.studyprogramme_id = ? AND semester <= ? " +
                         "  GROUP BY q.activity_id, q.architecturallayer_id " +
-                        ") as tmp) " +
-                        ") as complete_semester from study.module_profile as mp " +
-                        "  inner join study.profile as p on p.id = mp.profile_id " +
-                        "  inner join study.studyprogramme as sp on sp.id = p.studyprogramme_id " +
-                        "  where sp.id = ? and mp.semester = ? " +
-                        "group by sp.id, sp.name, mp.semester;";
+                        ") AS tmp) " +
+                        ") AS complete_semester FROM study.module_profile AS mp " +
+                        "  inner join study.profile AS p ON p.id = mp.profile_id " +
+                        "  inner join study.studyprogramme AS sp ON sp.id = p.studyprogramme_id " +
+                        "  WHERE sp.id = ? AND mp.semester = ? " +
+                        "GROUP BY sp.id, sp.name, mp.semester;";
     }
 
 
