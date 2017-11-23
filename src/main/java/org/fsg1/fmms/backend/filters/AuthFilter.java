@@ -4,7 +4,6 @@ import org.fsg1.fmms.backend.app.Configuration;
 import org.fsg1.fmms.backend.exceptions.UnauthorizedException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
@@ -24,7 +23,7 @@ import java.util.regex.Pattern;
 public class AuthFilter implements ContainerRequestFilter {
 
     /**
-     * Regular Expression to detect a valid Authorization header
+     * Regular Expression to detect a valid Authorization header.
      */
     private static final String REGEX = "^Basic\\s([A-Za-z0-9+/=-]+)$";
 

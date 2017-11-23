@@ -91,18 +91,22 @@ public final class Configuration {
     }
 
     /**
-     * Username for HTTP Basic Auth
+     * Username for HTTP Basic Auth.
      *
      * @return Authentication Username
      */
-    public String getAuthUsername() { return authUsername; }
+    public String getAuthUsername() {
+        return authUsername;
+    }
 
     /**
-     * Password for HTTP Basic Auth
+     * Password for HTTP Basic Auth.
      *
      * @return Authentication Password
      */
-    public String getAuthPassword() { return authPassword; }
+    public String getAuthPassword() {
+        return authPassword;
+    }
 
     /**
      * Builder class for configuration.
@@ -194,24 +198,24 @@ public final class Configuration {
         }
 
         /**
-         * Set username for http authorization
+         * Set username for http authorization.
          *
-         * @param authUsername Authentication Username
+         * @param newAuthUsername Authentication Username
          * @return Fluent interface
          */
-        public Builder setAuthUsername(final String authUsername) {
-            this.authUsername = authUsername;
+        public Builder setAuthUsername(final String newAuthUsername) {
+            this.authUsername = newAuthUsername;
             return this;
         }
 
         /**
-         * Set password for http authorization
+         * Set password for http authorization.
          *
-         * @param authPassword Authentication Password
+         * @param newAuthPassword Authentication Password
          * @return Fluent interface
          */
-        public Builder setAuthPassword(final String authPassword) {
-            this.authPassword = authPassword;
+        public Builder setAuthPassword(final String newAuthPassword) {
+            this.authPassword = newAuthPassword;
             return this;
         }
 
