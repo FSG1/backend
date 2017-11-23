@@ -62,36 +62,37 @@ public class ModulesEndpointTest extends JerseyTest {
     public void testExpectServerError() throws Exception {
         given()
                 .spec(spec)
-                .get("curriculum/1/module/1")
+                .get("curriculum/1/module/BUA1")
                 .then()
                 .statusCode(500);
     }
 
     @Test
     public void testGetNoModule() throws Exception {
-        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("1"), eq(1)))
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("BUA1"), eq(1)))
                 .thenThrow(new EntityNotFoundException());
 
         given()
                 .spec(spec)
-                .get("curriculum/1/module/1")
+                .get("curriculum/1/module/BUA1")
                 .then()
                 .statusCode(404);
-        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1"));
+        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("BUA1"));
     }
 
     @Test
     public void testGetModule() throws Exception {
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
 
-        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("1"), eq(1)))
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("BUA1"), eq(1)))
                 .thenReturn(node);
         given()
                 .spec(spec)
-                .get("curriculum/1/module/1")
+                .get("curriculum/1/module/BUA1")
                 .then()
                 .statusCode(200)
                 .header("Content-Type", MediaType.APPLICATION_JSON);
-        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("1"));
+        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("BUA1"));
+    }
     }
 }
