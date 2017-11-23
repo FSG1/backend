@@ -1,7 +1,9 @@
 package org.fsg1.fmms.backend.filters;
 
+import org.fsg1.fmms.backend.app.Configuration;
 import org.fsg1.fmms.backend.exceptions.UnauthorizedException;
 
+import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -24,14 +26,26 @@ public class AuthFilter implements ContainerRequestFilter {
     /**
      * Regular Expression to detect a valid Authorization header
      */
-    private static final String REGEX = "^Basic\\s([A-Za-z0-9+/=-]+={0,2})$";
+    private static final String REGEX = "^Basic\\s([A-Za-z0-9+/=-]+)$";
+
+    private final Configuration config;
+
+    /**
+     * Constructor.
+     *
+     * @param config App configuration
+     */
+    @Inject
+    public AuthFilter(final Configuration config) {
+        this.config = config;
+    }
 
     /**
      * Apply the filter : check input request, validate or not with user auth.
      * @param containerRequest The request from server
      */
     @Override
-    public void filter(final ContainerRequestContext containerRequest) throws WebApplicationException {
+    public void filter(final ContainerRequestContext containerRequest) throws UnauthorizedException {
         String path = containerRequest.getUriInfo().getPath(true);
 
         if (path.startsWith("restricted/")) {
@@ -47,13 +61,12 @@ public class AuthFilter implements ContainerRequestFilter {
                     String[] credentials = decoded.split(":");
 
                     if (credentials.length == 2) {
-                        String username = credentials[0];
-                        String password = credentials[1];
+                        String username = credentials[0].trim();
+                        String password = credentials[1].trim();
 
-                        System.out.println(username);
-                        System.out.println(password);
-
-                        return;
+                        if (this.config.getAuthUsername().equals(username) && this.config.getAuthPassword().equals(password)) {
+                            return;
+                        }
                     }
                 }
             }
