@@ -47,7 +47,7 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(final ContainerRequestContext containerRequest) throws UnauthorizedException {
         String path = containerRequest.getUriInfo().getPath(true);
 
-        if (path.startsWith("restricted/")) {
+        if (path.matches(".*/?restricted/.*")) {
             String header = containerRequest.getHeaderString("Authorization");
             if (header != null && !header.isEmpty()) {
                 Pattern pattern = Pattern.compile(REGEX);
