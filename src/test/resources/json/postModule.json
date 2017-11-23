@@ -1,0 +1,20 @@
+{
+  "code": "BUA1",
+  "name": "Business Administration 1",
+  "credits": 4,
+  "lectures_in_week": 1,
+  "practical_hours_week": 4,
+  "introductorytext": "Hello",
+  "topics": [
+    "Do some stuff", "And other stuff too"
+  ],
+  "teaching_material": [
+    "This book", "And this movie"
+  ],
+  "additional_information": "This course is impossible",
+  "lecturers": [
+    1, 2
+  ],
+  "credentials": "",
+  "total_effort": 112
+}
