@@ -10,12 +10,13 @@
     "Do some stuff", "And other stuff too"
   ],
   "teaching_material": [
-    "This book", "And this movie"
+    {"type": "BOOK", "name": "This book"},
+    {"type": "OTHER", "name": "And this movie"}
   ],
   "additional_information": "This course is impossible",
   "lecturers": [
     1, 2
   ],
   "credentials": "",
-  "project_flag": false
+  "project_flag": true
 }
