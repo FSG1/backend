@@ -21,6 +21,10 @@ public final class Configuration {
 
     private String db;
 
+    private String authUsername;
+
+    private String authPassword;
+
     /**
      * Private constructor.
      * Class cannot be instantiated directly
@@ -43,7 +47,9 @@ public final class Configuration {
                 .setBase(env.getOrDefault("BASE", "/fmms"))
                 .setDbUser(env.getOrDefault("DB_USER", "module"))
                 .setDbPassword(env.getOrDefault("DB_PASSWD", ""))
-                .setDb(env.getOrDefault("DB", "172.17.0.1:5432/modulemanagement"));
+                .setDb(env.getOrDefault("DB", "172.17.0.1:5432/modulemanagement"))
+                .setAuthUsername(env.getOrDefault("AUTH_USER", "fmms"))
+                .setAuthPassword(env.getOrDefault("AUTH_PASSWORD", "modulemanagement"));
 
         return builder.build();
     }
@@ -85,6 +91,24 @@ public final class Configuration {
     }
 
     /**
+     * Username for HTTP Basic Auth.
+     *
+     * @return Authentication Username
+     */
+    public String getAuthUsername() {
+        return authUsername;
+    }
+
+    /**
+     * Password for HTTP Basic Auth.
+     *
+     * @return Authentication Password
+     */
+    public String getAuthPassword() {
+        return authPassword;
+    }
+
+    /**
      * Builder class for configuration.
      *
      * @author Tobias Derksen
@@ -102,6 +126,10 @@ public final class Configuration {
         private String dbPasswd;
 
         private String db;
+
+        private String authUsername;
+
+        private String authPassword;
 
         /**
          * Sets hostname.
@@ -170,6 +198,28 @@ public final class Configuration {
         }
 
         /**
+         * Set username for http authorization.
+         *
+         * @param newAuthUsername Authentication Username
+         * @return Fluent interface
+         */
+        public Builder setAuthUsername(final String newAuthUsername) {
+            this.authUsername = newAuthUsername;
+            return this;
+        }
+
+        /**
+         * Set password for http authorization.
+         *
+         * @param newAuthPassword Authentication Password
+         * @return Fluent interface
+         */
+        public Builder setAuthPassword(final String newAuthPassword) {
+            this.authPassword = newAuthPassword;
+            return this;
+        }
+
+        /**
          * Builds the configuration object.
          * Can be called many times. Returns always a new object
          *
@@ -183,6 +233,8 @@ public final class Configuration {
             config.dbUser = dbUser;
             config.port = port;
             config.host = host;
+            config.authUsername = authUsername;
+            config.authPassword = authPassword;
 
             return config;
         }
