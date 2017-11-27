@@ -67,4 +67,12 @@ public class AuthFilterTest extends JerseyTest {
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
+
+    @Test
+    public void testOptionsRequest() {
+        given()
+                .options("http://localhost:9998/restricted/auth")
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
 }
