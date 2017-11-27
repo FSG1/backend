@@ -39,8 +39,9 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     @Test
     public void testExecuteQuery() throws Exception {
         Connection conn = new Connection(configMock, bds);
-
-        conn.executeQuery("", "param1: '?' , param2: '?'", "stringparam", 4);
+        String query = "param1: '?' , param2: '?'";
+        Object[] params = new Object[]{"stringparam", 4};
+        conn.executeQuery(null, query, params);
         final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
                 .getPreparedStatementResultSetHandler().getPreparedStatements();
         assertEquals(preparedStatements.size(), 1);
@@ -58,7 +59,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
 
-        conn.executeQuery("", query, params);
+        conn.executeQuery(null, query, params);
         final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
                 .getPreparedStatementResultSetHandler().getPreparedStatements();
         assertEquals(preparedStatements.size(), 1);
@@ -76,7 +77,8 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         final java.sql.Connection connection = conn.startTransaction();
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
-        conn.executeQuery(connection, "", query, params);
+        conn.executeQuery(connection, null, query, params);
+        conn.commitTransaction(connection);
         final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
                 .getPreparedStatementResultSetHandler().getPreparedStatements();
         assertEquals(preparedStatements.size(), 1);

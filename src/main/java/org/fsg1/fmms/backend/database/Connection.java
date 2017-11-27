@@ -106,7 +106,7 @@ public final class Connection {
      * @throws SQLException If a database access error occurs.
      */
     public void commitTransaction(java.sql.Connection connection) throws SQLException {
-        if (!connection.isClosed()) return;
+        if (connection.isClosed()) return;
         try {
             connection.commit();
             connection.close();
