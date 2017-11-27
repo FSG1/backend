@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
 
+import java.sql.SQLException;
+
 /**
  * An abstract class representing a Service to be used by the REST API.
  */
@@ -36,5 +38,24 @@ public abstract class Service {
         final String jsonString = getConn().executeQuery(columnName, query, parameters);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(jsonString);
+    }
+
+    /**
+     * Execute an update or insert statement on the database with the given connection and parameters.
+     * This connection will remain uncommitted and unclosed until the endPost() method is called.
+     *
+     * @param statement     Statements to perform.
+     * @param parameters    Array of parameters to give to the query.
+     */
+    public void post(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
+        getConn().executeQuery(connection, null, statement, parameters);
+    }
+
+    public java.sql.Connection beginPost() throws SQLException {
+        return getConn().startTransaction();
+    }
+
+    public void endPost(java.sql.Connection connection) throws SQLException {
+        getConn().commitTransaction(connection);
     }
 }

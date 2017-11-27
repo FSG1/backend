@@ -65,4 +65,40 @@ public class ModulesService extends Service {
                         "  left join study.profile AS p ON mp.profile_id = p.id " +
                         "WHERE m.code = ? AND p.studyprogramme_id = ?;";
     }
+
+    /**
+     * Get the queries to update module information.
+     *
+     * @return The query string.
+     */
+    public String[] getUpdateModuleInformationStatements() {
+        return new String[]{
+                        "UPDATE study.module " +
+                                "    SET code = ?, name = ?, credits = ?, lecturesperweek = ?, practicalperweek = ?, isproject = ?, totaleffort = credits * 28 " +
+                                "WHERE id = ?",
+
+                        "DELETE FROM study.moduletopic " +
+                                "WHERE module_id = ?",
+
+                        "INSERT INTO study.moduletopic(module_id, sequenceno, description) " +
+                                "    VALUES (?, NULL, ?)",
+
+                        "UPDATE study.moduledescription " +
+                                "    SET introduction = ?, additionalinfo = ?, credentials = ? " +
+                                "WHERE module_id = ?",
+
+                        "DELETE FROM study.teachingmaterial " +
+                                "WHERE moduledescription_id = (SELECT id FROM study.moduledescription WHERE module_id = ?); ",
+
+                        "INSERT INTO study.teachingmaterial (moduledescription_id, type, description) " +
+                                "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?, ?)",
+                        
+                        "DELETE FROM study.module_employee " +
+                                "  WHERE module_id = ?",
+                        
+                        "INSERT INTO study.module_employee(module_id, employee_id) " +
+                                "  VALUES (?, ?)"
+
+                };
+    }
 }
