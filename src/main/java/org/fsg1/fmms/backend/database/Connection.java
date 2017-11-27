@@ -94,8 +94,8 @@ public final class Connection {
                 }
             } catch (Exception e) {
                 closeConnection(connection);
+                throw e;
             }
-            return EMPTY_STRING;
     }
 
     /**
