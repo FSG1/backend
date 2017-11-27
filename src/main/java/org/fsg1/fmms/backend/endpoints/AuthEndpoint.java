@@ -5,7 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 /**
- * Authentication endpoint
+ * Authentication endpoint.
  *
  * @author Tobias Derksen
  * @see org.fsg1.fmms.backend.filters.AuthFilter
@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 public class AuthEndpoint {
 
     /**
-     * Endpoint for simply checking auth credentials
+     * Endpoint for simply checking auth credentials.
      *
      * @return Empty response
      */
