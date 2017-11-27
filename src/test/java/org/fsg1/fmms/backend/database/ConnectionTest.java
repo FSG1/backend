@@ -120,4 +120,25 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
             Assert.fail();
         }
     }
+
+    @Test
+    public void testUpdate() throws Exception {
+        Connection conn = new Connection(configMock, bds);
+        final java.sql.Connection connection = conn.startTransaction();
+        String query = "SELECT * FROM ?";
+        Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
+        conn.executeUpdate(connection,  query, params);
+        conn.commitTransaction(connection);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), query);
+
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.get(1), "tablename");
+
+        assertTrue(connection.isClosed());
+        verifyConnectionClosed();
+    }
 }

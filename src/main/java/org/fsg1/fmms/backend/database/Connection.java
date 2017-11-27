@@ -73,7 +73,8 @@ public final class Connection {
      * If an exception occurs at any time during the transaction it is rollbacked and aborted.
      *
      * @param connection Connection to execute the statement on.
-     * @param columnName Column name to retrieve any possible result.
+     * @param columnName Column name to retrieve any possible result. If no column name is given, the statement is seen
+     *                   as an update instead of a query.
      * @param statement  Statement to perform.
      * @param parameters Array of parameters to map to the statement.
      * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
@@ -96,6 +97,29 @@ public final class Connection {
                 closeConnection(connection);
                 throw e;
             }
+    }
+
+    /**
+     * Executes an update on the given connection. This statement will be executed but not committed as it is
+     * in an open transaction until the commitTransaction method is called.
+     * If an exception occurs at any time during the transaction it is rollbacked and aborted.
+     *
+     * @param connection Connection to execute the statement on.
+     * @param statement  Statement to perform.
+     * @param parameters Array of parameters to map to the statement.
+     * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
+     * @throws SQLException If a database access error occurs or anything else goes wrong.
+     */
+    public int executeUpdate(final java.sql.Connection connection,
+                             final String statement,
+                             final Object... parameters) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+            mapParams(preparedStatement, parameters);
+            return preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            closeConnection(connection);
+            throw e;
+        }
     }
 
     /**
@@ -139,8 +163,10 @@ public final class Connection {
             if (i > parameterCount) return;
             if (arg instanceof Integer) {
                 ps.setInt(i++, (Integer) arg);
-            } else {
+            } else if(arg instanceof String) {
                 ps.setString(i++, (String) arg);
+            } else if(arg instanceof Boolean) {
+                ps.setBoolean(i++, (Boolean) arg);
             }
         }
     }

@@ -48,7 +48,7 @@ public abstract class Service {
      * @param parameters    Array of parameters to give to the query.
      */
     public void post(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
-        getConn().executeQuery(connection, null, statement, parameters);
+        getConn().executeUpdate(connection,  statement, parameters);
     }
 
     public java.sql.Connection beginPost() throws SQLException {
