@@ -5,8 +5,6 @@ import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
-import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,19 +40,16 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     public void testExecuteQuery() throws Exception {
         Connection conn = new Connection(configMock, bds);
 
-        try {
-            conn.executeQuery("", "param1: '?' , param2: '?'", "stringparam", 4);
-            Assert.fail();
-        } catch (EntityNotFoundException enfe) {
-            final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
-                    .getPreparedStatementResultSetHandler().getPreparedStatements();
-            assertEquals(preparedStatements.size(), 1);
-            assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
-            final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-            assertEquals(parameterMap.size(), 2);
-            assertEquals(parameterMap.get(1), "stringparam");
-            assertEquals(parameterMap.get(2), 4);
-        }
+        conn.executeQuery("", "param1: '?' , param2: '?'", "stringparam", 4);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 2);
+        assertEquals(parameterMap.get(1), "stringparam");
+        assertEquals(parameterMap.get(2), 4);
+        verifyConnectionClosed();
     }
 
     @Test
@@ -62,18 +58,35 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
 
-        try {
-            conn.executeQuery("", query, params);
-            Assert.fail();
-        } catch (EntityNotFoundException enfe) {
-            final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
-                    .getPreparedStatementResultSetHandler().getPreparedStatements();
-            assertEquals(preparedStatements.size(), 1);
-            assertEquals(preparedStatements.get(0).getSQL(), query);
+        conn.executeQuery("", query, params);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), query);
 
-            final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-            assertEquals(parameterMap.size(), 1);
-            assertEquals(parameterMap.get(1), "tablename");
-        }
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.get(1), "tablename");
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public void testTransaction() throws Exception {
+        Connection conn = new Connection(configMock, bds);
+        final java.sql.Connection connection = conn.startTransaction();
+        String query = "SELECT * FROM ?";
+        Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
+        conn.executeQuery(connection, "", query, params);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), query);
+
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.get(1), "tablename");
+
+        assertTrue(connection.isClosed());
+        verifyConnectionClosed();
     }
 }

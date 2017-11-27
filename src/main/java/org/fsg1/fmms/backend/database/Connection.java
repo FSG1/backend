@@ -14,12 +14,13 @@ import java.sql.SQLException;
  */
 public final class Connection {
     private BasicDataSource connectionPool;
+    private final String EMPTY_STRING = "";
 
     /**
      * The constructor. It immediately connects to the database. Uses a connection pool with an
      * initial size of 2.
      *
-     * @param config Active server configuration.
+     * @param config         Active server configuration.
      * @param connectionPool The connection pool to obtain Connections from.
      * @throws SQLException if the database connection closed or the query was malformed.
      */
@@ -43,16 +44,80 @@ public final class Connection {
      * @throws Exception if something goes wrong performing the query.
      */
     public String executeQuery(final String columnName, final String query, final Object... parameters) throws Exception {
-        try (java.sql.Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(java.sql.Connection connection = startTransaction()){
+            final String result = executeQuery(connection, columnName, query, parameters);
+            commitTransaction(connection);
+            return result;
+        }
+    }
+
+    /**
+     * Offers you a Connection from the connection pool and disables auto committing. Any queries executed on
+     * this connection will not go in effect until the commitTransaction method is called.
+     * Keep in mind the timeouts will be the driver's defaults.
+     * This connection will not be closed until the transaction is committed with the commitTransaction method.
+     *
+     * @return A connection to do transactions with.
+     * @throws SQLException If a database access error occurs, while participating in a distributed transaction
+     *                      or this method is called on a closed connection.
+     */
+    public java.sql.Connection startTransaction() throws SQLException {
+        final java.sql.Connection connection = connectionPool.getConnection();
+        connection.setAutoCommit(false);
+        return connection;
+    }
+
+    /**
+     * Executes a statement on the given connection. This statement will be executed but not committed as it is
+     * in an open transaction until the commitTransaction method is called.
+     * If an exception occurs at any time during the transaction it is rollbacked and aborted.
+     *
+     * @param connection Connection to execute the statement on.
+     * @param columnName Column name to retrieve any possible result.
+     * @param statement  Statement to perform.
+     * @param parameters Array of parameters to map to the statement.
+     * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
+     * @throws SQLException If a database access error occurs or anything else goes wrong.
+     */
+    public String executeQuery(final java.sql.Connection connection,
+                               final String columnName,
+                               final String statement,
+                               final Object... parameters) throws SQLException {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
                 mapParams(preparedStatement, parameters);
 
                 try (ResultSet result = preparedStatement.executeQuery()) {
+                    if(columnName == null) return EMPTY_STRING;
+
                     if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
                     return result.getString(columnName);
                 }
+            } catch (Exception e) {
+                closeConnection(connection);
             }
+            return EMPTY_STRING;
+    }
+
+    /**
+     * Commit and close the connection. If anything goes wrong the connection will attempt to rollback.
+     * In case of continued failure, an exception is thrown.
+     *
+     * @param connection Connection to close.
+     * @throws SQLException If a database access error occurs.
+     */
+    public void commitTransaction(java.sql.Connection connection) throws SQLException {
+        if (!connection.isClosed()) return;
+        try {
+            connection.commit();
+            connection.close();
+        } catch (SQLException e) {
+            closeConnection(connection);
         }
+    }
+
+    private void closeConnection(java.sql.Connection connection) throws SQLException {
+        connection.rollback();
+        connection.close();
     }
 
     /**
