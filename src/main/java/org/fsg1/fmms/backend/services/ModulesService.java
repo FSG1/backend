@@ -26,7 +26,7 @@ public class ModulesService extends Service {
     public String getQueryModuleInformation() {
         return
                 "WITH " +
-                        "    prior AS (SELECT Json_build_object('code',m.code , 'name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END), 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
+                        "    prior AS (SELECT Json_build_object('id', m.id, 'code',m.code , 'name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END), 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
                         "    alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
                         "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
                         "    material AS (SELECT Array_agg(tm.description) AS descs, tm.moduledescription_id AS md_id FROM study.teachingmaterial AS tm GROUP BY tm.moduledescription_id), " +
@@ -39,6 +39,7 @@ public class ModulesService extends Service {
                         "    lecturers AS (SELECT array_to_json(array_agg(concat(e.firstname, ' ', e.lastname))) AS json, me.module_id AS module FROM study.module_employee AS me inner join study.employee AS e ON e.id = me.employee_id GROUP BY me.module_id), " +
                         "    grading AS (SELECT array_agg(json_build_object('subcode', ma.code, 'description', ma.description, 'percentage', coalesce(ma.weight, 0.0), 'minimal_grade', ma.minimumgrade, 'remark', coalesce(ma.remarks, '')) ORDER BY ma.code) AS json, ma.module_id AS module FROM study.moduleassessment AS ma GROUP BY ma.module_id) " +
                         "SELECT json_build_object( " +
+                        "  'id', m.id, " +
                         "  'code', m.code, " +
                         "  'name', m.name, " +
                         "  'credits', m.credits, " +
