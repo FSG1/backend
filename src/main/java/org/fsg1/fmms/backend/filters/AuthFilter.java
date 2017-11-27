@@ -56,7 +56,6 @@ public class AuthFilter implements ContainerRequestFilter {
                 if (m.find()) {
                     String base64 = m.group(1);
                     String decoded = new String(Base64.getDecoder().decode(base64));
-                    System.out.println(decoded);
                     String[] credentials = decoded.split(":");
 
                     if (credentials.length == 2) {
