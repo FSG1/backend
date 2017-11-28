@@ -88,7 +88,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         assertEquals(preparedStatements.get(0).getSQL(), query);
 
         final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.size(), 4);
         assertEquals(parameterMap.get(1), "tablename");
 
         verifyConnectionClosed();
@@ -100,7 +100,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
         try {
-            conn.executeQuery(null, query, params);
+            conn.executeQuery("", query, params);
             Assert.fail();
         } catch (EntityNotFoundException enfe) {
             final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
