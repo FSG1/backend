@@ -7,15 +7,23 @@
   "practical_hours_week": 4,
   "introductorytext": "Hello",
   "topics": [
-    "Do some stuff", "And other stuff too"
+    "Do some stuff",
+    "And other stuff too"
   ],
   "teaching_material": [
-    {"type": "BOOK", "name": "This book"},
-    {"type": "OTHER", "name": "And this movie"}
+    {
+      "type": "BOOK",
+      "name": "This book"
+    },
+    {
+      "type": "OTHER",
+      "name": "And this movie"
+    }
   ],
   "additional_information": "This course is impossible",
   "lecturers": [
-    1, 2
+    1,
+    2
   ],
   "credentials": "",
   "project_flag": true

@@ -48,8 +48,10 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
     /**
      * Post a module to be updated.
      *
-     * @param module Module object containing the updated information. In this case an object resembling a Module, which
-     *               is shown in test/resources/json/postModule.json.
+     * @param module       Module object containing the updated information. In this case an object resembling a Module, which
+     *                     is shown in test/resources/json/postModule.json.
+     * @param curriculumId Identifier of the curriculum.
+     * @param moduleId     Identifier of the module.
      * @return A Response with status code 200 if the update went well, or status code 500
      * if an error occurred internally.
      * @throws Exception In case the update went wrong.
@@ -79,7 +81,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         //List all parameters in the order in which they occur in the statement
         final String[] queries = service.getUpdateModuleInformationStatements();
 
-        final Connection connection = service.beginPost();
+        final Connection connection = service.startTransaction();
 
         service.post(connection, queries[0],
                 code, name, credits, lecturesPerWeek, practicalPerWeek, isProject, id);
@@ -111,7 +113,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
                     id, lecturer.asInt());
         }
 
-        service.endPost(connection);
+        service.commitTransaction(connection);
 
         return Response.status(Response.Status.OK).build();
     }

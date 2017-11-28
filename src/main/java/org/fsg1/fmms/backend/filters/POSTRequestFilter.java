@@ -19,7 +19,7 @@ public class POSTRequestFilter implements ContainerRequestFilter {
      * @throws IOException if an I/O exception occurs.
      */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(final ContainerRequestContext requestContext) throws IOException {
         if (requestContext.getMethod().equals("POST") && requestContext.getLength() <= 0) {
             throw new EmptyRequestBodyException();
         }

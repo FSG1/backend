@@ -19,14 +19,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.MediaType;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.*;
@@ -126,7 +124,7 @@ public class ModulesEndpointTest extends JerseyTest {
 
     @Test
     public void testPostModule() throws Exception {
-        when(service.beginPost()).thenReturn(connection);
+        when(service.startTransaction()).thenReturn(connection);
         when(service.getUpdateModuleInformationStatements()).thenCallRealMethod();
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/postModule.json")));
         given()

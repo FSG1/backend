@@ -13,12 +13,8 @@ import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

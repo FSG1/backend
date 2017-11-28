@@ -13,7 +13,6 @@ import uk.co.datumedge.hamcrest.json.SameJSONAs;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertThat;

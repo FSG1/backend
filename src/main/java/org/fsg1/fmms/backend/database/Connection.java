@@ -14,7 +14,6 @@ import java.sql.SQLException;
  */
 public final class Connection {
     private BasicDataSource connectionPool;
-    private final String EMPTY_STRING = "";
 
     /**
      * The constructor. It immediately connects to the database. Uses a connection pool with an
@@ -44,7 +43,7 @@ public final class Connection {
      * @throws Exception if something goes wrong performing the query.
      */
     public String executeQuery(final String columnName, final String query, final Object... parameters) throws Exception {
-        try(java.sql.Connection connection = startTransaction()){
+        try (java.sql.Connection connection = startTransaction()) {
             final String result = executeQuery(connection, columnName, query, parameters);
             commitTransaction(connection);
             return result;
@@ -84,19 +83,20 @@ public final class Connection {
                                final String columnName,
                                final String statement,
                                final Object... parameters) throws SQLException {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-                mapParams(preparedStatement, parameters);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+            mapParams(preparedStatement, parameters);
 
-                try (ResultSet result = preparedStatement.executeQuery()) {
-                    if(columnName == null) return EMPTY_STRING;
+            try (ResultSet result = preparedStatement.executeQuery()) {
+                String emptyString = "";
+                if (columnName == null) return emptyString;
 
-                    if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
-                    return result.getString(columnName);
-                }
-            } catch (Exception e) {
-                closeConnection(connection);
-                throw e;
+                if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
+                return result.getString(columnName);
             }
+        } catch (Exception e) {
+            closeConnection(connection);
+            throw e;
+        }
     }
 
     /**
@@ -129,7 +129,7 @@ public final class Connection {
      * @param connection Connection to close.
      * @throws SQLException If a database access error occurs.
      */
-    public void commitTransaction(java.sql.Connection connection) throws SQLException {
+    public void commitTransaction(final java.sql.Connection connection) throws SQLException {
         if (connection.isClosed()) return;
         try {
             connection.commit();
@@ -139,7 +139,7 @@ public final class Connection {
         }
     }
 
-    private void closeConnection(java.sql.Connection connection) throws SQLException {
+    private void closeConnection(final java.sql.Connection connection) throws SQLException {
         connection.rollback();
         connection.close();
     }
@@ -163,9 +163,9 @@ public final class Connection {
             if (i > parameterCount) return;
             if (arg instanceof Integer) {
                 ps.setInt(i++, (Integer) arg);
-            } else if(arg instanceof String) {
+            } else if (arg instanceof String) {
                 ps.setString(i++, (String) arg);
-            } else if(arg instanceof Boolean) {
+            } else if (arg instanceof Boolean) {
                 ps.setBoolean(i++, (Boolean) arg);
             }
         }

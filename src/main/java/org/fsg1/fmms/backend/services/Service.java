@@ -42,20 +42,34 @@ public abstract class Service {
 
     /**
      * Execute an update or insert statement on the database with the given connection and parameters.
-     * This connection will remain uncommitted and unclosed until the endPost() method is called.
+     * This connection will remain uncommitted and unclosed until the commitTransaction() method is called.
      *
-     * @param statement     Statements to perform.
-     * @param parameters    Array of parameters to give to the query.
+     * @param connection Connection to use.
+     * @param statement  Statements to perform.
+     * @param parameters Array of parameters to give to the query.
+     * @throws Exception if a database access error occurs.
      */
     public void post(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
-        getConn().executeUpdate(connection,  statement, parameters);
+        getConn().executeUpdate(connection, statement, parameters);
     }
 
-    public java.sql.Connection beginPost() throws SQLException {
+    /**
+     * Begin a transaction with the database on one connection.
+     *
+     * @return Connection to use.
+     * @throws SQLException If a database access error occurs.
+     */
+    public java.sql.Connection startTransaction() throws SQLException {
         return getConn().startTransaction();
     }
 
-    public void endPost(java.sql.Connection connection) throws SQLException {
+    /**
+     * Ends and commits the transaction with the database.
+     *
+     * @param connection Connection to use.
+     * @throws SQLException If a database access error occurs.
+     */
+    public void commitTransaction(final java.sql.Connection connection) throws SQLException {
         getConn().commitTransaction(connection);
     }
 }

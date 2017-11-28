@@ -100,10 +100,10 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         final java.sql.Connection connection = conn.startTransaction();
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
-        try{
+        try {
             conn.executeQuery(connection, "", query, params);
             Assert.fail();
-        } catch(EntityNotFoundException enfe){
+        } catch (EntityNotFoundException enfe) {
             conn.commitTransaction(connection);
             final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
                     .getPreparedStatementResultSetHandler().getPreparedStatements();
@@ -116,7 +116,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
 
             assertTrue(connection.isClosed());
             verifyConnectionClosed();
-        } catch(Exception e){
+        } catch (Exception e) {
             Assert.fail();
         }
     }
@@ -127,7 +127,7 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         final java.sql.Connection connection = conn.startTransaction();
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
-        conn.executeUpdate(connection,  query, params);
+        conn.executeUpdate(connection, query, params);
         conn.commitTransaction(connection);
         final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
                 .getPreparedStatementResultSetHandler().getPreparedStatements();
