@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fsg1.fmms.backend.database.Connection;
 
-import java.sql.SQLException;
-
 /**
  * An abstract class representing a Service to be used by the REST API.
  */
@@ -53,7 +51,13 @@ public abstract class Service {
         getConn().executeUpdate(connection, statement, parameters);
     }
 
-    public void executeTransactional(TransactionRunner transaction) throws Exception {
+    /**
+     * Executes a TransactionRunner on a Connection.
+     *
+     * @param transaction Function to run.
+     * @throws Exception If a database access error occurs or any other thing goes wrong.
+     */
+    public void executeTransactional(final TransactionRunner transaction) throws Exception {
         getConn().executeTransactional(transaction);
     }
 }

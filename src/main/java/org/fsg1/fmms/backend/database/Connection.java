@@ -90,8 +90,8 @@ public final class Connection {
      * @param transaction Function to run.
      * @throws Exception If a database access error occurs.
      */
-    public void executeTransactional(TransactionRunner transaction) throws Exception {
-        try(java.sql.Connection conn = connectionPool.getConnection()){
+    public void executeTransactional(final TransactionRunner transaction) throws Exception {
+        try (java.sql.Connection conn = connectionPool.getConnection()) {
             conn.setAutoCommit(false);
             transaction.run(conn);
             conn.commit();
