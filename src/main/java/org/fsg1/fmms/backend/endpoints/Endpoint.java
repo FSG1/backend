@@ -4,6 +4,7 @@ import org.fsg1.fmms.backend.services.Service;
 
 /**
  * Abstract class for an Endpoint.
+ *
  * @param <ServiceType> Type of Service this endpoint uses.
  */
 public abstract class Endpoint<ServiceType extends Service> {

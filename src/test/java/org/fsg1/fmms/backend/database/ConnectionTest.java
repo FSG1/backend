@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,20 +41,18 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     @Test
     public void testExecuteQuery() throws Exception {
         Connection conn = new Connection(configMock, bds);
-
-        try {
-            conn.executeQuery("", "param1: '?' , param2: '?'", "stringparam", 4);
-            Assert.fail();
-        } catch (EntityNotFoundException enfe) {
-            final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
-                    .getPreparedStatementResultSetHandler().getPreparedStatements();
-            assertEquals(preparedStatements.size(), 1);
-            assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
-            final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-            assertEquals(parameterMap.size(), 2);
-            assertEquals(parameterMap.get(1), "stringparam");
-            assertEquals(parameterMap.get(2), 4);
-        }
+        String query = "param1: '?' , param2: '?'";
+        Object[] params = new Object[]{"stringparam", 4};
+        conn.executeQuery(null, query, params);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), "param1: '?' , param2: '?'");
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 2);
+        assertEquals(parameterMap.get(1), "stringparam");
+        assertEquals(parameterMap.get(2), 4);
+        verifyConnectionClosed();
     }
 
     @Test
@@ -62,6 +61,44 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         String query = "SELECT * FROM ?";
         Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
 
+        conn.executeQuery(null, query, params);
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), query);
+
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.get(1), "tablename");
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public void testTransaction() throws Exception {
+        Connection conn = new Connection(configMock, bds);
+        String query = "UPDATE ? SET stuff WHERE something = ? AND other_things = ? OR that = ?";
+        Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
+        conn.executeTransactional(conn1 -> {
+            conn.executeUpdate(conn1, query, params);
+        });
+
+        final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
+                .getPreparedStatementResultSetHandler().getPreparedStatements();
+        assertEquals(preparedStatements.size(), 1);
+        assertEquals(preparedStatements.get(0).getSQL(), query);
+
+        final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
+        assertEquals(parameterMap.size(), 4);
+        assertEquals(parameterMap.get(1), "tablename");
+
+        verifyConnectionClosed();
+    }
+
+    @Test
+    public void testWrongColumnName() throws Exception {
+        Connection conn = new Connection(configMock, bds);
+        String query = "SELECT * FROM ?";
+        Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
         try {
             conn.executeQuery("", query, params);
             Assert.fail();
@@ -74,6 +111,9 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
             final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
             assertEquals(parameterMap.size(), 1);
             assertEquals(parameterMap.get(1), "tablename");
+            verifyConnectionClosed();
+        } catch (Exception e) {
+            Assert.fail();
         }
     }
 }

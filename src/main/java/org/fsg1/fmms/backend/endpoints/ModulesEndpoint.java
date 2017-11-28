@@ -1,13 +1,11 @@
 package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.fsg1.fmms.backend.services.ModulesService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -44,5 +42,77 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
+    }
+
+    /**
+     * Post a module to be updated.
+     *
+     * @param module       Module object containing the updated information. In this case an object resembling a Module, which
+     *                     is shown in test/resources/json/postModule.json.
+     * @param curriculumId Identifier of the curriculum.
+     * @param moduleId     Identifier of the module.
+     * @return A Response with status code 200 if the update went well, or status code 500
+     * if an error occurred internally.
+     * @throws Exception In case the update went wrong.
+     */
+    @POST
+    @Path("/module/{module_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postModuleInformation(@PathParam("curriculum_id") final int curriculumId,
+                                          @PathParam("module_id") final String moduleId,
+                                          final JsonNode module) throws Exception {
+        final ModulesService service = getService();
+
+        final int id = module.findValue("id").asInt();
+        final String code = module.findValue("code").asText();
+        final String name = module.findValue("name").asText();
+        final int credits = module.findValue("credits").asInt();
+        final int lecturesPerWeek = module.findValue("lectures_in_week").asInt();
+        final int practicalPerWeek = module.findValue("practical_hours_week").asInt();
+        final String introText = module.findValue("introductorytext").asText();
+        final ArrayNode topics = ((ArrayNode) module.findValue("topics"));
+        final ArrayNode teachingMaterials = ((ArrayNode) module.findValue("teaching_material"));
+        final String additionalInformation = module.findValue("additional_information").asText();
+        final ArrayNode lecturers = ((ArrayNode) module.findValue("lecturers"));
+        final String credentials = module.findValue("credentials").asText();
+        final boolean isProject = module.findValue("project_flag").asBoolean();
+
+        //List all parameters in the order in which they occur in the statement
+        final String[] queries = service.getUpdateModuleInformationStatements();
+
+        service.executeTransactional(conn -> {
+            //comments
+            service.update(conn, queries[0],
+                    code, name, credits, lecturesPerWeek, practicalPerWeek, isProject, id);
+
+            service.update(conn, queries[1],
+                    id);
+
+            for (JsonNode topic : topics) {
+                service.update(conn, queries[2],
+                        id, topic.asText());
+            }
+
+            service.update(conn, queries[3],
+                    introText, additionalInformation, credentials, id);
+
+            service.update(conn, queries[4],
+                    id);
+
+            for (JsonNode teachingMaterial : teachingMaterials) {
+                service.update(conn, queries[5],
+                        id, teachingMaterial.findValue("type").asText(), teachingMaterial.findValue("name").asText());
+            }
+
+            service.update(conn, queries[6],
+                    id);
+
+            for (JsonNode lecturer : lecturers) {
+                service.update(conn, queries[7],
+                        id, lecturer.asInt());
+            }
+        });
+
+        return Response.status(Response.Status.OK).build();
     }
 }

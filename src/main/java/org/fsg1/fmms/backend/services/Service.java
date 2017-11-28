@@ -37,4 +37,27 @@ public abstract class Service {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(jsonString);
     }
+
+    /**
+     * Execute an update or insert statement on the database with the given connection and parameters.
+     * This connection will remain uncommitted and unclosed until the commitTransaction() method is called.
+     *
+     * @param connection Connection to use.
+     * @param statement  Statements to perform.
+     * @param parameters Array of parameters to give to the query.
+     * @throws Exception if a database access error occurs.
+     */
+    public void update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
+        getConn().executeUpdate(connection, statement, parameters);
+    }
+
+    /**
+     * Executes a TransactionRunner on a Connection.
+     *
+     * @param transaction Function to run.
+     * @throws Exception If a database access error occurs or any other thing goes wrong.
+     */
+    public void executeTransactional(final TransactionRunner transaction) throws Exception {
+        getConn().executeTransactional(transaction);
+    }
 }

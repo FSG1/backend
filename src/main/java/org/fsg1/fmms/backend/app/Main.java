@@ -3,8 +3,10 @@ package org.fsg1.fmms.backend.app;
 import org.fsg1.fmms.backend.exceptions.AppExceptionMapper;
 import org.fsg1.fmms.backend.filters.AuthFilter;
 import org.fsg1.fmms.backend.filters.CORSResponseFilter;
+import org.fsg1.fmms.backend.filters.POSTRequestFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
@@ -39,8 +41,10 @@ public final class Main {
 
         rc.register(di);
         rc.register(CORSResponseFilter.class);
+        rc.register(POSTRequestFilter.class);
         rc.register(AuthFilter.class);
         rc.register(AppExceptionMapper.class);
+        rc.register(JacksonFeature.class);
 
         rc.packages("org.fsg1.fmms.backend.endpoints");
 

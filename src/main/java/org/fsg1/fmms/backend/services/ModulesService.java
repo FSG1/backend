@@ -26,7 +26,7 @@ public class ModulesService extends Service {
     public String getQueryModuleInformation() {
         return
                 "WITH " +
-                        "    prior AS (SELECT Json_build_object('code',m.code , 'name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END), 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
+                        "    prior AS (SELECT Json_build_object('id', m.id, 'code',m.code , 'name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END), 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
                         "    alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
                         "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
                         "    material AS (SELECT Array_agg(tm.description) AS descs, tm.moduledescription_id AS md_id FROM study.teachingmaterial AS tm GROUP BY tm.moduledescription_id), " +
@@ -39,6 +39,7 @@ public class ModulesService extends Service {
                         "    lecturers AS (SELECT array_to_json(array_agg(concat(e.firstname, ' ', e.lastname))) AS json, me.module_id AS module FROM study.module_employee AS me inner join study.employee AS e ON e.id = me.employee_id GROUP BY me.module_id), " +
                         "    grading AS (SELECT array_agg(json_build_object('subcode', ma.code, 'description', ma.description, 'percentage', coalesce(ma.weight, 0.0), 'minimal_grade', ma.minimumgrade, 'remark', coalesce(ma.remarks, '')) ORDER BY ma.code) AS json, ma.module_id AS module FROM study.moduleassessment AS ma GROUP BY ma.module_id) " +
                         "SELECT json_build_object( " +
+                        "  'id', m.id, " +
                         "  'code', m.code, " +
                         "  'name', m.name, " +
                         "  'credits', m.credits, " +
@@ -63,5 +64,40 @@ public class ModulesService extends Service {
                         "  left join study.module_profile AS mp ON mp.module_id = m.id " +
                         "  left join study.profile AS p ON mp.profile_id = p.id " +
                         "WHERE m.code = ? AND p.studyprogramme_id = ?;";
+    }
+
+    /**
+     * Get the queries to update module information.
+     *
+     * @return The query string.
+     */
+    public String[] getUpdateModuleInformationStatements() {
+        return new String[]{
+                "UPDATE study.module " +
+                        "    SET code = ?, name = ?, credits = ?, lecturesperweek = ?, practicalperweek = ?, isproject = ?, totaleffort = credits * 28 " +
+                        "WHERE id = ?",
+
+                "DELETE FROM study.moduletopic " +
+                        "WHERE module_id = ?",
+
+                "INSERT INTO study.moduletopic(module_id, sequenceno, description) " +
+                        "    VALUES (?, NULL, ?)",
+
+                "UPDATE study.moduledescription  " +
+                        "  SET introduction = ?, additionalinfo = ?, credentials = ? " +
+                        "WHERE module_id = ?;",
+
+                "DELETE FROM study.teachingmaterial " +
+                        "WHERE moduledescription_id = (SELECT id FROM study.moduledescription WHERE module_id = ?); ",
+
+                "INSERT INTO study.teachingmaterial (moduledescription_id, type, description) " +
+                        "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?::study.teachingmaterials, ?)",
+
+                "DELETE FROM study.module_employee " +
+                        "  WHERE module_id = ?",
+
+                "INSERT INTO study.module_employee(module_id, employee_id) " +
+                        "  VALUES (?, ?)"
+        };
     }
 }

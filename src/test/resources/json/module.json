@@ -1,10 +1,10 @@
 {
+  "id": 9,
   "code": "BUA1",
   "name": "Business Administration 1",
   "credits": 4,
   "credentials": "",
   "lecturers": [
-
   ],
   "lifecycle_activities": [
     {
@@ -122,14 +122,11 @@
   "introductorytext": "",
   "additional_information": "",
   "topics": [
-
   ],
   "semester": 1,
   "teaching_material": [
-
   ],
   "prior_knowledge_references": [
-
   ],
   "qualifications": [
     {

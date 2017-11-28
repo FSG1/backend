@@ -1,6 +1,7 @@
 package org.fsg1.fmms.backend.exceptions;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
@@ -19,10 +20,11 @@ public class AppExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(final Exception ex) {
-        ex.printStackTrace();
         if (ex instanceof WebApplicationException) return ((WebApplicationException) (ex)).getResponse();
+        ex.printStackTrace();
         return Response.status(INTERNAL_SERVER_ERROR)
                 .entity(ex.toString())
+                .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
 }

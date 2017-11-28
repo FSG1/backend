@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.database;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
+import org.fsg1.fmms.backend.services.TransactionRunner;
 
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ public final class Connection {
      * The constructor. It immediately connects to the database. Uses a connection pool with an
      * initial size of 2.
      *
-     * @param config Active server configuration.
+     * @param config         Active server configuration.
      * @param connectionPool The connection pool to obtain Connections from.
      * @throws SQLException if the database connection closed or the query was malformed.
      */
@@ -37,21 +38,62 @@ public final class Connection {
      * Execute any query on the database using a <code>PreparedStatement</code>.
      *
      * @param columnName The name of the column that is returned by the query.
-     * @param query      The SQL String of the query you want to perform.
+     * @param statement  The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
      * @throws Exception if something goes wrong performing the query.
      */
-    public String executeQuery(final String columnName, final String query, final Object... parameters) throws Exception {
+    public String executeQuery(final String columnName, final String statement, final Object... parameters) throws Exception {
         try (java.sql.Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
                 mapParams(preparedStatement, parameters);
 
                 try (ResultSet result = preparedStatement.executeQuery()) {
+                    if (columnName == null) return "";
+
                     if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
                     return result.getString(columnName);
                 }
             }
+        }
+    }
+
+    /**
+     * Executes an update on the given connection. This statement will be executed but not committed as it is
+     * in an open transaction until the transaction is committed. This method should be used in context of a
+     * TransactionRunner to update (multiple) tables.
+     * If an exception occurs at any time during the transaction it is rollbacked and aborted.
+     *
+     * @param connection Connection to execute the statement on.
+     * @param statement  Statement to perform.
+     * @param parameters Array of parameters to map to the statement.
+     * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
+     * @throws SQLException If a database access error occurs or anything else goes wrong.
+     */
+    public int executeUpdate(final java.sql.Connection connection,
+                             final String statement,
+                             final Object... parameters) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+            mapParams(preparedStatement, parameters);
+            return preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        }
+    }
+
+    /**
+     * Execute an arbitrary function inside an open transaction. Any number of updates can be performed
+     * in this transaction. Afterwards it is committed and closed.
+     *
+     * @param transaction Function to run.
+     * @throws Exception If a database access error occurs.
+     */
+    public void executeTransactional(final TransactionRunner transaction) throws Exception {
+        try (java.sql.Connection conn = connectionPool.getConnection()) {
+            conn.setAutoCommit(false);
+            transaction.run(conn);
+            conn.commit();
         }
     }
 
@@ -74,8 +116,10 @@ public final class Connection {
             if (i > parameterCount) return;
             if (arg instanceof Integer) {
                 ps.setInt(i++, (Integer) arg);
-            } else {
+            } else if (arg instanceof String) {
                 ps.setString(i++, (String) arg);
+            } else if (arg instanceof Boolean) {
+                ps.setBoolean(i++, (Boolean) arg);
             }
         }
     }
