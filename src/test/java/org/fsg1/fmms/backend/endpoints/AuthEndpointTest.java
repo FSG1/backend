@@ -52,13 +52,13 @@ public class AuthEndpointTest extends JerseyTest {
     public void testAuth() throws Exception {
         given().header("Authorization", "Basic Zm1tczptb2R1bGVtYW5hZ2VtZW50")
                 .spec(spec)
-                .get("restricted/auth")
+                .post("auth")
                 .then()
                 .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
         given().header("Authorization", "Basic lkuahdsfliköas")
                 .spec(spec)
-                .get("restricted/auth")
+                .post("auth")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }

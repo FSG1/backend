@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Authentication Filters.
- * Enforces authentication for secured endpoints
+ * Enforces authentication for everything which tries to modify data
  *
  * @author Tobias Derksen
  */
@@ -45,9 +45,7 @@ public class AuthFilter implements ContainerRequestFilter {
      */
     @Override
     public void filter(final ContainerRequestContext containerRequest) throws UnauthorizedException {
-        String path = containerRequest.getUriInfo().getPath(true);
-
-        if (path.matches(".*/?restricted/.*") && !containerRequest.getMethod().equals("OPTIONS")) {
+        if (!containerRequest.getMethod().equals("GET") && !containerRequest.getMethod().equals("OPTIONS")) {
             String header = containerRequest.getHeaderString("Authorization");
             if (header != null && !header.isEmpty()) {
                 Pattern pattern = Pattern.compile(REGEX);
