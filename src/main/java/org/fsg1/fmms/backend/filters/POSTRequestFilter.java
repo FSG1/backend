@@ -4,11 +4,13 @@ import org.fsg1.fmms.backend.exceptions.EmptyRequestBodyException;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.PreMatching;
 import java.io.IOException;
 
 /**
  * Filter for all POST requests.
  */
+@PreMatching
 public class POSTRequestFilter implements ContainerRequestFilter {
 
     /**
