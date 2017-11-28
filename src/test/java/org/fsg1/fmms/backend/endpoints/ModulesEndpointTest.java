@@ -13,6 +13,7 @@ import org.fsg1.fmms.backend.filters.POSTRequestFilter;
 import org.fsg1.fmms.backend.services.ModulesService;
 import org.fsg1.fmms.backend.services.Service;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
@@ -59,7 +60,8 @@ public class ModulesEndpointTest extends JerseyTest {
                     }
                 })
                 .register(AppExceptionMapper.class)
-                .register(POSTRequestFilter.class);
+                .register(POSTRequestFilter.class)
+                .register( JacksonFeature.class);
     }
 
     @Test
