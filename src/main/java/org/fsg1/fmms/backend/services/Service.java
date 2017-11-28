@@ -49,27 +49,11 @@ public abstract class Service {
      * @param parameters Array of parameters to give to the query.
      * @throws Exception if a database access error occurs.
      */
-    public void post(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
+    public void update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
         getConn().executeUpdate(connection, statement, parameters);
     }
 
-    /**
-     * Begin a transaction with the database on one connection.
-     *
-     * @return Connection to use.
-     * @throws SQLException If a database access error occurs.
-     */
-    public java.sql.Connection startTransaction() throws SQLException {
-        return getConn().startTransaction();
-    }
-
-    /**
-     * Ends and commits the transaction with the database.
-     *
-     * @param connection Connection to use.
-     * @throws SQLException If a database access error occurs.
-     */
-    public void commitTransaction(final java.sql.Connection connection) throws SQLException {
-        getConn().commitTransaction(connection);
+    public void executeTransactional(TransactionRunner transaction) throws Exception {
+        getConn().executeTransactional(transaction);
     }
 }

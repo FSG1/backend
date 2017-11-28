@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.Connection;
 
 /**
  * The class containing the 'modules' endpoints.
@@ -81,39 +80,38 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         //List all parameters in the order in which they occur in the statement
         final String[] queries = service.getUpdateModuleInformationStatements();
 
-        final Connection connection = service.startTransaction();
+        service.executeTransactional(conn -> {
+            //comments
+            service.update(conn, queries[0],
+                    code, name, credits, lecturesPerWeek, practicalPerWeek, isProject, id);
 
-        service.post(connection, queries[0],
-                code, name, credits, lecturesPerWeek, practicalPerWeek, isProject, id);
+            service.update(conn, queries[1],
+                    id);
 
-        service.post(connection, queries[1],
-                id);
+            for (JsonNode topic : topics) {
+                service.update(conn, queries[2],
+                        id, topic.asText());
+            }
 
-        for (JsonNode topic : topics) {
-            service.post(connection, queries[2],
-                    id, topic.asText());
-        }
+            service.update(conn, queries[3],
+                    introText, additionalInformation, credentials, id);
 
-        service.post(connection, queries[3],
-                introText, additionalInformation, credentials, id);
+            service.update(conn, queries[4],
+                    id);
 
-        service.post(connection, queries[4],
-                id);
+            for (JsonNode teachingMaterial : teachingMaterials) {
+                service.update(conn, queries[5],
+                        id, teachingMaterial.findValue("type").asText(), teachingMaterial.findValue("name").asText());
+            }
 
-        for (JsonNode teachingMaterial : teachingMaterials) {
-            service.post(connection, queries[5],
-                    id, teachingMaterial.findValue("type").asText(), teachingMaterial.findValue("name").asText());
-        }
+            service.update(conn, queries[6],
+                    id);
 
-        service.post(connection, queries[6],
-                id);
-
-        for (JsonNode lecturer : lecturers) {
-            service.post(connection, queries[7],
-                    id, lecturer.asInt());
-        }
-
-        service.commitTransaction(connection);
+            for (JsonNode lecturer : lecturers) {
+                service.update(conn, queries[7],
+                        id, lecturer.asInt());
+            }
+        });
 
         return Response.status(Response.Status.OK).build();
     }

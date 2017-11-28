@@ -12,6 +12,7 @@ import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
 import org.fsg1.fmms.backend.filters.POSTRequestFilter;
 import org.fsg1.fmms.backend.services.ModulesService;
 import org.fsg1.fmms.backend.services.Service;
+import org.fsg1.fmms.backend.services.TransactionRunner;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -19,10 +20,14 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.MediaType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -109,7 +114,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .post("curriculum/1/module/BUA1")
                 .then()
                 .statusCode(400);
-        verify(service, times(0)).post(any(), anyString(), any(), any(), any());
+        verify(service, times(0)).update(any(), anyString(), any(), any(), any());
     }
 
     @Test
@@ -121,13 +126,17 @@ public class ModulesEndpointTest extends JerseyTest {
                 .post("curriculum/1/module/BUA1")
                 .then()
                 .statusCode(500);
-        verify(service, times(0)).post(any(), any(), any());
+        verify(service, times(0)).update(any(), any(), any());
     }
 
     @Test
     public void testPostModule() throws Exception {
-        when(service.startTransaction()).thenReturn(connection);
         when(service.getUpdateModuleInformationStatements()).thenCallRealMethod();
+        Mockito.doAnswer(invocation -> {
+            final TransactionRunner argument = invocation.getArgument(0);
+            argument.run(connection);
+            return 0;
+        }).when(service).executeTransactional(any());
         JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/postModule.json")));
         given()
                 .spec(spec)
@@ -138,16 +147,18 @@ public class ModulesEndpointTest extends JerseyTest {
                 .statusCode(200);
 
         final String[] statements = service.getUpdateModuleInformationStatements();
-        verify(service, times(11)).post(eq(connection), any(), any());
-        verify(service, times(1)).post(eq(connection), eq(statements[0]), eq("BUA1"), eq("Business Administration 1"), eq(4), eq(1), eq(4), eq(true), eq(9));
-        verify(service, times(1)).post(eq(connection), eq(statements[1]), eq(9));
-        verify(service, times(1)).post(eq(connection), eq(statements[2]), eq(9), eq("Do some stuff"));
-        verify(service, times(1)).post(eq(connection), eq(statements[2]), eq(9), eq("And other stuff too"));
-        verify(service, times(1)).post(eq(connection), eq(statements[3]), eq("Hello"), eq("This course is impossible"), eq(""), eq(9));
-        verify(service, times(1)).post(eq(connection), eq(statements[4]), eq(9));
-        verify(service, times(1)).post(eq(connection), eq(statements[5]), eq(9), eq("BOOK"), eq("This book"));
-        verify(service, times(1)).post(eq(connection), eq(statements[6]), eq(9));
-        verify(service, times(1)).post(eq(connection), eq(statements[7]), eq(9), eq(1));
-        verify(service, times(1)).post(eq(connection), eq(statements[7]), eq(9), eq(2));
+
+        verify(service, times(1)).executeTransactional(any(TransactionRunner.class));
+        verify(service, times(11)).update(any(Connection.class), any(), any());
+        verify(service, times(1)).update(any(Connection.class), eq(statements[0]), eq("BUA1"), eq("Business Administration 1"), eq(4), eq(1), eq(4), eq(true), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[1]), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("Do some stuff"));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("And other stuff too"));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[3]), eq("Hello"), eq("This course is impossible"), eq(""), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[4]), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[5]), eq(9), eq("BOOK"), eq("This book"));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[6]), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[7]), eq(9), eq(1));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[7]), eq(9), eq(2));
     }
 }

@@ -3,6 +3,7 @@ package org.fsg1.fmms.backend.database;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.fsg1.fmms.backend.app.Configuration;
 import org.fsg1.fmms.backend.exceptions.EntityNotFoundException;
+import org.fsg1.fmms.backend.services.TransactionRunner;
 
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
@@ -37,71 +38,31 @@ public final class Connection {
      * Execute any query on the database using a <code>PreparedStatement</code>.
      *
      * @param columnName The name of the column that is returned by the query.
-     * @param query      The SQL String of the query you want to perform.
+     * @param statement  The SQL String of the query you want to perform.
      * @param parameters An optional array of Objects from which to fill the parameters.
      * @return A ResultSet of the query results.
      * @throws Exception if something goes wrong performing the query.
      */
-    public String executeQuery(final String columnName, final String query, final Object... parameters) throws Exception {
-        try (java.sql.Connection connection = startTransaction()) {
-            final String result = executeQuery(connection, columnName, query, parameters);
-            commitTransaction(connection);
-            return result;
-        }
-    }
+    public String executeQuery(final String columnName, final String statement, final Object... parameters) throws Exception {
+        try (java.sql.Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+                mapParams(preparedStatement, parameters);
 
-    /**
-     * Offers you a Connection from the connection pool and disables auto committing. Any queries executed on
-     * this connection will not go in effect until the commitTransaction method is called.
-     * Keep in mind the timeouts will be the driver's defaults.
-     * This connection will not be closed until the transaction is committed with the commitTransaction method.
-     *
-     * @return A connection to do transactions with.
-     * @throws SQLException If a database access error occurs, while participating in a distributed transaction
-     *                      or this method is called on a closed connection.
-     */
-    public java.sql.Connection startTransaction() throws SQLException {
-        final java.sql.Connection connection = connectionPool.getConnection();
-        connection.setAutoCommit(false);
-        return connection;
-    }
+                try (ResultSet result = preparedStatement.executeQuery()) {
+                    String emptyString = "";
+                    if (columnName == null) return emptyString;
 
-    /**
-     * Executes a statement on the given connection. This statement will be executed but not committed as it is
-     * in an open transaction until the commitTransaction method is called.
-     * If an exception occurs at any time during the transaction it is rollbacked and aborted.
-     *
-     * @param connection Connection to execute the statement on.
-     * @param columnName Column name to retrieve any possible result. If no column name is given, the statement is seen
-     *                   as an update instead of a query.
-     * @param statement  Statement to perform.
-     * @param parameters Array of parameters to map to the statement.
-     * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
-     * @throws SQLException If a database access error occurs or anything else goes wrong.
-     */
-    public String executeQuery(final java.sql.Connection connection,
-                               final String columnName,
-                               final String statement,
-                               final Object... parameters) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-            mapParams(preparedStatement, parameters);
-
-            try (ResultSet result = preparedStatement.executeQuery()) {
-                String emptyString = "";
-                if (columnName == null) return emptyString;
-
-                if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
-                return result.getString(columnName);
+                    if (!result.next() || result.getString(columnName) == null) throw new EntityNotFoundException();
+                    return result.getString(columnName);
+                }
             }
-        } catch (Exception e) {
-            closeConnection(connection);
-            throw e;
         }
     }
 
     /**
      * Executes an update on the given connection. This statement will be executed but not committed as it is
-     * in an open transaction until the commitTransaction method is called.
+     * in an open transaction until the transaction is committed. This method should be used in context of a
+     * TransactionRunner to update (multiple) tables.
      * If an exception occurs at any time during the transaction it is rollbacked and aborted.
      *
      * @param connection Connection to execute the statement on.
@@ -117,31 +78,24 @@ public final class Connection {
             mapParams(preparedStatement, parameters);
             return preparedStatement.executeUpdate();
         } catch (Exception e) {
-            closeConnection(connection);
+            connection.rollback();
             throw e;
         }
     }
 
     /**
-     * Commit and close the connection. If anything goes wrong the connection will attempt to rollback.
-     * In case of continued failure, an exception is thrown.
+     * Execute an arbitrary function inside an open transaction. Any number of updates can be performed
+     * in this transaction. Afterwards it is committed and closed.
      *
-     * @param connection Connection to close.
-     * @throws SQLException If a database access error occurs.
+     * @param transaction Function to run.
+     * @throws Exception If a database access error occurs.
      */
-    public void commitTransaction(final java.sql.Connection connection) throws SQLException {
-        if (connection.isClosed()) return;
-        try {
-            connection.commit();
-            connection.close();
-        } catch (SQLException e) {
-            closeConnection(connection);
+    public void executeTransactional(TransactionRunner transaction) throws Exception {
+        try(java.sql.Connection conn = connectionPool.getConnection()){
+            conn.setAutoCommit(false);
+            transaction.run(conn);
+            conn.commit();
         }
-    }
-
-    private void closeConnection(final java.sql.Connection connection) throws SQLException {
-        connection.rollback();
-        connection.close();
     }
 
     /**
