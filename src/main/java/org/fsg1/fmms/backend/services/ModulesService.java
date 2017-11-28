@@ -83,10 +83,9 @@ public class ModulesService extends Service {
                 "INSERT INTO study.moduletopic(module_id, sequenceno, description) " +
                         "    VALUES (?, NULL, ?)",
 
-                "DELETE FROM study.moduledescription " +
-                        "  WHERE module_id = ?; " +
-                        "INSERT INTO study.moduledescription(module_id, introduction, additionalinfo, credentials, validof) " +
-                        "    VALUES (?, ?, ?, ?, NULL);",
+                "UPDATE study.moduledescription  " +
+                        "  SET introduction = ?, additionalinfo = ?, credentials = ? " +
+                        "WHERE module_id = ?;",
 
                 "DELETE FROM study.teachingmaterial " +
                         "WHERE moduledescription_id = (SELECT id FROM study.moduledescription WHERE module_id = ?); ",

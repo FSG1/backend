@@ -95,7 +95,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         }
 
         service.post(connection, queries[3],
-                id, id, introText, additionalInformation, credentials, id);
+                introText, additionalInformation, credentials, id);
 
         service.post(connection, queries[4],
                 id);

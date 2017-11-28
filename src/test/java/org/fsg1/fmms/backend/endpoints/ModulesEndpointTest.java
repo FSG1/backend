@@ -143,7 +143,7 @@ public class ModulesEndpointTest extends JerseyTest {
         verify(service, times(1)).post(eq(connection), eq(statements[1]), eq(9));
         verify(service, times(1)).post(eq(connection), eq(statements[2]), eq(9), eq("Do some stuff"));
         verify(service, times(1)).post(eq(connection), eq(statements[2]), eq(9), eq("And other stuff too"));
-        verify(service, times(1)).post(eq(connection), eq(statements[3]), eq(9), eq(9), eq("Hello"), eq("This course is impossible"), eq(""), eq(9));
+        verify(service, times(1)).post(eq(connection), eq(statements[3]), eq("Hello"), eq("This course is impossible"), eq(""), eq(9));
         verify(service, times(1)).post(eq(connection), eq(statements[4]), eq(9));
         verify(service, times(1)).post(eq(connection), eq(statements[5]), eq(9), eq("BOOK"), eq("This book"));
         verify(service, times(1)).post(eq(connection), eq(statements[6]), eq(9));
