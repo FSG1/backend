@@ -83,22 +83,22 @@ public class ModulesService extends Service {
                         "INSERT INTO study.moduletopic(module_id, sequenceno, description) " +
                                 "    VALUES (?, NULL, ?)",
 
-                        "UPDATE study.moduledescription " +
-                                "    SET introduction = ?, additionalinfo = ?, credentials = ? " +
-                                "WHERE module_id = ?",
+                        "DELETE FROM study.moduledescription " +
+                                "  WHERE module_id = ?; " +
+                                "INSERT INTO study.moduledescription(module_id, introduction, additionalinfo, credentials, validof) " +
+                                "    VALUES (?, ?, ?, ?, NULL);",
 
                         "DELETE FROM study.teachingmaterial " +
                                 "WHERE moduledescription_id = (SELECT id FROM study.moduledescription WHERE module_id = ?); ",
 
                         "INSERT INTO study.teachingmaterial (moduledescription_id, type, description) " +
-                                "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?, ?)",
+                                "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?::study.teachingmaterials, ?)",
                         
                         "DELETE FROM study.module_employee " +
                                 "  WHERE module_id = ?",
                         
                         "INSERT INTO study.module_employee(module_id, employee_id) " +
                                 "  VALUES (?, ?)"
-
                 };
     }
 }

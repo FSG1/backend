@@ -74,6 +74,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         final String additionalInformation = module.findValue("additional_information").asText();
         final ArrayNode lecturers = ((ArrayNode) module.findValue("lecturers"));
         final String credentials = module.findValue("credentials").asText();
+        final boolean isProject = module.findValue("project_flag").asBoolean();
 
         //List all parameters in the order in which they occur in the statement
         final String[] queries = service.getUpdateModuleInformationStatements();
@@ -81,7 +82,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         final Connection connection = service.beginPost();
 
         service.post(connection, queries[0],
-                code, name, credits, lecturesPerWeek, practicalPerWeek, id);
+                code, name, credits, lecturesPerWeek, practicalPerWeek, isProject, id);
 
         service.post(connection, queries[1],
                 id);
@@ -92,7 +93,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         }
 
         service.post(connection, queries[3],
-                introText, additionalInformation, credentials, id);
+                id, id, introText, additionalInformation, credentials, id);
 
         service.post(connection, queries[4],
                 id);
