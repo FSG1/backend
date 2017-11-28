@@ -1,6 +1,6 @@
 package org.fsg1.fmms.backend.endpoints;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  * @author Tobias Derksen
  * @see org.fsg1.fmms.backend.filters.AuthFilter
  */
-@Path("restricted/auth")
+@Path("auth")
 public class AuthEndpoint {
 
     /**
@@ -18,7 +18,7 @@ public class AuthEndpoint {
      *
      * @return Empty response
      */
-    @GET
+    @POST
     public Response auth() {
         return Response.status(Response.Status.NO_CONTENT).build();
     }

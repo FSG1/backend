@@ -29,7 +29,17 @@ public class AuthFilterTest extends JerseyTest {
     @Test
     public void testNoAuth() {
         given()
-                .get("http://localhost:9998/restricted/auth")
+                .post("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given()
+                .put("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given()
+                .delete("http://localhost:9998/auth")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -37,7 +47,17 @@ public class AuthFilterTest extends JerseyTest {
     @Test
     public void testInvalidHeader() {
         given().header("Authorization", "Something really wrong")
-                .get("http://localhost:9998/restricted/auth")
+                .post("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given().header("Authorization", "Something really wrong")
+                .put("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given().header("Authorization", "Something really wrong")
+                .delete("http://localhost:9998/auth")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -46,7 +66,17 @@ public class AuthFilterTest extends JerseyTest {
     public void testAuthFails() {
         // Given credentials are invalid
         given().header("Authorization", "Zm1tczptb2R1bGVtYW5hZ2UzMzNtZW50")
-                .get("http://localhost:9998/restricted/auth")
+                .post("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given().header("Authorization", "Zm1tczptb2R1bGVtYW5hZ2UzMzNtZW50")
+                .put("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+
+        given().header("Authorization", "Zm1tczptb2R1bGVtYW5hZ2UzMzNtZW50")
+                .delete("http://localhost:9998/auth")
                 .then()
                 .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
@@ -63,7 +93,17 @@ public class AuthFilterTest extends JerseyTest {
     public void testAuthSuccess() {
         // Credentials are base64 encoded. See Configuration for default credentials
         given().header("Authorization", "Basic Zm1tczptb2R1bGVtYW5hZ2VtZW50")
-                .get("http://localhost:9998/restricted/auth")
+                .post("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+
+        given().header("Authorization", "Basic Zm1tczptb2R1bGVtYW5hZ2VtZW50")
+                .delete("http://localhost:9998/auth")
+                .then()
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+
+        given().header("Authorization", "Basic Zm1tczptb2R1bGVtYW5hZ2VtZW50")
+                .put("http://localhost:9998/auth")
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
