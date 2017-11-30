@@ -25,14 +25,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true -B'
+                sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true -B'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Test...'
-                sh 'mvn clean test -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -B'
+                sh 'mvn test -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -B'
                 sh 'mvn checkstyle:check -Dmaven.javadoc.skip=true -B'
             }
         }
