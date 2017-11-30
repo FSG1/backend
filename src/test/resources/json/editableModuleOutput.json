@@ -47,8 +47,14 @@
     }
   ],
   "active_lecturers": [
-    "Garrosh",
-    "Grommash"
+    {
+      "id": 7,
+      "name": "Khadgar"
+    },
+    {
+      "id": 5,
+      "name": "JAYSON"
+    }
   ],
   "lifecycle_activities": [
     {
