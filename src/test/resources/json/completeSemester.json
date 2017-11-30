@@ -1,51 +1,51 @@
 {
-  "curriculum_name": "Informatics - Advanced Software Concepts",
+  "curriculum_name": "FancyCurriculum",
   "modules": [
     {
       "code": "APPL",
-      "name": "Applied Research Methods",
+      "name": "Study apples",
       "credits": 3,
       "is_project": 0
     },
     {
       "code": "CSA1",
-      "name": "Computer Systems Architecture 1",
+      "name": "Crime scene activation 1",
       "credits": 3,
       "is_project": 0
     },
     {
-      "code": "PRJ3",
-      "name": "Project 3 Lift",
+      "code": "PRJ",
+      "name": "Project",
       "credits": 3,
       "is_project": 0
     },
     {
-      "code": "RENG",
-      "name": "Requirements Engineering",
+      "code": "REN",
+      "name": "Running a marathon",
       "credits": 4,
       "is_project": 0
     },
     {
-      "code": "CON1",
-      "name": "IT Consultancy",
+      "code": "CON",
+      "name": "Scamming people 101",
       "credits": 4,
       "is_project": 0
     },
     {
-      "code": "STA1",
-      "name": "Statistics",
+      "code": "STA",
+      "name": "Stand up",
       "credits": 4,
       "is_project": 0
     },
     {
-      "code": "ALDA",
-      "name": "Algorithms and Data structures",
+      "code": "ALDi",
+      "name": "Cheap stuff",
       "credits": 4,
       "is_project": 0
     },
     {
-      "code": "MOD2",
-      "name": "Modeling 2",
+      "code": "MOD",
+      "name": "Modding Skyrim",
       "credits": 5,
       "is_project": 0
     }

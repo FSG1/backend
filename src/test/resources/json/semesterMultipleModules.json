@@ -4,38 +4,38 @@
       "semester": 1,
       "modules": [
         {
-          "code": "BUA1",
-          "name": "Business Administration 1",
+          "code": "UAE",
+          "name": "United arab emirates",
           "credits": 4,
           "is_project": false
         },
         {
-          "code": "DBS1",
-          "name": "Databases",
+          "code": "DB",
+          "name": "Dobobobob",
           "credits": 5,
           "is_project": false
         },
         {
-          "code": "ENG1",
+          "code": "ENG",
           "name": "English",
           "credits": 2,
           "is_project": false
         },
         {
-          "code": "MAT1",
-          "name": "Mathematics",
+          "code": "MA",
+          "name": "Masters degree",
           "credits": 4,
           "is_project": false
         },
         {
-          "code": "JAVA1",
-          "name": "Programming in Java 1",
+          "code": "JAA",
+          "name": "YAAAAAAA",
           "credits": 5,
           "is_project": false
         },
         {
-          "code": "PRJ1",
-          "name": "Project 1",
+          "code": "STF",
+          "name": "Stuff",
           "credits": 10,
           "is_project": false
         }
