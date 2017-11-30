@@ -20,14 +20,11 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.MediaType;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -36,7 +33,7 @@ import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ModulesEndpointTest extends JerseyTest {
+public class ModuleEndpointsTest extends JerseyTest {
 
     private static RequestSpecification spec;
     private ObjectMapper mapper = new ObjectMapper();
@@ -57,7 +54,8 @@ public class ModulesEndpointTest extends JerseyTest {
     @Override
     public ResourceConfig configure() {
         return new ResourceConfig()
-                .register(ModulesEndpoint.class)
+                .register(EditableModuleEndpoint.class)
+                .register(ReadableModuleEndpoint.class)
                 .register(new AbstractBinder() {
                     @Override
                     protected void configure() {
