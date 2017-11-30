@@ -157,7 +157,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body("{}")
-                .post("module/BUA1")
+                .post("module/2")
                 .then()
                 .statusCode(500);
         verify(service, times(0)).update(any(), any(), any());
@@ -176,7 +176,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body(node)
-                .post("module/BUA1")
+                .post("module/9")
                 .then()
                 .statusCode(200);
 
@@ -184,7 +184,7 @@ public class ModulesEndpointTest extends JerseyTest {
 
         verify(service, times(1)).executeTransactional(any(TransactionRunner.class));
         verify(service, times(11)).update(any(Connection.class), any(), any());
-        verify(service, times(1)).update(any(Connection.class), eq(statements[0]), eq("BUA1"), eq("Business Administration 1"), eq(4), eq(1), eq(4), eq(true), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[0]), eq("JOS"), eq("Java on steroids"), eq(4), eq(1), eq(4), eq(true), eq(9));
         verify(service, times(1)).update(any(Connection.class), eq(statements[1]), eq(9));
         verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("Do some stuff"));
         verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("And other stuff too"));

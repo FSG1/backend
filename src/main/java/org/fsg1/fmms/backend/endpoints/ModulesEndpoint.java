@@ -57,7 +57,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
     @POST
     @Path("module/{module_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postModuleInformation(@PathParam("module_id") final String moduleId,
+    public Response postModuleInformation(@PathParam("module_id") final int moduleId,
                                           final JsonNode module) throws Exception {
         final ModulesService service = getService();
 
