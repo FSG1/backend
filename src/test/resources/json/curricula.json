@@ -1,12 +1,12 @@
 [
   {
     "id": 1,
-    "code": "SE",
-    "name": "Software Engineering"
+    "code": "S",
+    "name": "Soupmaking"
   },
   {
     "id": 2,
-    "code": "BI",
-    "name": "Business Informatics"
+    "code": "B",
+    "name": "Basketball"
   }
 ]

@@ -6,17 +6,17 @@
         "semester": 1,
         "qualifications_modules": [
           {
-            "code": "BUA1",
-            "name": "Business Administration 1",
+            "code": "AU",
+            "name": "Australian studies",
             "credits": 4,
             "learning_goals": [
               {
                 "name": "LG 1",
-                "description": "explain major concepts: difference between enterprises, businesses and organisation, primary and secondary processes of a business, organisational structures and Information systems and relations of an organisation and its environment."
+                "description": "Do some things."
               },
               {
                 "name": "LG 2",
-                "description": "apply concepts of LG1 in a business game and company visit and analyse, advice, design and implement a strategy in the business game."
+                "description": "Think bout stuff."
               }
             ]
           }
@@ -26,13 +26,13 @@
         "semester": 2,
         "qualifications_modules": [
           {
-            "code": "MOD1",
-            "name": "Modeling 1",
+            "code": "MO",
+            "name": "Mo money mo problems",
             "credits": 4,
             "learning_goals": [
               {
                 "name": "LG 1",
-                "description": "construct, based on a given business case, and interpret simple business process models using UML activity diagrams."
+                "description": "construct additional pylons"
               }
             ]
           }
@@ -47,24 +47,24 @@
         "semester": 2,
         "qualifications_modules": [
           {
-            "code": "ITSM",
-            "name": "IT Service Management",
+            "code": "IM",
+            "name": "Instant messaging",
             "credits": 5,
             "learning_goals": [
               {
                 "name": "LG 1",
-                "description": "analyse, design and advice on a complete IT service organisation (Organisation, Processes) based on a given case."
+                "description": "Hi."
               }
             ]
           },
           {
-            "code": "PRJ2",
-            "name": "Project 2",
+            "code": "PR2",
+            "name": "Public relations chapter 2",
             "credits": 10,
             "learning_goals": [
               {
                 "name": "LG 1",
-                "description": "PRJ21 - explain the difference between as-is and to-be business processes and demonstrate how use cases support the to-be process by making use of activity diagrams"
+                "description": "Make some things work."
               }
             ]
           }
@@ -74,24 +74,24 @@
         "semester": 3,
         "qualifications_modules": [
           {
-            "code": "CON1",
-            "name": "IT Consultancy",
+            "code": "CO",
+            "name": "COOP games",
             "credits": 4,
             "learning_goals": [
               {
                 "name": "LG 2",
-                "description": "to research a given topic (emerging technology\/technique) and to prepare a solution (proposal) for this topic within a given context (paper)."
+                "description": "AAAAAAAAAAA"
               }
             ]
           },
           {
-            "code": "RENG",
-            "name": "Requirements Engineering",
+            "code": "RNG",
+            "name": "Random number generation.",
             "credits": 4,
             "learning_goals": [
               {
                 "name": "LG 1",
-                "description": "choose and apply techniques for retrieving requirements."
+                "description": "I'm bored"
               }
             ]
           }

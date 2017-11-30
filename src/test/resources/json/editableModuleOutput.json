@@ -1,54 +1,54 @@
 {
-  "curriculum_name": "FancyCurriculum",
-  "modules": [
+  "id": 9,
+  "code": "BUKI",
+  "name": "Some stuff",
+  "credits": 4,
+  "credentials": "",
+  "all_lecturers": [
     {
-      "code": "APPL",
-      "name": "Study apples",
-      "credits": 3,
-      "is_project": 0
+      "id": 10,
+      "name": "Bob Anderson"
     },
     {
-      "code": "CSA1",
-      "name": "Crime scene activation 1",
-      "credits": 3,
-      "is_project": 0
+      "id": 6,
+      "name": "Donald Trump"
     },
     {
-      "code": "PRJ",
-      "name": "Project",
-      "credits": 3,
-      "is_project": 0
+      "id": 1,
+      "name": "Sitsma Hendriks"
     },
     {
-      "code": "REN",
-      "name": "Running a marathon",
-      "credits": 4,
-      "is_project": 0
+      "id": 9,
+      "name": "Martin Luther"
     },
     {
-      "code": "CON",
-      "name": "Scamming people 101",
-      "credits": 4,
-      "is_project": 0
+      "id": 4,
+      "name": "Dragonborn"
     },
     {
-      "code": "STA",
-      "name": "Stand up",
-      "credits": 4,
-      "is_project": 0
+      "id": 2,
+      "name": "Tyrion Lannister"
     },
     {
-      "code": "ALDi",
-      "name": "Cheap stuff",
-      "credits": 4,
-      "is_project": 0
+      "id": 3,
+      "name": "Tyrion Fordring"
     },
     {
-      "code": "MOD",
-      "name": "Modding Skyrim",
-      "credits": 5,
-      "is_project": 0
+      "id": 8,
+      "name": "Arthas Menethil"
+    },
+    {
+      "id": 7,
+      "name": "Khadgar"
+    },
+    {
+      "id": 5,
+      "name": "JAYSON"
     }
+  ],
+  "active_lecturers": [
+    "Garrosh",
+    "Grommash"
   ],
   "lifecycle_activities": [
     {
@@ -119,90 +119,79 @@
       "description": "UNDEFINED"
     }
   ],
+  "learning_goals": [
+    {
+      "name": "LG 1",
+      "description": "explain how to raid.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "LG 2",
+      "description": "apply more dots.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 3,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 4,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 2,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "lectures_in_week": 1,
+  "practical_hours_week": 4,
+  "total_effort": 112,
+  "introductorytext": "",
+  "additional_information": "",
+  "topics": [
+
+  ],
+  "semesters": [
+    1
+  ],
+  "teaching_material": [
+
+  ],
+  "teaching_material_types": [
+    "BOOK",
+    "WEBSITE",
+    "ARTICLE",
+    "OTHER"
+  ],
+  "prior_knowledge_references": [
+
+  ],
   "qualifications": [
     {
-      "lifecycle_activity": 0,
-      "architectural_layer": 1,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 0,
-      "architectural_layer": 2,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 0,
-      "architectural_layer": 3,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 1,
-      "architectural_layer": 0,
-      "level": 2
-    },
-    {
       "lifecycle_activity": 1,
       "architectural_layer": 1,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 1,
-      "architectural_layer": 2,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 1,
-      "architectural_layer": 3,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 1,
-      "architectural_layer": 4,
       "level": 1
     },
     {
       "lifecycle_activity": 2,
       "architectural_layer": 1,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 2,
-      "architectural_layer": 2,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 2,
-      "architectural_layer": 3,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 3,
-      "architectural_layer": 0,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 3,
-      "architectural_layer": 1,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 3,
-      "architectural_layer": 2,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 3,
-      "architectural_layer": 3,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 3,
-      "architectural_layer": 4,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 4,
-      "architectural_layer": 0,
       "level": 1
     },
     {
@@ -211,29 +200,18 @@
       "level": 1
     },
     {
-      "lifecycle_activity": 4,
-      "architectural_layer": 2,
+      "lifecycle_activity": 3,
+      "architectural_layer": 1,
       "level": 1
-    },
+    }
+  ],
+  "assesment_parts": [
     {
-      "lifecycle_activity": 4,
-      "architectural_layer": 3,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 4,
-      "architectural_layer": 4,
-      "level": 1
-    },
-    {
-      "lifecycle_activity": 5,
-      "architectural_layer": 5,
-      "level": 2
-    },
-    {
-      "lifecycle_activity": 6,
-      "architectural_layer": 5,
-      "level": 2
+      "subcode": "BUL",
+      "description": "Bullying people 101",
+      "percentage": 1,
+      "minimal_grade": 5.5,
+      "remark": ""
     }
   ]
 }

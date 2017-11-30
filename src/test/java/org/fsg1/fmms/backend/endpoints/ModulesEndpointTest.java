@@ -66,7 +66,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 })
                 .register(AppExceptionMapper.class)
                 .register(POSTRequestFilter.class)
-                .register( JacksonFeature.class);
+                .register(JacksonFeature.class);
     }
 
     @Test
@@ -74,6 +74,12 @@ public class ModulesEndpointTest extends JerseyTest {
         given()
                 .spec(spec)
                 .get("curriculum/1/module/BUA1")
+                .then()
+                .statusCode(500);
+
+        given()
+                .spec(spec)
+                .get("/module/BUA1")
                 .then()
                 .statusCode(500);
     }
@@ -107,11 +113,39 @@ public class ModulesEndpointTest extends JerseyTest {
     }
 
     @Test
+    public void testGetEditableModule() throws Exception {
+        when(service.get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1")))
+                .thenThrow(new EntityNotFoundException());
+
+        given()
+                .spec(spec)
+                .get("module/BUA1")
+                .then()
+                .statusCode(404);
+        verify(service, times(2)).get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1"));
+    }
+
+    @Test
+    public void testGetNoEditableModule() throws Exception {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/editableModuleOutput.json")));
+
+        when(service.get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1")))
+                .thenReturn(node);
+        given()
+                .spec(spec)
+                .get("module/BUA1")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1"));
+    }
+
+    @Test
     public void testPostEmpty() throws Exception {
         given()
                 .spec(spec)
                 .contentType(ContentType.JSON)
-                .post("curriculum/1/module/BUA1")
+                .post("module/BUA1")
                 .then()
                 .statusCode(400);
         verify(service, times(0)).update(any(), anyString(), any(), any(), any());
@@ -123,7 +157,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body("{}")
-                .post("curriculum/1/module/BUA1")
+                .post("module/2")
                 .then()
                 .statusCode(500);
         verify(service, times(0)).update(any(), any(), any());
@@ -137,12 +171,12 @@ public class ModulesEndpointTest extends JerseyTest {
             argument.run(connection);
             return 0;
         }).when(service).executeTransactional(any());
-        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/postModule.json")));
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/editableModuleInput.json")));
         given()
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body(node)
-                .post("curriculum/1/module/BUA1")
+                .post("module/9")
                 .then()
                 .statusCode(200);
 
@@ -150,7 +184,7 @@ public class ModulesEndpointTest extends JerseyTest {
 
         verify(service, times(1)).executeTransactional(any(TransactionRunner.class));
         verify(service, times(11)).update(any(Connection.class), any(), any());
-        verify(service, times(1)).update(any(Connection.class), eq(statements[0]), eq("BUA1"), eq("Business Administration 1"), eq(4), eq(1), eq(4), eq(true), eq(9));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[0]), eq("JOS"), eq("Java on steroids"), eq(4), eq(1), eq(4), eq(true), eq(9));
         verify(service, times(1)).update(any(Connection.class), eq(statements[1]), eq(9));
         verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("Do some stuff"));
         verify(service, times(1)).update(any(Connection.class), eq(statements[2]), eq(9), eq("And other stuff too"));

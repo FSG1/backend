@@ -1,7 +1,7 @@
 {
   "id": 9,
-  "code": "BUA1",
-  "name": "Business Administration 1",
+  "code": "BOWA",
+  "name": "Boom",
   "credits": 4,
   "credentials": "",
   "lecturers": [
@@ -78,7 +78,7 @@
   "learning_goals": [
     {
       "name": "LG 1",
-      "description": "explain major concepts: difference between enterprises, businesses and organisation, primary and secondary processes of a business, organisational structures and Information systems and relations of an organisation and its environment.",
+      "description": "explain some stuff about things.",
       "type": "personal",
       "skillmatrix": [
         {
@@ -90,7 +90,7 @@
     },
     {
       "name": "LG 2",
-      "description": "apply concepts of LG1 in a business game and company visit and analyse, advice, design and implement a strategy in the business game.",
+      "description": "apply some concepts here and there maybe.",
       "type": "personal",
       "skillmatrix": [
         {
@@ -116,9 +116,9 @@
       ]
     }
   ],
-  "lectures_in_week": 1,
-  "practical_hours_week": 4,
-  "total_effort": 112,
+  "lectures_in_week": 99,
+  "practical_hours_week": 99,
+  "total_effort": 99999,
   "introductorytext": "",
   "additional_information": "",
   "topics": [
@@ -152,8 +152,8 @@
   ],
   "assesment_parts": [
     {
-      "subcode": "BUA1",
-      "description": "Business Administration 1",
+      "subcode": "BOWA",
+      "description": "Bakalakalak",
       "percentage": 1,
       "minimal_grade": 5.5,
       "remark": ""

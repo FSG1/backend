@@ -2,13 +2,13 @@
   "curricula": [
     {
       "id": 1,
-      "code": "SE",
-      "name": "Informatics - Advanced Software Concepts"
+      "code": "E",
+      "name": "Extreme mountainbiking"
     },
     {
       "id": 2,
-      "code": "BI",
-      "name": "Informatics - Business Informatics"
+      "code": "I",
+      "name": "Intense exercise"
     }
   ],
   "architectural_layers": [
