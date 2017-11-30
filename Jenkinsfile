@@ -40,14 +40,14 @@ pipeline {
         stage('Docker') {
             steps {
                 echo 'Build Docker Image...'
-                docker.build("172.16.0.10:5000/backend:latest")
+                sh 'docker build -t 172.16.0.10:5000/backend:latest .'
             }
         }
 
         stage('Push') {
             steps {
                 echo 'Build Docker Image...'
-                docker.build("172.16.0.10:5000/backend:latest").push()
+                sh 'docker push 172.16.0.10:5000/backend:latest'
             }
         }
 
