@@ -138,6 +138,7 @@ public class ModulesService extends Service {
                         "  'practical_hours_week', m.practicalperweek, " +
                         "  'total_effort', coalesce(m.totaleffort, (m.credits * 28)), " +
                         "  'introductorytext', coalesce(md.introduction, ''), " +
+                        "  'project_flag', m.isproject, " +
                         "  'additional_information', coalesce(md.additionalinfo, ''), " +
                         "  'topics', coalesce((SELECT topics FROM topics WHERE module = m.id), '[]'::json), " +
                         "  'semesters',coalesce((SELECT json FROM semesters WHERE module = m.id), '[]'::json), " +
