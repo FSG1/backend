@@ -176,7 +176,7 @@ public class ModuleEndpointsTest extends JerseyTest {
                 .body(node)
                 .post("module/9")
                 .then()
-                .statusCode(200);
+                .statusCode(204);
 
         final String[] statements = service.getUpdateModuleInformationStatements();
 

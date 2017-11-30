@@ -92,7 +92,7 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
             }
         });
 
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     /**
