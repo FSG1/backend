@@ -1,3 +1,217 @@
 {
+  "id": 9,
+  "code": "BUKI",
+  "name": "Some stuff",
+  "credits": 4,
+  "credentials": "",
+  "all_lecturers": [
+    {
+      "id": 10,
+      "name": "Bob Anderson"
+    },
+    {
+      "id": 6,
+      "name": "Donald Trump"
+    },
+    {
+      "id": 1,
+      "name": "Sitsma Hendriks"
+    },
+    {
+      "id": 9,
+      "name": "Martin Luther"
+    },
+    {
+      "id": 4,
+      "name": "Dragonborn"
+    },
+    {
+      "id": 2,
+      "name": "Tyrion Lannister"
+    },
+    {
+      "id": 3,
+      "name": "Tyrion Fordring"
+    },
+    {
+      "id": 8,
+      "name": "Arthas Menethil"
+    },
+    {
+      "id": 7,
+      "name": "Khadgar"
+    },
+    {
+      "id": 5,
+      "name": "JAYSON"
+    }
+  ],
+  "active_lecturers": [
+    "Garrosh",
+    "Grommash"
+  ],
+  "lifecycle_activities": [
+    {
+      "id": 1,
+      "name": "Manage",
+      "description": "Management and control of all activities aimed at the process of development and deployment of IT systems and of IT service management."
+    },
+    {
+      "id": 2,
+      "name": "Analyse",
+      "description": "The analysis of relationships between processes, products and data flows within the context of the environment."
+    },
+    {
+      "id": 3,
+      "name": "Advise",
+      "description": "Advice regarding the reorganisation of processes and \/ or data flows. Advise on new IT systems to be developed or purchased on the basis of an analysis and in consultation with stakeholders."
+    },
+    {
+      "id": 4,
+      "name": "Design",
+      "description": "Design of an IT system on the basis of set specifications, and within predefined frameworks."
+    },
+    {
+      "id": 5,
+      "name": "Implement",
+      "description": "Build an IT system on the basis of a specific design and within a set framework."
+    },
+    {
+      "id": 6,
+      "name": "Show Professional Behaviour",
+      "description": "Show professional behaviour"
+    },
+    {
+      "id": 7,
+      "name": "Show Research Skills",
+      "description": "Show Research Skills"
+    }
+  ],
+  "architectural_layers": [
+    {
+      "id": 1,
+      "name": "User interaction",
+      "description": "Relates to the communication of the (end) user with the IT system. User interaction during the creation and realization of an IT system is explicitly excluded from this, as this is a recurring issue in each architectural layer."
+    },
+    {
+      "id": 2,
+      "name": "Business processes",
+      "description": "Relate to facilitating organisational processes using IT systems. These processes deal with the functionality of the overall system (automated and non-automated components) within the context of organisational objectives to be achieved."
+    },
+    {
+      "id": 3,
+      "name": "Infrastructure",
+      "description": "This concerns the full range of IT systems deployed to facilitate business processes. Emphasis lies on creating and maintaining availability of both the traditional hardware infrastructure and the software infrastructure, and the configuring thereof."
+    },
+    {
+      "id": 4,
+      "name": "Software",
+      "description": "This concerns the development of various software that is incorporated in an IT infrastructure after delivery."
+    },
+    {
+      "id": 5,
+      "name": "Hardware interfacing",
+      "description": "This applies when software interacts with available hardware, and when situations occur whereby the software explicitly has to take into account both the possibilities and the limitations of the available hardware.\nThe term computersystem has been chosen as an overall generic term. Depending on the context, this can be further specified as 'embedded system', industrial automation, 'virtual system', and so forth.\n"
+    },
+    {
+      "id": 6,
+      "name": "UNDEFINED",
+      "description": "UNDEFINED"
+    }
+  ],
+  "learning_goals": [
+    {
+      "name": "LG 1",
+      "description": "explain how to raid.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "LG 2",
+      "description": "apply more dots.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 3,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 4,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 2,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "lectures_in_week": 1,
+  "practical_hours_week": 4,
+  "total_effort": 112,
+  "introductorytext": "",
+  "additional_information": "",
+  "topics": [
 
+  ],
+  "semesters": [
+    1
+  ],
+  "teaching_material": [
+
+  ],
+  "teaching_material_types": [
+    "BOOK",
+    "WEBSITE",
+    "ARTICLE",
+    "OTHER"
+  ],
+  "prior_knowledge_references": [
+
+  ],
+  "qualifications": [
+    {
+      "lifecycle_activity": 1,
+      "architectural_layer": 1,
+      "level": 1
+    },
+    {
+      "lifecycle_activity": 2,
+      "architectural_layer": 1,
+      "level": 1
+    },
+    {
+      "lifecycle_activity": 4,
+      "architectural_layer": 1,
+      "level": 1
+    },
+    {
+      "lifecycle_activity": 3,
+      "architectural_layer": 1,
+      "level": 1
+    }
+  ],
+  "assesment_parts": [
+    {
+      "subcode": "BUL",
+      "description": "Bullying people 101",
+      "percentage": 1,
+      "minimal_grade": 5.5,
+      "remark": ""
+    }
+  ]
 }

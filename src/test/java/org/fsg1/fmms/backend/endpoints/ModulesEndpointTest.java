@@ -171,7 +171,7 @@ public class ModulesEndpointTest extends JerseyTest {
             argument.run(connection);
             return 0;
         }).when(service).executeTransactional(any());
-        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/postModule.json")));
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/editableModuleInput.json")));
         given()
                 .spec(spec)
                 .contentType(ContentType.JSON)
