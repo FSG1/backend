@@ -101,6 +101,11 @@ public class ModulesService extends Service {
         };
     }
 
+    /**
+     * Get the query string to get a module that has extra information for editing.
+     *
+     * @return The query string.
+     */
     public String getQueryEditableModule() {
         return
                 "";
