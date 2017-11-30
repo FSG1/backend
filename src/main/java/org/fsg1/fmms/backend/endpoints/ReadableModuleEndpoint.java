@@ -11,6 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * The class containing the 'modules' endpoints that are used to only display a module.
+ */
 @Path("curriculum/{curriculum_id}/module/{module_id}")
 public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
 
@@ -21,7 +24,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
      * @param service Service object.
      */
     @Inject
-    ReadableModuleEndpoint(ModulesService service) {
+    ReadableModuleEndpoint(final ModulesService service) {
         super(service);
     }
 

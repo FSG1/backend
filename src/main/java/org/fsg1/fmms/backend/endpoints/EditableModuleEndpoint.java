@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The class containing the 'modules' endpoints.
+ * The class containing the 'modules' endpoints that are used to edit a module.
  */
 @Path("")
 public class EditableModuleEndpoint extends Endpoint<ModulesService> {
