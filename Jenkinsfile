@@ -24,14 +24,12 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building...'
                 sh 'mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true -B'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Test...'
                 sh 'mvn test -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -B'
                 sh 'mvn checkstyle:check -Dmaven.javadoc.skip=true -B'
             }
@@ -39,21 +37,18 @@ pipeline {
 
         stage('Docker') {
             steps {
-                echo 'Build Docker Image...'
                 sh 'docker build -t 172.16.0.10:5000/backend:latest .'
             }
         }
 
         stage('Push') {
             steps {
-                echo 'Build Docker Image...'
                 sh 'docker push 172.16.0.10:5000/backend:latest'
             }
         }
 
         stage('Publish') {
             steps {
-                echo 'Publish reports....'
                 junit 'target/surefire-reports/**/*.xml'
                 jacoco(execPattern: '**/**.exec')
             }
