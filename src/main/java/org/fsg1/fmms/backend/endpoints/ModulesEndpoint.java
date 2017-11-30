@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 /**
  * The class containing the 'modules' endpoints.
  */
-@Path("curriculum/{curriculum_id}")
+@Path("")
 public class ModulesEndpoint extends Endpoint<ModulesService> {
     /**
      * Constructor which receives the service as dependency. In subclasses this dependency is automatically
@@ -26,7 +26,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
     }
 
     /**
-     * Returns all semesters in a curriculum.
+     * Returns a module.
      *
      * @param curriculumId Identifier of the curriculum.
      * @param moduleId     Identifier of the module.
@@ -34,7 +34,7 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
      * @throws Exception In case the querying goes wrong.
      */
     @GET
-    @Path("/module/{module_id}")
+    @Path("curriculum/{curriculum_id}/module/{module_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModuleInformation(@PathParam("curriculum_id") final int curriculumId,
                                          @PathParam("module_id") final String moduleId) throws Exception {
@@ -49,17 +49,15 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
      *
      * @param module       Module object containing the updated information. In this case an object resembling a Module, which
      *                     is shown in test/resources/json/postModule.json.
-     * @param curriculumId Identifier of the curriculum.
      * @param moduleId     Identifier of the module.
      * @return A Response with status code 200 if the update went well, or status code 500
      * if an error occurred internally.
      * @throws Exception In case the update went wrong.
      */
     @POST
-    @Path("/module/{module_id}")
+    @Path("module/{module_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postModuleInformation(@PathParam("curriculum_id") final int curriculumId,
-                                          @PathParam("module_id") final String moduleId,
+    public Response postModuleInformation(@PathParam("module_id") final String moduleId,
                                           final JsonNode module) throws Exception {
         final ModulesService service = getService();
 
@@ -114,5 +112,22 @@ public class ModulesEndpoint extends Endpoint<ModulesService> {
         });
 
         return Response.status(Response.Status.OK).build();
+    }
+
+    /**
+     * Returns a module to be edited.
+     *
+     * @param moduleCode Code of the module.
+     * @return A JSON object of a module with extra information to allow editing.
+     * @throws Exception In case the querying goes wrong.
+     */
+    @GET
+    @Path("module/{module_code}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getEditableModule(@PathParam("module_code") final String moduleCode) throws Exception {
+        final ModulesService service = getService();
+        final JsonNode result = service.get(service.getQueryEditableModule(), "module", moduleCode);
+        final String jsonString = result.toString();
+        return Response.status(Response.Status.OK).entity(jsonString).build();
     }
 }

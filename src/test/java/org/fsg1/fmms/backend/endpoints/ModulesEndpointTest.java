@@ -66,7 +66,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 })
                 .register(AppExceptionMapper.class)
                 .register(POSTRequestFilter.class)
-                .register( JacksonFeature.class);
+                .register(JacksonFeature.class);
     }
 
     @Test
@@ -74,6 +74,12 @@ public class ModulesEndpointTest extends JerseyTest {
         given()
                 .spec(spec)
                 .get("curriculum/1/module/BUA1")
+                .then()
+                .statusCode(500);
+
+        given()
+                .spec(spec)
+                .get("/module/BUA1")
                 .then()
                 .statusCode(500);
     }
@@ -107,11 +113,39 @@ public class ModulesEndpointTest extends JerseyTest {
     }
 
     @Test
+    public void testGetEditableModule() throws Exception {
+        when(service.get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1")))
+                .thenThrow(new EntityNotFoundException());
+
+        given()
+                .spec(spec)
+                .get("module/BUA1")
+                .then()
+                .statusCode(404);
+        verify(service, times(2)).get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1"));
+    }
+
+    @Test
+    public void testGetNoEditableModule() throws Exception {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/editableModuleOutput.json")));
+
+        when(service.get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1")))
+                .thenReturn(node);
+        given()
+                .spec(spec)
+                .get("module/BUA1")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1"));
+    }
+
+    @Test
     public void testPostEmpty() throws Exception {
         given()
                 .spec(spec)
                 .contentType(ContentType.JSON)
-                .post("curriculum/1/module/BUA1")
+                .post("module/BUA1")
                 .then()
                 .statusCode(400);
         verify(service, times(0)).update(any(), anyString(), any(), any(), any());
@@ -123,7 +157,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body("{}")
-                .post("curriculum/1/module/BUA1")
+                .post("module/BUA1")
                 .then()
                 .statusCode(500);
         verify(service, times(0)).update(any(), any(), any());
@@ -142,7 +176,7 @@ public class ModulesEndpointTest extends JerseyTest {
                 .spec(spec)
                 .contentType(ContentType.JSON)
                 .body(node)
-                .post("curriculum/1/module/BUA1")
+                .post("module/BUA1")
                 .then()
                 .statusCode(200);
 

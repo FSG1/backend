@@ -100,4 +100,9 @@ public class ModulesService extends Service {
                         "  VALUES (?, ?)"
         };
     }
+
+    public String getQueryEditableModule() {
+        return
+                "";
+    }
 }
