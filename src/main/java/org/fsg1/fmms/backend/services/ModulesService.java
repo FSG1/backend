@@ -73,31 +73,67 @@ public class ModulesService extends Service {
      */
     public String[] getUpdateModuleInformationStatements() {
         return new String[]{
+                //Index 0: update base module
                 "UPDATE study.module " +
                         "    SET code = ?, name = ?, credits = ?, lecturesperweek = ?, practicalperweek = ?, isproject = ?, totaleffort = credits * 28 " +
                         "WHERE id = ?",
 
+                //index 1: delete topics linked to module
                 "DELETE FROM study.moduletopic " +
                         "WHERE module_id = ?",
 
+                //index 2: re-insert module topics
                 "INSERT INTO study.moduletopic(module_id, sequenceno, description) " +
                         "    VALUES (?, NULL, ?)",
 
+                //index 3: update module description
                 "UPDATE study.moduledescription  " +
                         "  SET introduction = ?, additionalinfo = ?, credentials = ? " +
                         "WHERE module_id = ?;",
 
+                //index 4: delete module teaching materials
                 "DELETE FROM study.teachingmaterial " +
                         "WHERE moduledescription_id = (SELECT id FROM study.moduledescription WHERE module_id = ?); ",
 
+                //index 5: re-insert module teaching materials
                 "INSERT INTO study.teachingmaterial (moduledescription_id, type, description) " +
                         "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?::study.teachingmaterials, ?)",
 
+                //index 6: delete linked employees
                 "DELETE FROM study.module_employee " +
                         "  WHERE module_id = ?",
 
+                //index 7: re-insert employees linked to module
                 "INSERT INTO study.module_employee(module_id, employee_id) " +
-                        "  VALUES (?, ?)"
+                        "  VALUES (?, ?)",
+
+                //index 8: delete module's dependencies
+                "DELETE FROM study.moduledependency " +
+                        "  WHERE module_id = ?;",
+
+                //index 9: re-insert module dependencies
+                "INSERT INTO study.moduledependency(module_id, dependency_module_id, type, remarks) " +
+                        "  VALUES (?, ?, ?, ?);",
+
+                //index 10: delete studies learning goals
+                "DELETE FROM study.learninggoal " +
+                        "  WHERE module_id = ? AND id NOT IN (?);",
+
+                //index 11: insert learning goals
+                "INSERT INTO study.learninggoal(module_id, description, sequenceno, weight, groupgoal) " +
+                        "    VALUES (?, ?, ?, ?, ?);",
+
+                //index 12: link learning goals to qualifications
+                "INSERT INTO study.learninggoal_qualification(learninggoal_id, qualification_id) " +
+                        "    VALUES (?, (SELECT id FROM study.qualification WHERE architecturallayer_id = ? AND activity_id = ? AND levelofskill_id = ?)); ",
+
+                //index 13: delete module assessments
+                "DELETE FROM study.moduleassessment " +
+                        "  WHERE module_id = ?;",
+
+                //index 14: re insert module assessments
+                "INSERT INTO study.moduleassessment(code, weight, minimumgrade, remarks, module_id, description) " +
+                        "  VALUES (?, ?, ?, ?, ?, ?);"
         };
     }
 
