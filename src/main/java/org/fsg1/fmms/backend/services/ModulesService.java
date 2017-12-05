@@ -26,7 +26,7 @@ public class ModulesService extends Service {
     public String getQueryModuleInformation() {
         return
                 "WITH " +
-                        "    prior AS (SELECT Json_build_object('id', m.id, 'code',m.code , 'name', m.name, 'type', (CASE WHEN md.mandatory = TRUE THEN 'mandatory' WHEN md.concurrent THEN 'concurrent' ELSE 'previous' END), 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
+                        "    prior AS (SELECT Json_build_object('id', m.id, 'code',m.code , 'name', m.name, 'type', type::text, 'remarks', Coalesce(md.remarks, '')) AS prior_modules, md.module_id AS module FROM study.moduledependency AS md inner join study.module AS m ON m.id = md.dependency_module_id), " +
                         "    alrow AS (SELECT Row_number() over () AS num, id FROM study.architecturallayer), " +
                         "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
                         "    material AS (SELECT Array_agg(tm.description) AS descs, tm.moduledescription_id AS md_id FROM study.teachingmaterial AS tm GROUP BY tm.moduledescription_id), " +
