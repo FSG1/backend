@@ -26,5 +26,75 @@
     2
   ],
   "credentials": "",
-  "project_flag": true
+  "project_flag": true,
+  "learning_goals": [
+    {
+      "id": 1,
+      "name": "LG 1",
+      "description": "explain major concepts: difference between enterprises, businesses and organisation, primary and secondary processes of a business, organisational structures and Information systems and relations of an organisation and its environment.",
+      "type": "personal",
+      "weight": 1,
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "LG 2",
+      "description": "apply concepts of LG1 in a business game and company visit and analyse, advice, design and implement a strategy in the business game.",
+      "type": "group",
+      "weight": 0.4,
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 3,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 4,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 2,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "assesment_parts": [
+    {
+      "subcode": "BUKI",
+      "description": "BLablablabla",
+      "percentage": 1,
+      "minimal_grade": 5.5,
+      "remark": ""
+    }
+  ],
+  "prior_knowledge_references": [
+    {
+      "id": 4,
+      "code": "LOL",
+      "name": "lolling",
+      "type": "CONCURRENT",
+      "remarks": "ya boi"
+    },
+    {
+      "id": 7,
+      "code": "KUK",
+      "name": "Swedish 101",
+      "type": "PRIOR",
+      "remarks": "kom igen nu va fan"
+    }
+  ]
 }

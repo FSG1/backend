@@ -28,9 +28,9 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
     /**
      * Post a module to be updated.
      *
-     * @param module       Module object containing the updated information. In this case an object resembling a Module, which
-     *                     is shown in test/resources/json/postModule.json.
-     * @param moduleId     Identifier of the module.
+     * @param module   Module object containing the updated information. In this case an object resembling a Module, which
+     *                 is shown in test/resources/json/postModule.json.
+     * @param moduleId Identifier of the module.
      * @return A Response with status code 200 if the update went well, or status code 500
      * if an error occurred internally.
      * @throws Exception In case the update went wrong.
@@ -55,6 +55,9 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
         final ArrayNode lecturers = ((ArrayNode) module.findValue("lecturers"));
         final String credentials = module.findValue("credentials").asText();
         final boolean isProject = module.findValue("project_flag").asBoolean();
+        final ArrayNode learningGoals = (ArrayNode) module.findValue("learning_goals");
+        final ArrayNode assessmentParts = (ArrayNode) module.findValue("assesment_parts");
+        final ArrayNode moduleLinks = (ArrayNode) module.findValue("prior_knowledge_references");
 
         //List all parameters in the order in which they occur in the statement
         final String[] queries = service.getUpdateModuleInformationStatements();
@@ -89,6 +92,50 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
             for (JsonNode lecturer : lecturers) {
                 service.update(conn, queries[7],
                         id, lecturer.asInt());
+            }
+
+            service.update(conn, queries[8],
+                    id);
+
+            for (JsonNode dependency : moduleLinks) {
+                service.update(conn, queries[9],
+                        id,
+                        dependency.findValue("id").asInt(),
+                        dependency.findValue("type").asText(),
+                        dependency.findValue("remarks").asText());
+            }
+
+            service.update(conn, queries[10],
+                    id);
+
+            for (JsonNode learningGoal : learningGoals) {
+                long generatedId = service.update(conn, queries[11],
+                        id,
+                        learningGoal.findValue("description").asText(),
+                        learningGoal.findValue("weight").asDouble(),
+                        !learningGoal.findValue("type").asText().equals("group"));
+
+                final ArrayNode skillmatrix = (ArrayNode) learningGoal.findValue("skillmatrix");
+                for (JsonNode qualification : skillmatrix) {
+                    service.update(conn, queries[12],
+                            generatedId,
+                            qualification.findValue("architectural_layer").asInt(),
+                            qualification.findValue("lifecycle_activity").asInt(),
+                            qualification.findValue("level").asInt());
+                }
+            }
+
+            service.update(conn, queries[13],
+                    id);
+
+            for (JsonNode assessmentPart : assessmentParts) {
+                service.update(conn, queries[14],
+                        assessmentPart.findValue("subcode").asText(),
+                        assessmentPart.findValue("percentage").asDouble(),
+                        assessmentPart.findValue("minimal_grade").asDouble(),
+                        assessmentPart.findValue("remark").asText(),
+                        id,
+                        assessmentPart.findValue("description").asText());
             }
         });
 
