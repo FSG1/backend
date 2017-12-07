@@ -109,7 +109,7 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
                     id);
 
             for (JsonNode learningGoal : learningGoals) {
-                long generatedId = service.update(conn, queries[11],
+                int generatedId = service.update(conn, queries[11],
                         id,
                         learningGoal.findValue("description").asText(),
                         learningGoal.findValue("weight").asDouble(),

@@ -49,7 +49,7 @@ public abstract class Service {
      * a DELETE or UPDATE.
      * @throws Exception if a database access error occurs.
      */
-    public long update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
+    public int update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
         return getConn().executeUpdate(connection, statement, parameters);
     }
 

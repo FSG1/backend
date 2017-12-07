@@ -72,7 +72,7 @@ public final class Connection {
      * a DELETE or UPDATE.
      * @throws SQLException If a database access error occurs or anything else goes wrong.
      */
-    public long executeUpdate(final java.sql.Connection connection,
+    public int executeUpdate(final java.sql.Connection connection,
                               final String statement,
                               final Object... parameters) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
@@ -80,7 +80,7 @@ public final class Connection {
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    return generatedKeys.getLong(1);
+                    return (int) generatedKeys.getLong(1);
                 }
                 return 0;
             } catch (Exception e) {
@@ -128,8 +128,6 @@ public final class Connection {
                 ps.setString(i++, (String) arg);
             } else if (arg instanceof Boolean) {
                 ps.setBoolean(i++, (Boolean) arg);
-            } else if (arg instanceof Long) {
-                ps.setLong(i++, (Long) arg);
             } else if (arg instanceof Double) {
                 ps.setDouble(i++, (Double) arg);
             }
