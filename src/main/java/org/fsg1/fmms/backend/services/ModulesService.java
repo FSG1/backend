@@ -113,15 +113,15 @@ public class ModulesService extends Service {
 
                 //index 9: re-insert module dependencies
                 "INSERT INTO study.moduledependency(module_id, dependency_module_id, type, remarks) " +
-                        "  VALUES (?, ?, ?, ?);",
+                        "  VALUES (?, ?, ?::study.dependencytype, ?);",
 
-                //index 10: delete studies learning goals
+                //index 10: delete studies learning goals.
                 "DELETE FROM study.learninggoal " +
-                        "  WHERE module_id = ? AND id NOT IN (?);",
+                        "  WHERE module_id = ?;",
 
                 //index 11: insert learning goals
                 "INSERT INTO study.learninggoal(module_id, description, sequenceno, weight, groupgoal) " +
-                        "    VALUES (?, ?, ?, ?, ?);",
+                        "    VALUES (?, ?, NULL, ?, ?);",
 
                 //index 12: link learning goals to qualifications
                 "INSERT INTO study.learninggoal_qualification(learninggoal_id, qualification_id) " +
