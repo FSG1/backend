@@ -198,10 +198,10 @@ public class ModuleEndpointsTest extends JerseyTest {
         verify(service, times(1)).update(any(Connection.class), eq(statements[10]), eq(9));
         verify(service, times(1)).update(any(Connection.class), eq(statements[11]), eq(9), eq("apply concepts of LG1 in a business game and company visit and analyse, advice, design and implement a strategy in the business game."), eq(0.4d), eq(false));
         verify(service, times(1)).update(any(Connection.class), eq(statements[11]), eq(9), eq("explain major concepts: difference between enterprises, businesses and organisation, primary and secondary processes of a business, organisational structures and Information systems and relations of an organisation and its environment."), eq(1.0d), eq(true));
-        verify(service, times(2)).update(any(Connection.class), eq(statements[12]), eq(0), eq(1), eq(1), eq(1));
-        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(0), eq(1), eq(3), eq(1));
-        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(0), eq(1), eq(4), eq(1));
-        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(0), eq(1), eq(2), eq(1));
+        verify(service, times(2)).update(any(Connection.class), eq(statements[12]), eq(-1), eq(1), eq(1), eq(1));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(-1), eq(1), eq(3), eq(1));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(-1), eq(1), eq(4), eq(1));
+        verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(-1), eq(1), eq(2), eq(1));
         verify(service, times(1)).update(any(Connection.class), eq(statements[13]), eq((9)));
         verify(service, times(1)).update(any(Connection.class), eq(statements[14]), eq("BUKI"), eq(1.0d), eq(5.5d), eq(""), eq(9), eq("BLablablabla"));
 

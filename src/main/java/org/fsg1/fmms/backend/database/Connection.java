@@ -82,7 +82,7 @@ public final class Connection {
                 if (generatedKeys.next()) {
                     return (int) generatedKeys.getLong(1);
                 }
-                return 0;
+                return -1;
             } catch (Exception e) {
                 connection.rollback();
                 throw e;
