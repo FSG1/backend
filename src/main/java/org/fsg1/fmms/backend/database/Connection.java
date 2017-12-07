@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * The class used for connecting with the Database. It uses the JDBC Driver.
@@ -67,18 +68,25 @@ public final class Connection {
      * @param connection Connection to execute the statement on.
      * @param statement  Statement to perform.
      * @param parameters Array of parameters to map to the statement.
-     * @return A possible result in JSON string form if columnName is given, else an empty string is returned.
+     * @return The generated INSERT id if an INSERT was made, or 0 if no INSERT was made but, for instance,
+     * a DELETE or UPDATE.
      * @throws SQLException If a database access error occurs or anything else goes wrong.
      */
-    public int executeUpdate(final java.sql.Connection connection,
-                             final String statement,
-                             final Object... parameters) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+    public long executeUpdate(final java.sql.Connection connection,
+                              final String statement,
+                              final Object... parameters) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
             mapParams(preparedStatement, parameters);
-            return preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            preparedStatement.executeUpdate();
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                }
+                return 0;
+            } catch (Exception e) {
+                connection.rollback();
+                throw e;
+            }
         }
     }
 
@@ -120,6 +128,8 @@ public final class Connection {
                 ps.setString(i++, (String) arg);
             } else if (arg instanceof Boolean) {
                 ps.setBoolean(i++, (Boolean) arg);
+            } else if (arg instanceof Long) {
+                ps.setLong(i++, (Long) arg);
             }
         }
     }
