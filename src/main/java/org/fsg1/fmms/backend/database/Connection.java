@@ -130,6 +130,8 @@ public final class Connection {
                 ps.setBoolean(i++, (Boolean) arg);
             } else if (arg instanceof Long) {
                 ps.setLong(i++, (Long) arg);
+            } else if (arg instanceof Double) {
+                ps.setDouble(i++, (Double) arg);
             }
         }
     }
