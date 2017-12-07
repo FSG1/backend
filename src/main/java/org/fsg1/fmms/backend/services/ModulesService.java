@@ -97,7 +97,7 @@ public class ModulesService extends Service {
 
                 //index 5: re-insert module teaching materials
                 "INSERT INTO study.teachingmaterial (moduledescription_id, type, description) " +
-                        "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), ?::study.teachingmaterials, ?)",
+                        "    VALUES ((SELECT id FROM study.moduledescription WHERE module_id = ?), (upper(?)::study.teachingmaterials), ?)",
 
                 //index 6: delete linked employees
                 "DELETE FROM study.module_employee " +
@@ -113,7 +113,7 @@ public class ModulesService extends Service {
 
                 //index 9: re-insert module dependencies
                 "INSERT INTO study.moduledependency(module_id, dependency_module_id, type, remarks) " +
-                        "  VALUES (?, ?, ?::study.dependencytype, ?);",
+                        "  VALUES (?, ?, (upper(?)::study.dependencytype), ?);",
 
                 //index 10: delete studies learning goals.
                 "DELETE FROM study.learninggoal " +
