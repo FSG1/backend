@@ -116,7 +116,7 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
                         learningGoal.findValue("weight").asDouble(),
                         !learningGoal.findValue("type").asText().equals("group"));
 
-                if(generatedId < 0) throw new AppException(500, "Incorrect id returned on insert");
+                if (generatedId < 0) throw new AppException(500, "Incorrect id returned on insert");
 
                 final ArrayNode skillmatrix = (ArrayNode) learningGoal.findValue("skillmatrix");
                 for (JsonNode qualification : skillmatrix) {
