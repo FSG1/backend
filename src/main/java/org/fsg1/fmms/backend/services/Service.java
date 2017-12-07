@@ -45,10 +45,12 @@ public abstract class Service {
      * @param connection Connection to use.
      * @param statement  Statements to perform.
      * @param parameters Array of parameters to give to the query.
+     * @return The generated INSERT id if an INSERT was made, or 0 if no INSERT was made but, for instance,
+     * a DELETE or UPDATE.
      * @throws Exception if a database access error occurs.
      */
-    public void update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
-        getConn().executeUpdate(connection, statement, parameters);
+    public int update(final java.sql.Connection connection, final String statement, final Object... parameters) throws Exception {
+        return getConn().executeUpdate(connection, statement, parameters);
     }
 
     /**

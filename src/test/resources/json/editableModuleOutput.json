@@ -3,7 +3,27 @@
   "code": "BUKI",
   "name": "Some stuff",
   "credits": 4,
-  "credentials": "",
+  "semesters": [
+    1
+  ],
+  "lectures_in_week": 1,
+  "practical_hours_week": 4,
+  "introductorytext": "",
+  "topics": [
+  ],
+  "teaching_material": [
+    {
+      "name": "asdfasdf",
+      "type": "WEBSITE"
+    }
+  ],
+  "teaching_material_types": [
+    "BOOK",
+    "WEBSITE",
+    "ARTICLE",
+    "OTHER"
+  ],
+  "additional_information": "",
   "all_lecturers": [
     {
       "id": 10,
@@ -54,6 +74,72 @@
     {
       "id": 5,
       "name": "JAYSON"
+    }
+  ],
+  "credentials": "",
+  "project_flag": false,
+  "learning_goals": [
+    {
+      "name": "LG 1",
+      "description": "explain major concepts: difference between enterprises, businesses and organisation, primary and secondary processes of a business, organisational structures and Information systems and relations of an organisation and its environment.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "name": "LG 2",
+      "description": "apply concepts of LG1 in a business game and company visit and analyse, advice, design and implement a strategy in the business game.",
+      "type": "personal",
+      "skillmatrix": [
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 3,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 4,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 2,
+          "level": 1
+        },
+        {
+          "architectural_layer": 1,
+          "lifecycle_activity": 1,
+          "level": 1
+        }
+      ]
+    }
+  ],
+  "assesment_parts": [
+    {
+      "subcode": "BUKI",
+      "description": "BLablablabla",
+      "percentage": 1,
+      "minimal_grade": 5.5,
+      "remark": ""
+    }
+  ],
+  "prior_knowledge_references": [
+  ],
+  "modules": [
+    {
+      "id": 41,
+      "code": "MODU1",
+      "name": "Module 1"
+    },
+    {
+      "id": 21,
+      "code": "MODU2",
+      "name": "Module 2"
     }
   ],
   "lifecycle_activities": [
@@ -125,71 +211,7 @@
       "description": "UNDEFINED"
     }
   ],
-  "learning_goals": [
-    {
-      "name": "LG 1",
-      "description": "explain how to raid.",
-      "type": "personal",
-      "skillmatrix": [
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 1,
-          "level": 1
-        }
-      ]
-    },
-    {
-      "name": "LG 2",
-      "description": "apply more dots.",
-      "type": "personal",
-      "skillmatrix": [
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 3,
-          "level": 1
-        },
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 4,
-          "level": 1
-        },
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 2,
-          "level": 1
-        },
-        {
-          "architectural_layer": 1,
-          "lifecycle_activity": 1,
-          "level": 1
-        }
-      ]
-    }
-  ],
-  "lectures_in_week": 1,
-  "practical_hours_week": 4,
-  "total_effort": 112,
-  "introductorytext": "",
-  "additional_information": "",
-  "topics": [
-
-  ],
-  "semesters": [
-    1
-  ],
-  "teaching_material": [
-
-  ],
-  "teaching_material_types": [
-    "BOOK",
-    "WEBSITE",
-    "ARTICLE",
-    "OTHER"
-  ],
-  "project_flag": false,
-  "prior_knowledge_references": [
-
-  ],
+  "total_effort": 110002,
   "qualifications": [
     {
       "lifecycle_activity": 1,
@@ -210,15 +232,6 @@
       "lifecycle_activity": 3,
       "architectural_layer": 1,
       "level": 1
-    }
-  ],
-  "assesment_parts": [
-    {
-      "subcode": "BUL",
-      "description": "Bullying people 101",
-      "percentage": 1,
-      "minimal_grade": 5.5,
-      "remark": ""
     }
   ]
 }

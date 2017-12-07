@@ -41,6 +41,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
     /**
      * Apply the filter : check input request, validate or not with user auth.
+     *
      * @param containerRequest The request from server
      */
     @Override

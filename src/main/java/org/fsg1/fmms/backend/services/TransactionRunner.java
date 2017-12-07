@@ -10,6 +10,7 @@ public interface TransactionRunner {
 
     /**
      * Method to perform.
+     *
      * @param conn Connection to use.
      * @throws Exception If a database access error occurs or anything else goes wrong interacting with the database.
      */

@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,8 +57,8 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
     @Test
     public void testSetParameters() throws Exception {
         Connection conn = new Connection(configMock, bds);
-        String query = "SELECT * FROM ?";
-        Object[] params = new Object[]{"tablename", 2, 4, "fourth param"};
+        String query = "SELECT * FROM ? ? ? ? ?";
+        Object[] params = new Object[]{"tablename", 2, 4, "fourth param", 4.5d};
 
         conn.executeQuery(null, query, params);
         final List<MockPreparedStatement> preparedStatements = getJDBCMockObjectFactory().getMockConnection()
@@ -68,8 +67,12 @@ public class ConnectionTest extends BasicJDBCTestCaseAdapter {
         assertEquals(preparedStatements.get(0).getSQL(), query);
 
         final MockParameterMap parameterMap = preparedStatements.get(0).getIndexedParameterMap();
-        assertEquals(parameterMap.size(), 1);
+        assertEquals(parameterMap.size(), 5);
         assertEquals(parameterMap.get(1), "tablename");
+        assertEquals(parameterMap.get(2), 2);
+        assertEquals(parameterMap.get(3), 4);
+        assertEquals(parameterMap.get(4), "fourth param");
+        assertEquals(parameterMap.get(5), 4.5d);
         verifyConnectionClosed();
     }
 
