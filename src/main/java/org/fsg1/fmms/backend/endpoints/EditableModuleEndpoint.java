@@ -2,6 +2,7 @@ package org.fsg1.fmms.backend.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.fsg1.fmms.backend.exceptions.AppException;
 import org.fsg1.fmms.backend.services.ModulesService;
 
 import javax.inject.Inject;
@@ -114,6 +115,8 @@ public class EditableModuleEndpoint extends Endpoint<ModulesService> {
                         learningGoal.findValue("description").asText(),
                         learningGoal.findValue("weight").asDouble(),
                         !learningGoal.findValue("type").asText().equals("group"));
+
+                if(generatedId < 0) throw new AppException(500, "Incorrect id returned on insert");
 
                 final ArrayNode skillmatrix = (ArrayNode) learningGoal.findValue("skillmatrix");
                 for (JsonNode qualification : skillmatrix) {

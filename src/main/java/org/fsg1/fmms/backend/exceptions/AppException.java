@@ -7,13 +7,13 @@ import javax.ws.rs.core.Response;
 /**
  * Class to map application related exceptions.
  */
-class AppException extends WebApplicationException {
+public class AppException extends WebApplicationException {
 
     /**
      * @param status       status code.
      * @param errorMessage error message.
      */
-    AppException(final int status, final String errorMessage) {
+    public AppException(final int status, final String errorMessage) {
         super(Response
                 .status(status)
                 .entity(errorMessage)
