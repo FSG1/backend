@@ -29,7 +29,7 @@ Meaning that this
 @Path("/hello/world
 Class A {}
 
-@Path("/"
+@Path("/")
 Class B {
   @Path("hello/world/again")
   public Response doStuff(){}
@@ -46,12 +46,19 @@ Be sure to register any new services in the AppBinder class!
 ### Filters
 A filter can be used to preprocess any incoming requests and outgoing responses. This is used by implementing the `ContainerRequestFilter` and `ContainerResponseFilter` interface. One method will need to be implemented that provides the `Context` of both situations.
 
+Be sure to register any new filters in the Main class!
+
 ### Tests
 The main part of tests will test the `Endpoint` and `Services` separately.
 
 The use of the `Endpoint` tests is to ensure the right status codes are given, and any input is processed correctly.
 
 The use of the `Service` tests is to test any output from the database is processed correctly and given to the Endpoint.
+
+### Configuration
+The `Configuration` class provides important information such as database credentials and database urls to the runtime environment.
+
+You can change these by supplying environment variables when running the project.
 
 ### Database connection
 The `Connection` class ensures a connection to the PostgreSQL database. 
