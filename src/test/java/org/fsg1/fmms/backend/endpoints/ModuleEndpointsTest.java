@@ -25,6 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -204,6 +205,44 @@ public class ModuleEndpointsTest extends JerseyTest {
         verify(service, times(1)).update(any(Connection.class), eq(statements[12]), eq(0), eq(1), eq(2), eq(1));
         verify(service, times(1)).update(any(Connection.class), eq(statements[13]), eq((9)));
         verify(service, times(1)).update(any(Connection.class), eq(statements[14]), eq("BUKI"), eq(1.0d), eq(5.5d), eq(""), eq(9), eq("BLablablabla"));
+    }
 
+    @Test
+    public void testGetPdfServerError() throws Exception {
+        given()
+                .spec(spec)
+                .get("curriculum/1/module/BUA1/pdf")
+                .then()
+                .statusCode(500);
+        verify(service, times(0)).getQueryModuleInformation();
+    }
+
+    @Test
+    public void testGetPdfModuleNotFound() throws Exception {
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("BUA1")))
+                .thenThrow(new EntityNotFoundException());
+
+        given()
+                .spec(spec)
+                .get("curriculum/1/module/BUA1/pdf")
+                .then()
+                .statusCode(404);
+        verify(service, times(2)).get(eq(service.getQueryEditableModule()), eq("module"), eq("BUA1"));
+    }
+
+    @Test
+    public void testGetPdf() throws Exception {
+        JsonNode node = mapper.readTree(Files.readAllBytes(Paths.get("src/test/resources/json/module.json")));
+        File file = new File("src/test/resources/json/curricula.json");
+        //Dependency injection pdf generator
+        when(service.get(eq(service.getQueryModuleInformation()), eq("module"), eq("BUA1"), eq(1)))
+                .thenReturn(node);
+        given()
+                .spec(spec)
+                .get("curriculum/1/module/BUA1")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", MediaType.APPLICATION_JSON);
+        verify(service, times(2)).get(eq(service.getQueryModuleInformation()), eq("module"), eq(1), eq("BUA1"));
     }
 }

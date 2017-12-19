@@ -55,7 +55,8 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
     public Response getModulePDF(@PathParam("curriculum_id") final int curriculumId,
                                  @PathParam("module_id") final String moduleId) throws Exception {
         final ModulesService service = getService();
-        File file = new File("src/test/resources/json/curricula.json");
+        //final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
+        File file = new File("src/test/resources/pdf.pdf");
         return Response.status(Response.Status.OK).entity(file)
                 .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"" )
                 .build();
