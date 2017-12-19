@@ -10,6 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * The class containing the 'modules' endpoints that are used to only display a module.
@@ -44,5 +47,17 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         final JsonNode result = service.get(service.getQueryModuleInformation(), "module", moduleId, curriculumId);
         final String jsonString = result.toString();
         return Response.status(Response.Status.OK).entity(jsonString).build();
+    }
+
+    @GET
+    @Path("/pdf")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getModulePDF(@PathParam("curriculum_id") final int curriculumId,
+                                 @PathParam("module_id") final String moduleId) throws Exception {
+        final ModulesService service = getService();
+        File file = new File("src/test/resources/json/curricula.json");
+        return Response.status(Response.Status.OK).entity(file)
+                .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"" )
+                .build();
     }
 }
