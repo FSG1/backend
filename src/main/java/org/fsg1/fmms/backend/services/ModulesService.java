@@ -189,4 +189,67 @@ public class ModulesService extends Service {
                         "  left join study.moduledescription AS md ON md.module_id = m.id " +
                         "WHERE m.code = ?;";
     }
+
+    public String latexHeader(final String moduleName,
+                              final int semester,
+                              final int credits,
+                              final int lectures,
+                              final int practicalHours,
+                              final int totalEffort,
+                              final String authors,
+                              final String credentials) {
+        return
+                "\\begin{header}\n" +
+                        "\t\\Module{" + moduleName + "}\n" +
+                        "\t\\Semester{" + semester + "}\n" +
+                        "\t\\Credits{" + credits + "}\n" +
+                        "\t\\ValidOf{\\today}\n" +
+                        "\t\\Lectures{" + lectures + "}\n" +
+                        "\t\\Practical{" + practicalHours + "}\n" +
+                        "\t\\TotalEffort{" + totalEffort + "}\n" +
+                        "\t\\Authors{" + authors + "}\n" +
+                        "\t\\Credentials{" + credentials + "}\n" +
+                        "\\end{header}\n";
+    }
+
+    public String latexIntroduction(final String introduction){
+        return
+                "\\Introduction{" + introduction + "}\n";
+    }
+
+    public String latexLearningGoal(final String name, final String description){
+        return
+                "\\LearningGoal{"+name+"}{"+description+"}\n";
+    }
+
+    public String latexTopic(final String topic){
+        return
+                "\\Topic{"+topic+"}\n";
+    }
+
+    public String latexExam(
+            final String subCode,
+            final String description,
+            final double percentage,
+            final double minGrade){
+        return
+                "\\Exam{"+subCode+"}{"+description+"}{"+percentage+"}{"+minGrade+"}\n";
+    }
+
+    public String latexTeachingMaterial(final String description){
+        return
+                "\\Material{"+description+"}\n";
+    }
+
+    public String latexModuleLink(final String code, final String name, final String type){
+        return
+                "\\Module{"+code+"}{"+name+"}{"+type+"}\n";
+    }
+
+    public String latexAdditionalInformation(final String information){
+        return
+                "\\AdditionalInformation{"+information+"}\n";
+    }
+
+
 }
