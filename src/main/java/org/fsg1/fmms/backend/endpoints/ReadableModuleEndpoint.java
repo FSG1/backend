@@ -111,7 +111,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
                 lecturersLinked,
                 credentials));
 
-        if (introText.isEmpty()) {
+        if (!introText.isEmpty()) {
             latexBuilder.append(service.latexIntroduction(introText.replace("\\n", "\\newline")));
         }
 
@@ -197,8 +197,10 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             latexBuilder.append("\\end{priorknowledge}\n");
         }
 
-        latexBuilder.append(service.latexAdditionalInformation(additionalInformation.replace(
-                "\\n", "\\newline")));
+        if(!additionalInformation.isEmpty()){
+            latexBuilder.append(service.latexAdditionalInformation(additionalInformation.replace(
+                    "\\n", "\\newline")));
+        }
 
         latexBuilder.append("\\end{document}\n");
 
