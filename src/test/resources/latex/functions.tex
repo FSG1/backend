@@ -18,6 +18,9 @@
 
 \geometry{a4paper}
 
+\def\mydate{\leavevmode\hbox{\twodigits\day}-\twodigits\month-\the\year}
+\def\twodigits#1{\ifnum#1<10 0\fi\the#1}
+
 \newcommand{\grey}[0]{\cellcolor[HTML]{9B9B9B}}
 \newcommand{\cell}[1]{#1}
 \newcommand{\multicell}[2]{\multicolumn{#1}{l|}{#2}}

@@ -214,7 +214,7 @@ public class ModulesService extends Service {
                         "\t\\Module{" + moduleName + "}\n" +
                         "\t\\Semester{" + semester + "}\n" +
                         "\t\\Credits{" + credits + "}\n" +
-                        "\t\\ValidOf{\\today}\n" +
+                        "\t\\ValidOf{\\mydate}\n" +
                         "\t\\Lectures{" + lectures + "}\n" +
                         "\t\\Practical{" + practicalHours + "}\n" +
                         "\t\\TotalEffort{" + totalEffort + "}\n";
