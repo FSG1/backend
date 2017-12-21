@@ -190,15 +190,26 @@ public class ModulesService extends Service {
                         "WHERE m.code = ?;";
     }
 
+    /**
+     * @param moduleName     Name of the module.
+     * @param semester       Semester of the module.
+     * @param credits        Credits.
+     * @param lectures       Lectures per week.
+     * @param practicalHours Practical hours per week.
+     * @param totalEffort    Total effort the module takes.
+     * @param lecturers      Lecturers of the module.
+     * @param credentials    Credentials. May be empty.
+     * @return A LaTeX string with the main module information formatted.
+     */
     public String latexHeader(final String moduleName,
                               final int semester,
                               final int credits,
                               final int lectures,
                               final int practicalHours,
                               final int totalEffort,
-                              final String authors,
+                              final String lecturers,
                               final String credentials) {
-        return
+        String result =
                 "\\begin{header}\n" +
                         "\t\\Module{" + moduleName + "}\n" +
                         "\t\\Semester{" + semester + "}\n" +
@@ -207,49 +218,87 @@ public class ModulesService extends Service {
                         "\t\\Lectures{" + lectures + "}\n" +
                         "\t\\Practical{" + practicalHours + "}\n" +
                         "\t\\TotalEffort{" + totalEffort + "}\n" +
-                        "\t\\Authors{" + authors + "}\n" +
-                        "\t\\Credentials{" + credentials + "}\n" +
-                        "\\end{header}\n";
+                        "\t\\Authors{" + lecturers + "}\n";
+
+        if (!credentials.isEmpty()) {
+            result +=
+                    "\t\\Credentials{" + credentials + "}\n";
+        }
+        result += "\\end{header}\n";
+
+        return result;
     }
 
-    public String latexIntroduction(final String introduction){
+    /**
+     * @param introduction Introduction text.
+     * @return a LaTeX string with the module introduction formatted.
+     */
+    public String latexIntroduction(final String introduction) {
         return
                 "\\Introduction{" + introduction + "}\n";
     }
 
-    public String latexLearningGoal(final String name, final String description){
+    /**
+     * @param name        Name of the learning goal.
+     * @param description Description.
+     * @return a LaTeX string with one learning goal formatted.
+     */
+    public String latexLearningGoal(final String name, final String description) {
         return
-                "\\LearningGoal{"+name+"}{"+description+"}\n";
+                "\\LearningGoal{" + name + "}{" + description + "}\n";
     }
 
-    public String latexTopic(final String topic){
+    /**
+     * @param topic Topic name
+     * @return a LaTeX string with one topic formatted.
+     */
+    public String latexTopic(final String topic) {
         return
-                "\\Topic{"+topic+"}\n";
+                "\\Topic{" + topic + "}\n";
     }
 
+    /**
+     * @param subCode     ProgRESS subcode of the exam.
+     * @param description Description.
+     * @param percentage  Percentage weight.
+     * @param minGrade    Minimal grade.
+     * @return a LaTeX string with one assessment part formatted.
+     */
     public String latexExam(
             final String subCode,
             final String description,
             final double percentage,
-            final double minGrade){
+            final double minGrade) {
         return
-                "\\Exam{"+subCode+"}{"+description+"}{"+percentage+"}{"+minGrade+"}\n";
+                "\\Exam{" + subCode + "}{" + description + "}{" + percentage + "}{" + minGrade + "}\n";
     }
 
-    public String latexTeachingMaterial(final String description){
+    /**
+     * @param description Description.
+     * @return a LaTeX string with a teaching material formatted.
+     */
+    public String latexTeachingMaterial(final String description) {
         return
-                "\\Material{"+description+"}\n";
+                "\\Material{" + description + "}\n";
     }
 
-    public String latexModuleLink(final String code, final String name, final String type){
+    /**
+     * @param code Code of the module that is linked.
+     * @param name Name of the module.
+     * @param type Type of link.
+     * @return a LaTeX string with one module link formatted.
+     */
+    public String latexModuleLink(final String code, final String name, final String type) {
         return
-                "\\Module{"+code+"}{"+name+"}{"+type+"}\n";
+                "\\Module{" + code + "}{" + name + "}{" + type + "}\n";
     }
 
-    public String latexAdditionalInformation(final String information){
+    /**
+     * @param information Additional information.
+     * @return a LaTeX string with additional information formatted.
+     */
+    public String latexAdditionalInformation(final String information) {
         return
-                "\\AdditionalInformation{"+information+"}\n";
+                "\\AdditionalInformation{" + information + "}\n";
     }
-
-
 }

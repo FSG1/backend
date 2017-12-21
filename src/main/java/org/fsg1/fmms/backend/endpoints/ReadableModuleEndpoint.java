@@ -13,7 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -92,8 +91,8 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         latexBuilder.append(latexFunctions);
 
         StringBuilder arrayLinker = new StringBuilder();
-        lecturers.forEachRemaining(lecturer -> arrayLinker.append(lecturer.asText() + ", "));
-        if(arrayLinker.length() > 2){
+        lecturers.forEachRemaining(lecturer -> arrayLinker.append(lecturer.asText()).append(", "));
+        if (arrayLinker.length() > 2) {
             arrayLinker.deleteCharAt(arrayLinker.length() - 1);
             arrayLinker.deleteCharAt(arrayLinker.length() - 1);
         }
@@ -112,30 +111,36 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
                 lecturersLinked,
                 credentials));
 
-        latexBuilder.append(service.latexIntroduction(introText.replace("\\n", "\\newline")));
+        if (introText.isEmpty()) {
+            latexBuilder.append(service.latexIntroduction(introText.replace("\\n", "\\newline")));
+        }
 
         latexBuilder.append("\\begin{learninggoals}");
         learningGoals.forEach(goal -> {
-            if(goal.findValue("type").asText().equals("personal")){
-                latexBuilder.append(service.latexLearningGoal(
-                        goal.findValue("name").asText(),
-                        goal.findValue("description").asText()
-                        ));
-            }
-        });
-
-        latexBuilder.append("\\GroupGoals\n");
-        learningGoals.forEach(goal -> {
-            if(goal.findValue("type").asText().equals("group")){
+            if (goal.findValue("type").asText().equals("personal")) {
                 latexBuilder.append(service.latexLearningGoal(
                         goal.findValue("name").asText(),
                         goal.findValue("description").asText()
                 ));
             }
         });
+
+        final List<JsonNode> goalTypes = learningGoals.findValues("type");
+        if (goalTypes.stream().filter(type -> type.asText().equals("group")).count() > 0) {
+            latexBuilder.append("\\GroupGoals\n");
+            learningGoals.forEach(goal -> {
+                if (goal.findValue("type").asText().equals("group")) {
+                    latexBuilder.append(service.latexLearningGoal(
+                            goal.findValue("name").asText(),
+                            goal.findValue("description").asText()
+                    ));
+                }
+            });
+        }
+
         latexBuilder.append("\\end{learninggoals}\n");
 
-        if(topics.size() != 0){
+        if (topics.size() != 0) {
             latexBuilder.append("\\begin{topics}\n");
             topics.forEach(topic -> {
                 latexBuilder.append(service.latexTopic(topic.asText()));
@@ -149,11 +154,11 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             final int activity = qualification.findValue("lifecycle_activity").asInt();
             final int level = qualification.findValue("level").asInt();
 
-            if(layer == 5){
+            if (layer == 5) {
                 latexBuilder.append("\\ProBehaviour{").append(level).append("}\n");
-            } else if(layer == 6){
+            } else if (layer == 6) {
                 latexBuilder.append("\\Research{").append(level).append("}\n");
-            } else{
+            } else {
                 latexBuilder.append("\\").append(ArchitecturalLayerMapper.mapInt(layer)).append("{\n");
                 latexBuilder.append("\\").append(LifecycleActivityMapper.mapInt(activity)).append("{").append(level).append("}\n");
                 latexBuilder.append("}\n");
@@ -172,7 +177,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         });
         latexBuilder.append("\\end{exams}\n");
 
-        if(teachingMaterials.size() != 0) {
+        if (teachingMaterials.size() != 0) {
             latexBuilder.append("\\begin{teachingmaterial}\n");
             teachingMaterials.forEach(material -> {
                 latexBuilder.append(service.latexTeachingMaterial(material.asText()));
@@ -180,7 +185,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             latexBuilder.append("\\end{teachingmaterial}\n");
         }
 
-        if(moduleLinks.size() != 0){
+        if (moduleLinks.size() != 0) {
             latexBuilder.append("\\begin{priorknowledge}\n");
             moduleLinks.forEach(link -> {
                 latexBuilder.append(service.latexModuleLink(
