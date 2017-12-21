@@ -31,7 +31,7 @@ public class ModulesService extends Service {
                         "    acrow AS (SELECT Row_number() over () AS num, id FROM study.activity), " +
                         "    material AS (SELECT Array_agg(tm.description) AS descs, tm.moduledescription_id AS md_id FROM study.teachingmaterial AS tm GROUP BY tm.moduledescription_id), " +
                         "    skills AS (SELECT Array_to_json(Array_agg(Json_build_object('architectural_layer', (SELECT (num - 1) FROM alrow WHERE alrow.id = q.architecturallayer_id), 'lifecycle_activity', (SELECT (num - 1) FROM acrow WHERE acrow.id = q.activity_id), 'level', los.LEVEL))) AS json, lq.learninggoal_id FROM study.learninggoal_qualification AS lq inner join study.qualification AS q ON q.id = lq.qualification_id inner join study.levelofskill AS los ON los.id = q.levelofskill_id GROUP BY lq.learninggoal_id), " +
-                        "    lg AS (SELECT Array_to_json(Array_agg(Json_build_object('name', Concat('LG ', sequenceno), 'description', description, 'type', (CASE lg.groupgoal WHEN TRUE THEN 'group' ELSE 'personal' END), 'skillmatrix', Coalesce((SELECT json FROM skills WHERE skills.learninggoal_id = lg.id), '[]'::json)))) AS json, lg.module_id FROM study.learninggoal AS lg GROUP BY module_id), " +
+                        "    lg AS (SELECT Array_to_json(Array_agg(Json_build_object('name', Concat('LG ', sequenceno), 'description', description, 'type', (CASE lg.groupgoal WHEN TRUE THEN 'group' ELSE 'personal' END), 'skillmatrix', Coalesce((SELECT json FROM skills WHERE skills.learninggoal_id = lg.id), '[]'::json)) order by lg.sequenceno)) AS json, lg.module_id FROM study.learninggoal AS lg GROUP BY module_id), " +
                         "    activities AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.activity), " +
                         "    als AS (SELECT Array_to_json(Array_agg(Json_build_object('id', id, 'name', name, 'description', description))) AS json FROM study.architecturallayer), " +
                         "    topics AS (SELECT array_to_json(array_agg(t.description order BY t.sequenceno)) AS topics, t.module_id AS module FROM study.moduletopic AS t GROUP BY t.module_id), " +
@@ -188,5 +188,121 @@ public class ModulesService extends Service {
                         ") AS module FROM study.module AS m " +
                         "  left join study.moduledescription AS md ON md.module_id = m.id " +
                         "WHERE m.code = ?;";
+    }
+
+    /**
+     * @param moduleName     Name of the module.
+     * @param semester       Semester of the module.
+     * @param credits        Credits.
+     * @param lectures       Lectures per week.
+     * @param practicalHours Practical hours per week.
+     * @param totalEffort    Total effort the module takes.
+     * @param lecturers      Lecturers of the module.
+     * @param credentials    Credentials. May be empty.
+     * @return A LaTeX string with the main module information formatted.
+     */
+    public String latexHeader(final String moduleName,
+                              final int semester,
+                              final int credits,
+                              final int lectures,
+                              final int practicalHours,
+                              final int totalEffort,
+                              final String lecturers,
+                              final String credentials) {
+        String result =
+                "\\begin{header}\n" +
+                        "\t\\Module{" + moduleName + "}\n" +
+                        "\t\\Semester{" + semester + "}\n" +
+                        "\t\\Credits{" + credits + "}\n" +
+                        "\t\\ValidOf{\\mydate}\n" +
+                        "\t\\Lectures{" + lectures + "}\n" +
+                        "\t\\Practical{" + practicalHours + "}\n" +
+                        "\t\\TotalEffort{" + totalEffort + "}\n";
+
+        if (!lecturers.isEmpty()) {
+            result +=
+                    "\t\\Authors{" + lecturers + "}\n";
+        }
+
+        if (!credentials.isEmpty()) {
+            result +=
+                    "\t\\Credentials{" + credentials + "}\n";
+        }
+        result += "\\end{header}\n";
+
+        return result;
+    }
+
+    /**
+     * @param introduction Introduction text.
+     * @return a LaTeX string with the module introduction formatted.
+     */
+    public String latexIntroduction(final String introduction) {
+        return
+                "\\Introduction{" + introduction + "}\n";
+    }
+
+    /**
+     * @param name        Name of the learning goal.
+     * @param description Description.
+     * @return a LaTeX string with one learning goal formatted.
+     */
+    public String latexLearningGoal(final String name, final String description) {
+        return
+                "\\LearningGoal{" + name + "}{" + description + "}\n";
+    }
+
+    /**
+     * @param topic Topic name
+     * @return a LaTeX string with one topic formatted.
+     */
+    public String latexTopic(final String topic) {
+        return
+                "\\Topic{" + topic + "}\n";
+    }
+
+    /**
+     * @param subCode     ProgRESS subcode of the exam.
+     * @param description Description.
+     * @param percentage  Percentage weight.
+     * @param minGrade    Minimal grade.
+     * @return a LaTeX string with one assessment part formatted.
+     */
+    public String latexExam(
+            final String subCode,
+            final String description,
+            final double percentage,
+            final double minGrade) {
+        return
+                "\\Exam{" + subCode + "}{" + description + "}{" + percentage + "}{" + minGrade + "}\n";
+    }
+
+    /**
+     * @param description Description.
+     * @return a LaTeX string with a teaching material formatted.
+     */
+    public String latexTeachingMaterial(final String description) {
+        return
+                "\\Material{" + description + "}\n";
+    }
+
+    /**
+     * @param code Code of the module that is linked.
+     * @param name Name of the module.
+     * @param type Type of link.
+     * @return a LaTeX string with one module link formatted.
+     */
+    public String latexModuleLink(final String code, final String name, final String type) {
+        return
+                "\\Module{" + code + "}{" + name + "}{" + type + "}\n";
+    }
+
+    /**
+     * @param information Additional information.
+     * @return a LaTeX string with additional information formatted.
+     */
+    public String latexAdditionalInformation(final String information) {
+        return
+                "\\AdditionalInformation{" + information + "}\n";
     }
 }
