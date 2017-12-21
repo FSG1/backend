@@ -1,0 +1,331 @@
+\documentclass[12pt]{article}
+
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{array}
+
+\geometry{a4paper}
+
+\newcommand{\grey}[0]{\cellcolor[HTML]{9B9B9B}}
+\newcommand{\cell}[1]{#1}
+\newcommand{\multicell}[2]{\multicolumn{#1}{l|}{#2}}
+\newcommand{\greyCell}[1]{\grey{}\cell{\textbf{#1}}}
+\newcommand{\nospace}[0]{\vspace{-1.8em}}
+\renewcommand{\rotate}[1]{\rotatebox{90}{#1}}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+
+\renewcommand{\arraystretch}{1.5}
+\addtolength{\oddsidemargin}{-.6in}
+\addtolength{\evensidemargin}{-.6in}
+\addtolength{\textwidth}{1.2in}
+
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.2in}
+
+\newenvironment{header}[0]{
+	\newcommand{\PrintModule}[0]{}
+	\newcommand{\Module}[1]{
+		\renewcommand{\PrintModule}[0]{\greyCell{Module} & \multicolumn{5}{l|}{##1} \\ \hline}
+	}
+
+	\newcommand{\PrintAuthors}[0]{}
+	\newcommand{\Authors}[1]{
+		\renewcommand{\PrintAuthors}[0]{\greyCell{Authors} & \multicolumn{5}{l|}{##1} \\ \hline}
+	}
+
+	\newcommand{\PrintCredentials}[0]{}
+	\newcommand{\Credentials}[1]{
+		\renewcommand{\PrintCredentials}[0]{\greyCell{Credentials} & \multicolumn{5}{l|}{##1} \\ \hline}
+	}
+
+	\newcommand{\PrintInfo}[0]{}
+	\newcommand{\SemesterValue}[0]{}
+	\newcommand{\CreditsValue}[0]{}
+	\newcommand{\ValidOfValue}[0]{}
+	\newcommand{\DeclareInfoRow}[0]{
+		\renewcommand{\PrintInfo}[0]{\greyCell{Semester} & \SemesterValue & \greyCell{Credits (ECTS)} & \CreditsValue & \greyCell{Valid as of} & \ValidOfValue \\ \hline}
+	}
+	\newcommand{\Semester}[1]{
+		\DeclareInfoRow
+		\renewcommand{\SemesterValue}[0]{##1}
+	}
+	\newcommand{\Credits}[1]{
+		\DeclareInfoRow
+		\renewcommand{\CreditsValue}[0]{##1}
+	}
+	\newcommand{\ValidOf}[1]{
+		\DeclareInfoRow
+		\renewcommand{\ValidOfValue}[0]{##1}
+	}
+
+	\newcommand{\PrintHours}[0]{}
+	\newcommand{\LecturesValue}[0]{}
+	\newcommand{\PracticalValue}[0]{}
+	\newcommand{\TotalEffortValue}[0]{}
+	\newcommand{\DeclareHoursRow}[0]{
+		\renewcommand{\PrintHours}[0]{
+			\greyCell{Lectures / week} & \LecturesValue & \greyCell{Practical Hours / week} & \PracticalValue & \greyCell{Total Effort} & \TotalEffortValue hours \\ \hline
+		}
+	}
+	\newcommand{\Lectures}[1]{
+		\DeclareHoursRow
+		\renewcommand{\LecturesValue}[0]{##1}
+	}
+	\newcommand{\Practical}[1]{
+		\DeclareHoursRow
+		\renewcommand{\PracticalValue}[0]{##1}
+	}
+	\newcommand{\TotalEffort}[1]{
+		\DeclareHoursRow
+		\renewcommand{\TotalEffortValue}[0]{##1}
+	}
+}{
+	\begin{table}[H]
+		\begin{tabularx}{\textwidth}{|l|Y|l|Y|l|l|}
+			\hline
+			\PrintModule
+			\PrintInfo
+			\PrintHours
+			\PrintAuthors
+			\PrintCredentials
+		\end{tabularx}
+	\end{table}
+	\nospace
+}
+
+\newenvironment{priorknowledge}[0]{
+	\newcommand{\Module}[3]{
+		\item ##1 - ##2 (##3)
+	}
+	\table[H]
+		\tabularx{\textwidth}{|X|}
+		\hline
+		\greyCell{Prior Knowledge} \\ \hline
+		\itemize[noitemsep,topsep=0pt]
+}{
+		\enditemize  \\ \hline
+		\endtabularx
+	\endtable
+	\nospace
+}
+
+\newcommand{\Introduction}[1]{
+	\begin{table}[H]
+		\begin{tabularx}{\textwidth}{|X|}
+			\hline
+			\greyCell{Introduction and Motivation} \\ \hline
+			#1 \\ \hline
+		\end{tabularx}
+	\end{table}
+	\nospace
+}
+
+\newenvironment{learninggoals}[0]{
+	\newcommand{\LearningGoal}[2]{
+		##1 & ##2 \\ \hline
+	}
+	\newcommand{\GroupGoals}[0]{
+		\multicolumn{2}{|l|}{\greyCell{Learning Goals: The group is able to ...}} \\ \hline
+	}
+
+	\table[H]
+		\tabularx{\textwidth}{|c|X|}
+		\hline
+		\multicolumn{2}{|l|}{\greyCell{Learning Goals: The student is able to ...}} \\ \hline
+}{
+		\endtabularx
+	\endtable
+	\nospace
+}
+
+\newenvironment{topics}[0]{
+	\newcommand{\Topic}[1]{
+		\item ##1
+	}
+	\table[H]
+		\tabularx{\textwidth}{|X|}
+			\hline
+			\greyCell{Topics} \\ \hline
+			\itemize[noitemsep,topsep=0pt]
+}{
+		\enditemize  \\ \hline
+		\endtabularx
+	\endtable
+	\nospace
+}
+
+\newenvironment{teachingmaterial}[0]{
+	\newcommand{\Material}[1]{
+		\item ##1
+	}
+	\table[H]
+	\tabularx{\textwidth}{|X|}
+	\hline
+	\greyCell{Teaching Material} \\ \hline
+	\itemize[noitemsep,topsep=0pt]
+}{
+	\enditemize \\ \hline
+	\endtabularx
+	\endtable
+	\nospace
+}
+
+\newcommand{\AdditionalInformation}[1]{
+	\begin{table}[H]
+		\begin{tabularx}{\textwidth}{|X|}
+			\hline
+			\greyCell{Additional Information} \\ \hline
+			#1 \\ \hline
+		\end{tabularx}
+	\end{table}
+	\nospace
+}
+
+\newenvironment{exams}[0]{
+	\newcommand{\Exam}[4]{
+		##1 & ##2 & ##3\% & ##4 \\ \hline
+	}
+
+	\table[H]
+		\tabularx{\textwidth}{|l|X|c|c|}
+		\hline
+		\multicolumn{4}{|l|}{\greyCell{Exam Information}} \\ \hline
+		\greyCell{ProgressCode} & \greyCell{Description} & \greyCell{Percentage} & \greyCell{Minimum Grade} \\ \hline
+}{
+		\endtabularx
+	\endtable
+	\nospace
+}
+
+\newenvironment{skills}[0]{
+	\newcommand{\BehaviorValue}[0]{}
+	\newcommand{\ResearchValue}[0]{}
+	\newcommand{\Research}[1]{\renewcommand{\ResearchValue}[0]{##1}}
+	\newcommand{\ProBehaviour}[1]{\renewcommand{\BehaviorValue}[0]{##1}}
+	\newcommand{\Manage}[0]{} % Pre definition DO NOT DELETE!
+	\newcommand{\Analyse}[0]{} % Pre definition DO NOT DELETE!
+	\newcommand{\Advise}[0]{} % Pre definition DO NOT DELETE!
+	\newcommand{\Design}[0]{} % Pre definition DO NOT DELETE!
+	\newcommand{\Implement}[0]{} % Pre definition DO NOT DELETE!
+
+	\newcommand{\UIManage}[0]{}
+	\newcommand{\UIAnalyse}[0]{}
+	\newcommand{\UIAdvise}[0]{}
+	\newcommand{\UIDesign}[0]{}
+	\newcommand{\UIImplement}[0]{}
+	\newcommand{\UserInteraction}[1]{
+		\renewcommand{\Manage}[1]{\renewcommand{\UIManage}[0]{####1}}
+		\renewcommand{\Analyse}[1]{\renewcommand{\UIAnalyse}[0]{####1}}
+		\renewcommand{\Advise}[1]{\renewcommand{\UIAdvise}[0]{####1}}
+		\renewcommand{\Design}[1]{\renewcommand{\UIDesign}[0]{####1}}
+		\renewcommand{\Implement}[1]{\renewcommand{\UIImplement}[0]{####1}}
+		##1
+	}
+
+	\newcommand{\BPManage}[0]{}
+	\newcommand{\BPAnalyse}[0]{}
+	\newcommand{\BPAdvise}[0]{}
+	\newcommand{\BPDesign}[0]{}
+	\newcommand{\BPImplement}[0]{}
+	\newcommand{\BusinessProcess}[1]{
+		\renewcommand{\Manage}[1]{\renewcommand{\BPManage}[0]{####1}}
+		\renewcommand{\Analyse}[1]{\renewcommand{\BPAnalyse}[0]{####1}}
+		\renewcommand{\Advise}[1]{\renewcommand{\BPAdvise}[0]{####1}}
+		\renewcommand{\Design}[1]{\renewcommand{\BPDesign}[0]{####1}}
+		\renewcommand{\Implement}[1]{\renewcommand{\BPImplement}[0]{####1}}
+		##1
+	}
+
+	\newcommand{\IManage}[0]{}
+	\newcommand{\IAnalyse}[0]{}
+	\newcommand{\IAdvise}[0]{}
+	\newcommand{\IDesign}[0]{}
+	\newcommand{\IImplement}[0]{}
+	\newcommand{\Infrastructure}[1]{
+		\renewcommand{\Manage}[1]{\renewcommand{\IManage}[0]{####1}}
+		\renewcommand{\Analyse}[1]{\renewcommand{\IAnalyse}[0]{####1}}
+		\renewcommand{\Advise}[1]{\renewcommand{\IAdvise}[0]{####1}}
+		\renewcommand{\Design}[1]{\renewcommand{\IDesign}[0]{####1}}
+		\renewcommand{\Implement}[1]{\renewcommand{\IImplement}[0]{####1}}
+		##1
+	}
+
+	\newcommand{\SManage}[0]{}
+	\newcommand{\SAnalyse}[0]{}
+	\newcommand{\SAdvise}[0]{}
+	\newcommand{\SDesign}[0]{}
+	\newcommand{\SImplement}[0]{}
+	\newcommand{\Software}[1]{
+		\renewcommand{\Manage}[1]{\renewcommand{\SManage}[0]{####1}}
+		\renewcommand{\Analyse}[1]{\renewcommand{\SAnalyse}[0]{####1}}
+		\renewcommand{\Advise}[1]{\renewcommand{\SAdvise}[0]{####1}}
+		\renewcommand{\Design}[1]{\renewcommand{\SDesign}[0]{####1}}
+		\renewcommand{\Implement}[1]{\renewcommand{\SImplement}[0]{####1}}
+		##1
+	}
+
+	\newcommand{\HIManage}[0]{}
+	\newcommand{\HIAnalyse}[0]{}
+	\newcommand{\HIAdvise}[0]{}
+	\newcommand{\HIDesign}[0]{}
+	\newcommand{\HIImplement}[0]{}
+	\newcommand{\HardwareInterfacing}[1]{
+		\renewcommand{\Manage}[1]{\renewcommand{\HIManage}[0]{####1}}
+		\renewcommand{\Analyse}[1]{\renewcommand{\HIAnalyse}[0]{####1}}
+		\renewcommand{\Advise}[1]{\renewcommand{\HIAdvise}[0]{####1}}
+		\renewcommand{\Design}[1]{\renewcommand{\HIDesign}[0]{####1}}
+		\renewcommand{\Implement}[1]{\renewcommand{\HIImplement}[0]{####1}}
+		##1
+	}
+
+}{
+	\begin{table}[H]
+		\begin{tabularx}{\textwidth}{|l|Y|Y|Y|Y|Y||Y|Y|}
+			\hline
+			\multicolumn{8}{|l|}{\greyCell{Contribution to final competence profile}} \\ \hline
+			& \rotate{Manage} & \rotate{Analyse} & \rotate{Advise} & \rotate{Design} & \rotate{Implement} & \rotate{Professional Behavior~~} & \rotate{Research Skills} \\ \hline
+			User Interaction & \UIManage & \UIAnalyse & \UIAdvise & \UIDesign & \UIImplement & \grey & \grey \\ \hline
+			Business Processes & \BPManage & \BPAnalyse & \BPAdvise & \BPDesign & \BPImplement & \grey & \grey \\ \hline
+			Infrastructure & \IManage & \IAnalyse & \IAdvise & \IDesign & \IImplement & \grey & \grey \\ \hline
+			Software & \SManage & \SAnalyse & \SAdvise & \SDesign & \SImplement & \grey & \grey \\ \hline
+			Hardware Interfacing & \HIManage & \HIAnalyse & \HIAdvise & \HIDesign & \HIImplement & \grey & \grey \\ \hline
+			\multicolumn{6}{|l||}{\grey} & \BehaviorValue & \ResearchValue \\ \hline
+		\end{tabularx}
+	\end{table}
+	\nospace
+}
+
+% Extended version of matrix
+% Shows skills fopr each learning goal
+% To be used in future functions
+%\begin{table}[H]
+%	\begin{tabularx}{\textwidth}{|c||Y|Y|Y|Y|Y||Y|Y|Y|Y|Y||Y|Y|}
+%		\hline
+%		\multicolumn{13}{|l|}{\grey Contribution to final competence profile} \\ \hline
+%		\multirow{2}{*}[-2.15cm]{\rotatebox{90}{Learning Goal}} & \multicolumn{5}{c||}{Architectural Layers} & \multicolumn{5}{c||}{Activities} & \multicolumn{2}{c|}{enter X} \\ \cline{2-13}
+%		& \rotatebox{90}{User Interface} & \rotatebox{90}{Business Processes} & \rotatebox{90}{Infrastructure} & \rotatebox{90}{Software} & \rotatebox{90}{Hardware Interfacing} & \rotatebox{90}{Manage} & \rotatebox{90}{Analyse} & \rotatebox{90}{Advice} & \rotatebox{90}{Design} & \rotatebox{90}{Implement} & \rotatebox{90}{Professional Behavior~~~} & \rotatebox{90}{Research Skills} \\ \hline
+%
+%		LG 1 & X & & & X & & & & & & 1 & & \\ \hline
+%		LG 2 &  & & & X & & & & & & 1 & & \\ \hline
+%		LG 4 & X & & & X & & & & & & 1 & & \\ \hline
+%		LG 5 &  & & & X & & & & & & 1 & & \\ \hline
+%		LG 10 & X & & & X & & & & & & 1 & & \\ \hline
+%		LG 11 &  & & & X & & & & & & 1 & & \\ \hline
+%	\end{tabularx}
+%\end{table}
+
+
