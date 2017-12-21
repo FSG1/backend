@@ -156,9 +156,9 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             final int activity = qualification.findValue("lifecycle_activity").asInt();
             final int level = qualification.findValue("level").asInt();
 
-            if (layer == 5) {
+            if (activity == 5) {
                 latexBuilder.append("\\ProBehaviour{").append(level).append("}\n");
-            } else if (layer == 6) {
+            } else if (activity == 6) {
                 latexBuilder.append("\\Research{").append(level).append("}\n");
             } else {
                 latexBuilder.append("\\").append(ArchitecturalLayerMapper.mapInt(layer)).append("{\n");
