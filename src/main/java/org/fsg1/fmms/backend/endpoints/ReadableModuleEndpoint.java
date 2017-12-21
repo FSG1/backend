@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.fsg1.fmms.backend.util.StringEscaper.escapeString;
+
 /**
  * The class containing the 'modules' endpoints that are used to only display a module.
  */
@@ -112,7 +114,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
                 credentials));
 
         if (!introText.isEmpty()) {
-            latexBuilder.append(service.latexIntroduction(introText.replace("\\n", "\\newline")));
+            latexBuilder.append(service.latexIntroduction(escapeString(introText)));
         }
 
         latexBuilder.append("\\begin{learninggoals}");
@@ -120,7 +122,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             if (goal.findValue("type").asText().equals("personal")) {
                 latexBuilder.append(service.latexLearningGoal(
                         goal.findValue("name").asText(),
-                        goal.findValue("description").asText()
+                        escapeString(goal.findValue("description").asText())
                 ));
             }
         });
@@ -132,7 +134,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
                 if (goal.findValue("type").asText().equals("group")) {
                     latexBuilder.append(service.latexLearningGoal(
                             goal.findValue("name").asText(),
-                            goal.findValue("description").asText()
+                            escapeString(goal.findValue("description").asText())
                     ));
                 }
             });
@@ -143,7 +145,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         if (topics.size() != 0) {
             latexBuilder.append("\\begin{topics}\n");
             topics.forEach(topic -> {
-                latexBuilder.append(service.latexTopic(topic.asText()));
+                latexBuilder.append(service.latexTopic(escapeString(topic.asText())));
             });
             latexBuilder.append("\\end{topics}\n");
         }
@@ -170,7 +172,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         assessmentParts.forEach(exam -> {
             latexBuilder.append(service.latexExam(
                     exam.findValue("subcode").asText(),
-                    exam.findValue("description").asText(),
+                    escapeString(exam.findValue("description").asText()),
                     exam.findValue("percentage").asDouble() * 100,
                     exam.findValue("minimal_grade").asDouble()
             ));
@@ -180,7 +182,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         if (teachingMaterials.size() != 0) {
             latexBuilder.append("\\begin{teachingmaterial}\n");
             teachingMaterials.forEach(material -> {
-                latexBuilder.append(service.latexTeachingMaterial(material.asText()));
+                latexBuilder.append(service.latexTeachingMaterial(escapeString(material.asText())));
             });
             latexBuilder.append("\\end{teachingmaterial}\n");
         }
@@ -198,8 +200,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         }
 
         if(!additionalInformation.isEmpty()){
-            latexBuilder.append(service.latexAdditionalInformation(additionalInformation.replace(
-                    "\\n", "\\newline")));
+            latexBuilder.append(service.latexAdditionalInformation(escapeString(additionalInformation)));
         }
 
         latexBuilder.append("\\end{document}\n");
