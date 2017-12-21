@@ -204,7 +204,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             latexBuilder.append("\\end{priorknowledge}\n");
         }
 
-        if(!additionalInformation.isEmpty()){
+        if (!additionalInformation.isEmpty()) {
             latexBuilder.append(service.latexAdditionalInformation(escapeString(additionalInformation)));
         }
 
