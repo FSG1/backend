@@ -93,7 +93,9 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         latexBuilder.append(latexFunctions);
 
         StringBuilder arrayLinker = new StringBuilder();
+        //Link an array of lecturer names into one String.
         lecturers.forEachRemaining(lecturer -> arrayLinker.append(lecturer.asText()).append(", "));
+        //Remove trailing space and comma.
         if (arrayLinker.length() > 2) {
             arrayLinker.deleteCharAt(arrayLinker.length() - 1);
             arrayLinker.deleteCharAt(arrayLinker.length() - 1);
@@ -119,6 +121,7 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
 
         latexBuilder.append("\\begin{learninggoals}");
         learningGoals.forEach(goal -> {
+            //Personal learning goals first.
             if (goal.findValue("type").asText().equals("personal")) {
                 latexBuilder.append(service.latexLearningGoal(
                         goal.findValue("name").asText(),
@@ -127,8 +130,10 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             }
         });
 
+        //Check if there are any group learning goals.
         final List<JsonNode> goalTypes = learningGoals.findValues("type");
         if (goalTypes.stream().filter(type -> type.asText().equals("group")).count() > 0) {
+            //There are, so start listing group goals.
             latexBuilder.append("\\GroupGoals\n");
             learningGoals.forEach(goal -> {
                 if (goal.findValue("type").asText().equals("group")) {
@@ -156,8 +161,10 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
             final int activity = qualification.findValue("lifecycle_activity").asInt();
             final int level = qualification.findValue("level").asInt();
 
+            //Activity nr 5 means the professional behaviour column
             if (activity == 5) {
                 latexBuilder.append("\\ProBehaviour{").append(level).append("}\n");
+                //Activity nr 6 means the research column
             } else if (activity == 6) {
                 latexBuilder.append("\\Research{").append(level).append("}\n");
             } else {
@@ -169,14 +176,12 @@ public class ReadableModuleEndpoint extends Endpoint<ModulesService> {
         latexBuilder.append("\\end{skills}\n");
 
         latexBuilder.append("\\begin{exams}\n");
-        assessmentParts.forEach(exam -> {
-            latexBuilder.append(service.latexExam(
-                    exam.findValue("subcode").asText(),
-                    escapeString(exam.findValue("description").asText()),
-                    exam.findValue("percentage").asDouble() * 100,
-                    exam.findValue("minimal_grade").asDouble()
-            ));
-        });
+        assessmentParts.forEach(exam -> latexBuilder.append(service.latexExam(
+                exam.findValue("subcode").asText(),
+                escapeString(exam.findValue("description").asText()),
+                exam.findValue("percentage").asDouble() * 100,
+                exam.findValue("minimal_grade").asDouble()
+        )));
         latexBuilder.append("\\end{exams}\n");
 
         if (teachingMaterials.size() != 0) {
